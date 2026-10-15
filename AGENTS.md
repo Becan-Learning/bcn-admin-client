@@ -95,6 +95,20 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
   verification-email` and `/password-reset` (backend "Admin emails"). There is no way to set a password in this
   UI and there must not be one.
 
+- **Enrollments, Plan and Usage, Sessions** (#6) are three independent sections, each with its own `<Suspense>`
+  and its own error alert, so one failing read never breaks the page. Their server reads are in
+  `src/lib/accounts/fetch-detail.ts` (`GET /api/v1/admin/accounts/:id/enrollments`, `/allowance`, `/sessions`,
+  and the public Catalog `GET /api/v1/courses` for the Course picker), with the forwarded cookie. Grant (`PUT`)
+  and End (`DELETE`) run in the browser through `enrollment-actions.ts`, then `router.refresh()`. Grant follows
+  the Student's Plan slot limit: 409 `ENROLLMENT_LIMIT_REACHED` is shown through `Errors`. Usage minutes round
+  like the student app (used up, limit down); the pure helpers are in `usage.ts`, `enrollment-picker.ts` and
+  `sessions-page.ts` (all tested). The Sessions page is server-paged (10 a page) in the `sessionsPage` search
+  param, which the page passes down to `SessionsSection`.
+- **`LANGFUSE_PROJECT_URL`** (server-only, optional, see `.env.example`): the Langfuse project URL, for example
+  `https://cloud.langfuse.com/project/<id>`. Each Session links to `${LANGFUSE_PROJECT_URL}/sessions/<room>`
+  (`langfuseSessionUrl`, the room is `ss_<study_session.id>`; Langfuse groups an agent Session's traces by room
+  name). Unset or not an http(s) URL: no link. It is read at request time, so it needs no `NEXT_PUBLIC_` prefix.
+
 ## Cross-repo contract
 
 `src/lib/auth/access-control.ts` is a **verbatim copy** of the backend's `src/lib/access-control.ts`

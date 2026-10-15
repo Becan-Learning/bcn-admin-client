@@ -15,13 +15,20 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchInstitutions } from "@/lib/accounts/fetch";
 import { fetchAccountProfile } from "@/lib/accounts/fetch-account";
+import type { RawSearchParams } from "@/lib/accounts/query-state";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("AccountDetail");
   return { title: t("title") };
 }
 
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<RawSearchParams>;
+}) {
   const t = await getTranslations("AccountDetail");
   return (
     <div className="flex max-w-3xl flex-col gap-6">
@@ -33,7 +40,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         {t("backToList")}
       </Link>
       <Suspense fallback={<Skeleton className="h-64 w-full" />}>
-        <Detail params={params} />
+        <Detail params={params} searchParams={searchParams} />
       </Suspense>
     </div>
   );
@@ -43,7 +50,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 // section. Each section lives in its own file under components/accounts/detail/, so a later issue
 // only edits its own file: Actions (#5) and Enrollments, Plan and Usage and Sessions (#6) are empty
 // slots until then.
-async function Detail({ params }: { params: Promise<{ id: string }> }) {
+async function Detail({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<RawSearchParams>;
+}) {
   const [{ id }, t, errors, incoming] = await Promise.all([
     params,
     getTranslations("AccountDetail"),
@@ -77,7 +90,7 @@ async function Detail({ params }: { params: Promise<{ id: string }> }) {
       <AccountActionsSection account={account} />
       <EnrollmentsSection account={account} />
       <PlanUsageSection account={account} />
-      <SessionsSection account={account} />
+      <SessionsSection account={account} searchParams={searchParams} />
     </>
   );
 }

@@ -8,6 +8,8 @@ describe("action labels", () => {
     expect(actionMessageKey("account.ban")).toBe("account_ban");
     expect(actionMessageKey("account.set-role")).toBe("account_set_role");
     expect(actionMessageKey("account.revoke-sessions")).toBe("account_revoke_sessions");
+    expect(actionMessageKey("enrollment.grant")).toBe("enrollment_grant");
+    expect(actionMessageKey("enrollment.end")).toBe("enrollment_end");
   });
 
   it("has an English label for every action the backend writes", () => {

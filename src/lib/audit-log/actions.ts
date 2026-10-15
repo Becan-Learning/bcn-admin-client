@@ -10,6 +10,8 @@ export const AUDIT_ACTIONS = [
   "account.revoke-sessions",
   "account.password-reset-sent",
   "account.verification-email-sent",
+  "enrollment.grant",
+  "enrollment.end",
 ] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];
