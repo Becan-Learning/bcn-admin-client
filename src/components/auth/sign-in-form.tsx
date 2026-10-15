@@ -9,6 +9,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth/client";
 import { authErrorKey, type AuthErrorKey } from "@/lib/auth/errors";
+import { returnPathFromLocation } from "@/lib/auth/return-path";
 import { FormError } from "./form-error";
 
 export function SignInForm() {
@@ -35,7 +36,7 @@ export function SignInForm() {
       }
       // A two-factor sign-in is finished on the challenge page; the client plugin sends us there.
       if (data && "twoFactorRedirect" in data && data.twoFactorRedirect) return;
-      router.replace("/");
+      router.replace(returnPathFromLocation() ?? "/");
       router.refresh();
     } catch {
       setErrorKey("NETWORK");

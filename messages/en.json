@@ -139,7 +139,8 @@
     "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Another Account already uses this email.",
     "ADMIN_UPDATE_FIELD_NOT_ALLOWED": "That field cannot be changed from here.",
     "ACCOUNT_NOT_FOUND": "This Account no longer exists.",
-    "EMAIL_ALREADY_VERIFIED": "This email is already verified."
+    "EMAIL_ALREADY_VERIFIED": "This email is already verified.",
+    "ADMIN_SELF_TARGET": "You cannot do this to your own Account."
   },
   "AuditLog": {
     "filters": {
@@ -479,6 +480,92 @@
       "dialogDescription": "{email} receives a link to choose a new password. Their current password keeps working until they use it.",
       "confirm": "Send email",
       "sent": "Password-reset email sent."
+    },
+    "actions": {
+      "title": "Actions",
+      "selfNote": "This is your own Account. You cannot ban, change the Role of or remove it.",
+      "freshRequired": "After you sign in again, you come back to this Account.",
+      "removed": "Account removed. Going back to the Accounts list.",
+      "signInAgain": "Sign in again",
+      "signingInAgain": "Signing out",
+      "ban": {
+        "title": "Ban",
+        "description": "A banned Account cannot sign in, and its Device sessions end at once.",
+        "reasonLabel": "Reason",
+        "noReason": "No reason was given.",
+        "bannedNotice": "This Account is banned.",
+        "expiresAt": "The ban ends <time>{date}</time>.",
+        "never": "The ban does not end on its own.",
+        "expiredAt": "The ban ended <time>{date}</time>. It lifts when the Student next tries to sign in, or you can lift it now.",
+        "action": "Ban Account",
+        "dialogTitle": "Ban this Account?",
+        "dialogDescription": "The Student cannot sign in while banned, and every Device session ends now.",
+        "reasonField": "Reason (optional)",
+        "reasonHelp": "Only Admins see it. It is kept in the Audit log.",
+        "expiryField": "Ban length",
+        "expiryNever": "Until I lift it",
+        "expiry1": "1 day",
+        "expiry7": "7 days",
+        "expiry30": "30 days",
+        "expiryCustom": "Custom number of days",
+        "customDays": "Number of days",
+        "customDaysInvalid": "Enter a whole number of days from 1 to 3650.",
+        "confirm": "Ban Account",
+        "pending": "Banning",
+        "done": "Account banned. Its Device sessions ended.",
+        "lift": "Lift ban",
+        "liftPending": "Lifting",
+        "liftDone": "Ban lifted."
+      },
+      "devices": {
+        "title": "Device sessions",
+        "description": "Where this Account is signed in. Revoking a Device session signs that device out.",
+        "loading": "Loading Device sessions",
+        "empty": "No Device sessions. This Account is not signed in anywhere.",
+        "unknownDevice": "Unknown device",
+        "unknownIp": "Unknown IP address",
+        "created": "Signed in <time>{date}</time>",
+        "expires": "Expires <time>{date}</time>",
+        "current": "Your current session",
+        "revoke": "Revoke",
+        "revokeLabel": "Revoke the Device session on {device}",
+        "revoking": "Revoking",
+        "revoked": "Device session revoked.",
+        "revokeAll": "Revoke all",
+        "revokeAllTitle": "Revoke all Device sessions?",
+        "revokeAllDescription": "Every device this Account is signed in on is signed out. The Student can sign in again.",
+        "revokeAllConfirm": "Revoke all",
+        "revokingAll": "Revoking",
+        "revokedAll": "All Device sessions revoked.",
+        "selfNote": "Revoking all is off for your own Account, because it would sign you out. Manage your own devices on My account."
+      },
+      "role": {
+        "title": "Role",
+        "description": "Students study. Admins also manage Accounts, the Catalog and Course content.",
+        "current": "Current Role: {role}",
+        "student": "Student",
+        "admin": "Admin",
+        "makeAdmin": "Make Admin",
+        "makeStudent": "Make Student",
+        "promoteTitle": "Make this Account an Admin?",
+        "promoteDescription": "An Admin can ban and remove Accounts, edit the Catalog and Courses, read the Audit log and study without a time limit. The new Admin must also turn on two-factor before any of these work.",
+        "demoteTitle": "Make this Account a Student?",
+        "demoteDescription": "The Account loses every Admin power at once, including access to this dashboard. It keeps its Enrollments and Plan.",
+        "confirm": "Change Role",
+        "pending": "Changing",
+        "promoted": "Role changed. This Account is now an Admin.",
+        "demoted": "Role changed. This Account is now a Student."
+      },
+      "remove": {
+        "title": "Remove Account",
+        "description": "Permanently delete this Account.",
+        "action": "Remove Account",
+        "dialogTitle": "Remove this Account?",
+        "dialogDescription": "This erases the Account, its Enrollments, its Sessions and its Plan assignment. It cannot be undone. The Audit log keeps only the Account's id. Langfuse traces of past Sessions remain.",
+        "typeEmail": "Type <strong>{email}</strong> to confirm.",
+        "confirm": "Remove Account",
+        "pending": "Removing"
+      }
     }
   }
 }

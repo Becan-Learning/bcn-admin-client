@@ -1,8 +1,9 @@
 // Calls the browser makes for one Account's Profile. Same origin: next.config.ts rewrites /api/auth/*
 // and /api/v1/* to the backend, so the Admin's cookie goes along.
 import { authClient } from "@/lib/auth/client";
-import { authErrorKey, type AuthErrorKey } from "@/lib/auth/errors";
+import { authErrorKey, type AuthClientError, type AuthErrorKey } from "@/lib/auth/errors";
 import { backendErrorKey } from "./errors";
+import { accountActionErrorKey } from "./account-safety";
 import { placeProfileError, isEmailFieldError, type ProfileChanges, type ProfileFailure } from "./profile-form";
 
 export type ActionResult = { ok: true } | { ok: false; errorKey: AuthErrorKey };
@@ -84,3 +85,76 @@ export const sendVerificationEmail = (accountId: string) =>
   postEmailRoute(accountId, "verification-email");
 export const sendPasswordResetEmail = (accountId: string) =>
   postEmailRoute(accountId, "password-reset");
+
+// Account safety actions (ban, Device sessions, Role, removal): Better Auth's admin plugin methods.
+// Each returns the error key the page shows; the backend's own text is never used.
+type AdminCall = Promise<{ error: AuthClientError }>;
+
+async function adminCall(call: () => AdminCall): Promise<ActionResult> {
+  try {
+    const { error } = await call();
+    return error ? { ok: false, errorKey: accountActionErrorKey(error) } : { ok: true };
+  } catch {
+    return { ok: false, errorKey: "NETWORK" };
+  }
+}
+
+// `banExpiresIn` is in seconds; leave it out for a ban that never expires. Ending the Account's Device
+// sessions is part of banning, done by the plugin.
+export const banAccount = (userId: string, banReason: string, banExpiresIn: number | undefined) =>
+  adminCall(() =>
+    authClient.admin.banUser({
+      userId,
+      ...(banReason.trim() ? { banReason: banReason.trim() } : {}),
+      ...(banExpiresIn ? { banExpiresIn } : {}),
+    }),
+  );
+
+export const unbanAccount = (userId: string) => adminCall(() => authClient.admin.unbanUser({ userId }));
+
+// Needs a fresh Device session (backend: 403 FRESH_SESSION_REQUIRED).
+export const setAccountRole = (userId: string, role: "user" | "admin") =>
+  adminCall(() => authClient.admin.setRole({ userId, role }));
+
+// Needs a fresh Device session. Deletes the Account and its Enrollments, Sessions and Plan assignment.
+export const removeAccount = (userId: string) => adminCall(() => authClient.admin.removeUser({ userId }));
+
+export const revokeAccountSession = (sessionToken: string) =>
+  adminCall(() => authClient.admin.revokeUserSession({ sessionToken }));
+
+export const revokeAccountSessions = (userId: string) =>
+  adminCall(() => authClient.admin.revokeUserSessions({ userId }));
+
+// What the list shows of a Device session. The token is only for revoking: it is never rendered.
+export type AccountDeviceSession = {
+  id: string;
+  token: string;
+  userAgent: string | null;
+  ipAddress: string | null;
+  createdAt: Date | string;
+  expiresAt: Date | string;
+};
+
+export type ListSessionsResult =
+  | { ok: true; sessions: AccountDeviceSession[] }
+  | { ok: false; errorKey: AuthErrorKey };
+
+export async function listAccountSessions(userId: string): Promise<ListSessionsResult> {
+  try {
+    const { data, error } = await authClient.admin.listUserSessions({ userId });
+    if (error || !data) return { ok: false, errorKey: accountActionErrorKey(error) };
+    return {
+      ok: true,
+      sessions: data.sessions.map((session) => ({
+        id: session.id,
+        token: session.token,
+        userAgent: session.userAgent ?? null,
+        ipAddress: session.ipAddress ?? null,
+        createdAt: session.createdAt,
+        expiresAt: session.expiresAt,
+      })),
+    };
+  } catch {
+    return { ok: false, errorKey: "NETWORK" };
+  }
+}

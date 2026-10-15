@@ -18,6 +18,7 @@ const profileSchema = z.object({
   majorId: z.string(),
   role: z.string().nullish(),
   banned: z.boolean().nullish(),
+  banReason: z.string().nullish(),
   banExpires: z.string().nullish(),
   twoFactorEnabled: z.boolean().nullish(),
 });

@@ -94,6 +94,17 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
   "Resend verification email" and "Send password-reset email" call `POST /api/v1/admin/accounts/:id/
   verification-email` and `/password-reset` (backend "Admin emails"). There is no way to set a password in this
   UI and there must not be one.
+- **Actions** (`AccountActionsSection`, an async Server Component that reads the viewer's session for `isSelf`).
+  Four client cards, all through `authClient.admin.*` and `src/lib/accounts/account-actions.ts`: `BanCard` (`banUser`
+  with `banExpiresIn` in seconds, `unbanUser`), `AccountDeviceSessionsCard` (`listUserSessions`, `revokeUserSession`,
+  `revokeUserSessions`; the session token is only used to revoke and is never rendered), `RoleCard` (`setRole`
+  `"user" | "admin"`) and `RemoveAccountCard` (`removeUser`, after typing the email; it goes to `/accounts` without a
+  refresh). Pure rules (expiry to seconds, typed-email match, error mapping) are in `src/lib/accounts/account-safety.ts`.
+  Viewing your own Account disables ban, Role change and removal (the backend also answers 403 `ADMIN_SELF_TARGET`).
+- **Fresh session.** `set-role` and `remove-user` answer 403 `FRESH_SESSION_REQUIRED` when the Device session is older
+  than ten minutes. The dialog then shows `SignInAgainButton`: sign out, then `/sign-in?next=/accounts/<id>`. The
+  sign-in and two-factor forms follow `next` through `src/lib/auth/return-path.ts` (`safeReturnPath` accepts only a
+  path on this app), and the two-factor redirect in `client.ts` carries it across the challenge.
 
 - **Enrollments, Plan and Usage, Sessions** (#6) are three independent sections, each with its own `<Suspense>`
   and its own error alert, so one failing read never breaks the page. Their server reads are in
