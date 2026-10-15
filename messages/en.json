@@ -1,0 +1,123 @@
+{
+  "Metadata": {
+    "appName": "Becan admin",
+    "description": "Internal dashboard for Becan Admins."
+  },
+  "Common": {
+    "loading": "Loading",
+    "somethingWentWrong": "Something went wrong",
+    "tryAgain": "Try again",
+    "continue": "Continue",
+    "signOut": "Sign out",
+    "signingOut": "Signing out",
+    "email": "Email",
+    "password": "Password"
+  },
+  "Nav": {
+    "label": "Navigation",
+    "accounts": "Accounts",
+    "catalog": "Catalog",
+    "auditLog": "Audit log",
+    "myAccount": "My account",
+    "toggleSidebar": "Toggle sidebar"
+  },
+  "Header": {
+    "signedInAs": "Signed in as {name}",
+    "userMenu": "Account menu",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
+  },
+  "Pages": {
+    "accounts": {
+      "title": "Accounts",
+      "description": "Search and manage Accounts.",
+      "placeholder": "The Accounts list arrives with the next issues of Milestone 1."
+    },
+    "catalog": {
+      "title": "Catalog",
+      "description": "Institutions, Majors, Courses and Chapters.",
+      "placeholder": "The Catalog arrives in Milestone 2."
+    },
+    "auditLog": {
+      "title": "Audit log",
+      "description": "Every Admin action: who, what and when.",
+      "placeholder": "The Audit log arrives with the next issues of Milestone 1."
+    },
+    "myAccount": {
+      "title": "My account",
+      "description": "Your profile, two-factor and Device sessions.",
+      "placeholder": "Your account settings arrive with the next issues of Milestone 1."
+    }
+  },
+  "SignIn": {
+    "title": "Sign in",
+    "description": "Admins only. Use your Becan Account.",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Sign in",
+    "submitting": "Signing in",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
+  },
+  "TwoFactor": {
+    "title": "Two-factor check",
+    "totpDescription": "Enter the 6-digit code from your authenticator app.",
+    "backupDescription": "Enter one of your backup codes. Each code works once.",
+    "codeLabel": "Authentication code",
+    "backupCodeLabel": "Backup code",
+    "verify": "Verify",
+    "verifying": "Verifying",
+    "useBackupCode": "Use a backup code",
+    "useAuthenticator": "Use your authenticator app",
+    "backToSignIn": "Back to sign in"
+  },
+  "Setup": {
+    "title": "Set up two-factor",
+    "intro": "Admin access needs two-factor. Set it up now to continue.",
+    "passwordStepDescription": "Confirm your password to start.",
+    "start": "Start setup",
+    "starting": "Starting",
+    "scanStepDescription": "Scan the QR code with an authenticator app, then enter the 6-digit code it shows.",
+    "qrAlt": "QR code for your authenticator app",
+    "secretLabel": "Setup key",
+    "secretHelp": "Cannot scan? Enter this key in your app instead.",
+    "codeLabel": "Authentication code",
+    "verify": "Verify and turn on",
+    "verifying": "Verifying",
+    "backupTitle": "Save your backup codes",
+    "backupDescription": "Each code works once if you lose your authenticator. They are shown only now.",
+    "copyCodes": "Copy codes",
+    "copied": "Copied",
+    "savedConfirm": "I have saved these codes somewhere safe.",
+    "finish": "Go to the dashboard"
+  },
+  "NoAccess": {
+    "title": "No access",
+    "description": "<account>{email}</account> is signed in, but this Account is not an Admin. No admin data was loaded.",
+    "hint": "Sign out and use an Admin Account."
+  },
+  "Errors": {
+    "INVALID_EMAIL_OR_PASSWORD": "The email or password is wrong.",
+    "INVALID_EMAIL": "Enter a valid email address.",
+    "INVALID_PASSWORD": "The password is wrong.",
+    "EMAIL_NOT_VERIFIED": "Verify your email first. Check your inbox for the link.",
+    "USER_NOT_FOUND": "No Account matches those details.",
+    "BANNED_USER": "This Account is banned.",
+    "ADMIN_TWO_FACTOR_REQUIRED": "Two-factor must be turned on for this action.",
+    "SESSION_EXPIRED": "Your session expired. Sign in again.",
+    "SESSION_NOT_FRESH": "Sign in again to confirm it is you.",
+    "INVALID_CODE": "That code is wrong or expired.",
+    "INVALID_BACKUP_CODE": "That backup code is wrong.",
+    "INVALID_TWO_FACTOR_COOKIE": "The sign-in expired. Sign in again.",
+    "TOTP_NOT_ENABLED": "Authenticator codes are not turned on for this Account.",
+    "TOTP_ALREADY_ENABLED": "Two-factor is already turned on.",
+    "TWO_FACTOR_NOT_ENABLED": "Two-factor is not turned on for this Account.",
+    "BACKUP_CODES_NOT_ENABLED": "Backup codes are not available for this Account.",
+    "TOO_MANY_ATTEMPTS_REQUEST_NEW_CODE": "Too many attempts. Wait, then try again.",
+    "ACCOUNT_TEMPORARILY_LOCKED": "Too many failed attempts. This Account is locked for a while.",
+    "RATE_LIMITED": "Too many requests. Wait a moment, then try again.",
+    "NETWORK": "Could not reach the server. Check your connection and try again.",
+    "UNKNOWN": "Something went wrong. Try again."
+  }
+}
