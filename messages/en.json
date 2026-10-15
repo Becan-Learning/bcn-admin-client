@@ -159,7 +159,25 @@
     "CHAPTER_ORDER_MISMATCH": "The Course's Chapters changed since this page loaded, so the order was not saved. The list now shows the current order. Arrange it again.",
     "REPLACEMENT_INVALID": "That Draft cannot replace this Chapter any more. Reload the page, then pick again.",
     "CHAPTER_IN_USE": "This Chapter has study Sessions, or Content versions that were live or uploaded, so it cannot be deleted. Archive it instead.",
-    "CHAPTER_NOT_FOUND": "This Chapter no longer exists. Reload the page to refresh the list."
+    "CHAPTER_NOT_FOUND": "This Chapter no longer exists. Reload the page to refresh the list.",
+    "UPLOAD_TOKEN_REQUIRED": "The upload could not start because no upload token was sent. Try the upload again.",
+    "UPLOAD_TOKEN_INVALID": "The upload token was not recognised. Try the upload again.",
+    "UPLOAD_TOKEN_USED": "That upload token was already used. Try the upload again.",
+    "UPLOAD_TOKEN_EXPIRED": "The upload token expired before the upload started. Try the upload again.",
+    "PAYLOAD_TOO_LARGE": "The upload is larger than the server accepts. Leave out files that are not content and try again.",
+    "UNSUPPORTED_UPLOAD_TYPE": "The server only takes a zip file. Choose a zip file or a folder.",
+    "EMPTY_UPLOAD": "The upload was empty. Choose a folder or a zip file with files in it.",
+    "INVALID_ARCHIVE": "This is not a readable zip file, or it holds the same path twice. Check it and try again.",
+    "EMPTY_ARCHIVE": "The zip file holds no files.",
+    "UNSAFE_ARCHIVE_PATH": "The zip holds a file path that is not allowed, such as one that climbs out of its folder. Rename or remove it.",
+    "TOO_MANY_ENTRIES": "The zip holds too many files. Leave out files that are not content.",
+    "ARCHIVE_TOO_LARGE": "The files in the zip are too large once unpacked. Leave out files that are not content.",
+    "CONTENT_STORAGE_UNAVAILABLE": "Content storage is not set up on the server, so nothing can be uploaded or deleted. Ask whoever runs the backend.",
+    "CONTENT_STORAGE_FAILED": "Content storage refused the change, so nothing was changed. Try again in a moment.",
+    "VERSION_INVALID": "That version failed validation, so it cannot go live. Fix the files and upload a new version.",
+    "VERSION_IN_USE": "This version is or was live, or a Session used it, so it cannot be deleted. Keep it, or set another version live.",
+    "CONTENT_VERSION_NOT_FOUND": "This version no longer exists. Reload the page to refresh the list.",
+    "FOLDER_UNREADABLE": "The folder could not be read or zipped. Try again, or zip it yourself and upload the zip."
   },
   "AuditLog": {
     "filters": {
@@ -193,7 +211,8 @@
       "institution": "Institution",
       "major": "Major",
       "course": "Course",
-      "chapter": "Chapter"
+      "chapter": "Chapter",
+      "content-version": "Content version"
     },
     "actions": {
       "account_ban": "Banned an Account",
@@ -220,7 +239,10 @@
       "chapter_set_state": "Changed a Chapter state",
       "chapter_reorder": "Reordered Chapters",
       "chapter_replace": "Replaced a Chapter",
-      "chapter_delete": "Deleted a Chapter"
+      "chapter_delete": "Deleted a Chapter",
+      "content_version_upload": "Uploaded a Content version",
+      "content_version_set_live": "Set a Content version live",
+      "content_version_delete": "Deleted a Content version"
     },
     "fields": {
       "name": "Name",
@@ -253,7 +275,16 @@
       "titleAr": "Arabic title",
       "minutes": "Minutes",
       "lessonCount": "Lesson count",
-      "replacement": "Replacement"
+      "replacement": "Replacement",
+      "ownerKind": "Owner kind",
+      "ownerId": "Owner id",
+      "version": "Version",
+      "valid": "Valid",
+      "prefix": "Storage path",
+      "files": "Files",
+      "issues": "Validation findings",
+      "liveVersionId": "Live version id",
+      "liveVersion": "Live version"
     },
     "noChanges": "No recorded changes",
     "empty": {
@@ -924,7 +955,8 @@
         "numberHelpCreate": "Leave blank to use the next free number, {next}. A Draft may share a number with a Coming soon or Published Chapter.",
         "numberPlaceholder": "Next: {next}",
         "numberHelpLive": "Must not be used by another Coming soon or Published Chapter. To move a Chapter among the others, drag it instead.",
-        "numberHelpOther": "Only has to be free when the Chapter goes Coming soon or Published."
+        "numberHelpOther": "Only has to be free when the Chapter goes Coming soon or Published.",
+        "lessonCountFromContent": "Set by the live Chapter content version, so it cannot be edited here. Set another version live to change it."
       },
       "state": {
         "pending": "Updating",
@@ -1008,5 +1040,133 @@
       "copyLabel": "Copy the Chapter id"
     },
     "backToCourses": "Back to Courses"
+  },
+  "ContentVersions": {
+    "chapter": {
+      "title": "Content versions",
+      "description": "Every upload of this Chapter's files is kept as a numbered version. New Sessions use the live version; Sessions already running keep the one they started with.",
+      "expects": "A Chapter upload holds lessons_list.json, one JSON file per lesson (named after its slug) and slides.pdf, optionally inside one wrapping folder.",
+      "loading": "Loading Content versions",
+      "loadFailed": "The Content versions could not be loaded"
+    },
+    "course": {
+      "title": "Course content versions",
+      "description": "The files shared by every Chapter of this Course are uploaded on their own. Each upload is kept as a numbered version; new Sessions use the live one, and Sessions already running keep theirs.",
+      "expects": "A Course upload holds 01_Course_Knowledge_Schema.md and cast.json.",
+      "loading": "Loading Course content versions",
+      "loadFailed": "The Course content versions could not be loaded"
+    },
+    "upload": {
+      "title": "Upload a new version",
+      "help": "Choose a folder or a zip file. A folder is zipped in your browser, then sent straight to the server. The files are checked when they arrive. A version that fails the checks is kept with its report, and cannot go live.",
+      "chooseFolder": "Choose a folder",
+      "chooseZip": "Choose a zip file",
+      "folder": "Folder {name}",
+      "zip": "Zip file {name}",
+      "summary": "{count, plural, one {# file} other {# files}} · {size}",
+      "zipSummary": "{size}",
+      "skipped": "{count, plural, one {# system file} other {# system files}} left out.",
+      "start": "Upload",
+      "remove": "Remove selection",
+      "cancel": "Cancel upload",
+      "zipping": "Zipping the folder",
+      "token": "Getting an upload token",
+      "uploading": "Uploading, {percent}%",
+      "processing": "Sent. The server is checking and storing the files.",
+      "progressLabel": "Upload progress",
+      "notZip": "That file is not a zip file. Choose a file that ends in .zip, or a folder.",
+      "emptyFolder": "That folder holds no files.",
+      "doneValid": "Version {version} uploaded. It passed validation and is not live yet.",
+      "doneInvalid": "Version {version} uploaded, but it failed validation with {count, plural, one {# finding} other {# findings}}. It cannot go live. The report is open below. Fix the files and upload again.",
+      "doneTitle": "Upload finished",
+      "dismiss": "Dismiss"
+    },
+    "list": {
+      "title": "Versions",
+      "empty": "No versions yet. Upload the first one.",
+      "count": "{count, plural, one {# version} other {# versions}}, newest first"
+    },
+    "row": {
+      "version": "Version {version}",
+      "live": "Live",
+      "valid": "Valid",
+      "invalid": "Invalid",
+      "previewed": "Previewed",
+      "previewedBy": "Previewed in {count, plural, one {# Admin Session} other {# Admin Sessions}}",
+      "notPreviewed": "Not previewed yet",
+      "uploadedBy": "Uploaded by <bdi>{name}</bdi> on {date}",
+      "uploadedAt": "Uploaded on {date}",
+      "sessions": "{count, plural, one {# Session} other {# Sessions}}",
+      "lessons": "{count, plural, one {# lesson} other {# lessons}}",
+      "toggle": "Show or hide the details of version {version}"
+    },
+    "detail": {
+      "notPreviewedTitle": "Not previewed yet",
+      "notPreviewedBody": "No Admin has had a Session on this version. Preview it in the student app before you set it live.",
+      "previewedBody": "Previewed in {count, plural, one {# Admin Session} other {# Admin Sessions}}.",
+      "reportTitle": "Validation report",
+      "reportIntro": "This is the content validator's own output, shown as written. Each finding names its rule and where in the file it applies.",
+      "reportPassed": "The version passed validation. There are no findings.",
+      "reportFailed": "This version failed validation and cannot go live. {count, plural, one {# finding} other {# findings}} in {files, plural, one {# file} other {# files}}.",
+      "reportNone": "No validation report: this version was registered in place.",
+      "wholeArchive": "The upload as a whole",
+      "rule": "Rule: {rule}",
+      "location": "At {path}",
+      "filesTitle": "Files",
+      "filesSummary": "{count, plural, one {# file} other {# files}} · {size}",
+      "filesNone": "Registered in place; no upload record.",
+      "colPath": "Path",
+      "colSize": "Size",
+      "factsPrefix": "Storage path",
+      "factsFirstLive": "First live",
+      "factsNeverLive": "Never live",
+      "factsSessions": "Sessions",
+      "factsSessionsValue": "{count, plural, one {# Session} other {# Sessions}} used it, {admin} of them Admin Sessions",
+      "factsLessons": "Lessons",
+      "actionsTitle": "Actions",
+      "notPreviewedBodyCourse": "No Admin has had a Session on this version yet."
+    },
+    "preview": {
+      "link": "Preview in student app",
+      "help": "Opens the student app in a new tab with an Admin Session on this version. Students are not affected.",
+      "unavailable": "The preview link is not available because the admin app has no student app address (STUDENT_APP_URL).",
+      "invalidOnly": "Only a version that passed validation can be previewed."
+    },
+    "actions": {
+      "setLive": "Set live",
+      "rollback": "Roll back to this version",
+      "delete": "Delete",
+      "isLive": "This is the live version.",
+      "cannotGoLive": "A version that failed validation cannot go live.",
+      "deleteBlocked": "Cannot be deleted: {reasons}",
+      "deleteBlockers": {
+        "live": "it is the live version.",
+        "wasLive": "it was live once, and is kept so a rollback can use it.",
+        "sessions": "{count, plural, one {# Session used it.} other {# Sessions used it.}}"
+      }
+    },
+    "live": {
+      "setTitle": "Set version {version} live?",
+      "setDescription": "New Sessions will use version {version}. Sessions that are already running keep the version they started with.",
+      "setFirst": "Nothing is live yet, so this becomes the first live version.",
+      "rollbackTitle": "Roll back to version {version}?",
+      "rollbackDescription": "New Sessions will go back to version {version} instead of version {current}. Sessions that are already running keep the version they started with. Version {current} is kept and can be set live again.",
+      "lessonCount": "The Chapter's lesson count becomes {count}, read from this version.",
+      "chapterState": "Setting a version live does not change the Chapter's state.",
+      "notPreviewed": "This version has not been previewed. Consider previewing it in the student app first.",
+      "confirmSet": "Set live",
+      "confirmRollback": "Roll back",
+      "pending": "Working",
+      "doneSet": "Version {version} is live.",
+      "doneRollback": "Rolled back to version {version}."
+    },
+    "delete": {
+      "title": "Delete version {version}?",
+      "description": "Its files are removed from storage and the version is gone for good. It was never live and no Session used it.",
+      "filesLine": "{count, plural, one {# file} other {# files}} will be removed.",
+      "confirm": "Delete version",
+      "pending": "Deleting",
+      "done": "Version deleted."
+    }
   }
 }

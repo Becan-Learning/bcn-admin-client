@@ -191,7 +191,7 @@ Each ticket updates its own repo's docs, glossary and contract files. The Milest
 | AD1 | admin | Catalog navigation, Institutions and Majors pages (#22, PR open) | B2 (merged, backend #43) |
 | AD2 | admin | Courses list, create, edit, status changes, delete (#23, PR open) | B2 (merged, backend #43 and #45) |
 | AD3 | admin | Chapters list, drag to reorder, state changes, replacement (#24, PR open). Adds the `/catalog/chapters/[id]` page with the `ChapterContentVersionsSection` slot for AD4 | B2 |
-| AD4 | admin | Content versions and Course content versions: upload with the token, validation report, file list, set live, rollback, delete, preview link and status | B3, B4 |
+| AD4 | admin | Content versions and Course content versions: upload with the token, validation report, file list, set live, rollback, delete, preview link and status (#25, PR open). Fills the two `*ContentVersionsSection` slots; `STUDENT_APP_URL` is a new server-only env var; disables the Chapter dialog's lesson count while a live version exists | B3, B4 |
 | R1 | admin (tracking) | Release runbook: the maintenance window order, Bunny env vars, staging run, then production; check token issuance and a full Session on staging | everything |
 
 **Order.** A1 and B1 start now and run in parallel. B1, A2 and W1 break the contract between them, so they merge into
