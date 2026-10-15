@@ -7,6 +7,9 @@ describe("access-control contract with the backend", () => {
   it("has the backend's statements", () => {
     expect(statements).toMatchInlineSnapshot(`
       {
+        "audit": [
+          "read",
+        ],
         "course": [
           "create",
           "read",
@@ -51,6 +54,9 @@ describe("access-control contract with the backend", () => {
   it("gives the Admin Role the backend's permissions", () => {
     expect(admin.statements).toMatchInlineSnapshot(`
       {
+        "audit": [
+          "read",
+        ],
         "course": [
           "create",
           "read",

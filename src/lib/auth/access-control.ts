@@ -9,7 +9,8 @@ import { defaultStatements } from "better-auth/plugins/admin/access";
 export const statements = {
   ...defaultStatements,
   course: ["create", "read", "update", "delete", "publish"],
-  tutor: ["unlimited"]
+  tutor: ["unlimited"],
+  audit: ["read"]
 } as const;
 
 export const ac = createAccessControl(statements);
@@ -24,7 +25,8 @@ export const admin = ac.newRole({
   user: ["list", "set-role", "ban", "delete", "set-email", "get", "update"],
   session: ["list", "revoke", "delete"],
   course: ["create", "read", "update", "delete", "publish"],
-  tutor: ["unlimited"]
+  tutor: ["unlimited"],
+  audit: ["read"]
 });
 
 // Keyed by the Role names stored on the user row. `user` is the Student Role's stored name.
