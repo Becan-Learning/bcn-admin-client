@@ -24,11 +24,11 @@ function Actor({ actor }: { actor: AuditEntry["actor"] }) {
   if (!actor) return <span className="text-muted-foreground">{t("removedAdmin")}</span>;
   return (
     <div className="grid">
-      <span className="font-medium" dir="auto">
-        {actor.name}
+      <span className="font-medium">
+        <bdi>{actor.name}</bdi>
       </span>
-      <span className="text-xs text-muted-foreground" dir="auto">
-        {actor.email}
+      <span className="text-xs text-muted-foreground">
+        <bdi>{actor.email}</bdi>
       </span>
     </div>
   );
@@ -42,8 +42,8 @@ function Action({ entry }: { entry: AuditEntry }) {
     <div className="grid gap-0.5">
       <span>{key ? names(key) : entry.action}</span>
       {entry.reason ? (
-        <span className="text-xs text-muted-foreground" dir="auto">
-          {t("reason", { reason: entry.reason })}
+        <span className="text-xs text-muted-foreground">
+          {t("reason", { reason: `\u2068${entry.reason}\u2069` })}
         </span>
       ) : null}
     </div>

@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Page() {
   const t = await getTranslations("Pages.myAccount");
   return (
-    <div className="flex max-w-3xl flex-col gap-6">
+    <div className="flex max-w-5xl flex-col gap-6">
       <PageHeader title={t("title")} description={t("description")} />
       <Suspense fallback={<Skeleton className="h-64 w-full" />}>
         <Sections />

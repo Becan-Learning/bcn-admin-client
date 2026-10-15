@@ -187,7 +187,9 @@ export function EnrollmentsCard({
         }}
         title={t("endTitle")}
         description={
-          ending ? t("endDescription", { course: `${ending.course.code} ${ending.course.name.en}` }) : ""
+          ending
+            ? t("endDescription", { course: `\u2068${ending.course.code} ${ending.course.name.en}\u2069` })
+            : ""
         }
         confirmLabel={t("endConfirm")}
         pendingLabel={t("ending")}

@@ -53,7 +53,7 @@ export function ProfileCard({ name, email }: { name: string; email: string }) {
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={save} className="flex flex-col gap-6">
+        <form onSubmit={save} className="flex max-w-xl flex-col gap-6">
           <FormError errorKey={errorKey} />
           <FieldGroup>
             <Field>

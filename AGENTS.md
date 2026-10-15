@@ -38,8 +38,11 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
 - **Interface text** lives in `messages/en.json` (English only, no locale prefix). Never hard-code
   visible text in components. Show Better Auth errors through `Errors.<CODE>` in that file
   (`src/lib/auth/errors.ts`), never the backend's own text.
-- **Arabic content** (names, titles) can appear anywhere. Put `dir="auto"` on every cell, field and
-  preview that shows user content.
+- **Arabic content** (names, titles) can appear anywhere. Inputs and textareas that take user content get
+  `dir="auto"`, so typing Arabic right-aligns. Display text (headings, cells, labels, notices) does **not**:
+  `dir="auto"` on a block right-aligns an Arabic value in this LTR page. Keep the block LTR and isolate the
+  value inline with `<bdi>`, so it lines up with the rest of the page but still renders RTL. For a truncated
+  line use `<span className="truncate"><bdi>…</bdi></span>`.
 - Add shadcn components with `pnpm dlx shadcn@latest add <name>`.
 - The auth screens are our own (`src/components/auth/`), built from shadcn blocks and `authClient`.
   Better Auth UI was evaluated and not used: it brings its own provider, TanStack Query and
@@ -78,7 +81,7 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
 
 - `/accounts/[id]` is a server component: inside `<Suspense>` it fetches Better Auth's `admin/get-user` and the
   public Institutions (`fetchAccountProfile`, `fetchInstitutions`), then renders `AccountHeader` and one
-  component per section, all in `src/components/accounts/detail/`. The header shows the name (`dir="auto"`),
+  component per section, all in `src/components/accounts/detail/`. The header shows the name (in a `<bdi>`),
   email, Role, banned and two-factor badges.
 - **Sections are slots.** `ProfileSection` is built. `AccountActionsSection` (#5: ban, Device sessions, Role,
   removal), `EnrollmentsSection`, `PlanUsageSection` and `SessionsSection` (#6) are files that return `null`;

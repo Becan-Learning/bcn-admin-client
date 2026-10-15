@@ -96,8 +96,8 @@ export function EmailCard({
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
         <div className="flex flex-wrap items-center gap-2">
-          <span dir="auto" className="text-sm font-medium">
-            {email}
+          <span className="text-sm font-medium">
+            <bdi>{email}</bdi>
           </span>
           <Badge variant={emailVerified ? "secondary" : "outline"}>
             {emailVerified ? t("verified") : t("unverified")}
@@ -135,7 +135,7 @@ export function EmailCard({
           </div>
         ) : null}
 
-        <form onSubmit={review} className="flex flex-col gap-4" noValidate>
+        <form onSubmit={review} className="flex max-w-xl flex-col gap-4" noValidate>
           <FieldGroup>
             <Field data-invalid={Boolean(fieldMessage) || undefined}>
               <FieldLabel htmlFor="profile-new-email">{t("newEmail")}</FieldLabel>

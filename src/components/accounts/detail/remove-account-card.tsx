@@ -59,18 +59,20 @@ export function RemoveAccountCard({
         <CardDescription>{t("remove.description")}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Button
-          type="button"
-          variant="destructive"
-          disabled={isSelf || pending}
-          onClick={() => {
-            setTyped("");
-            setErrorKey(null);
-            setOpen(true);
-          }}
-        >
-          {t("remove.action")}
-        </Button>
+        <div>
+          <Button
+            type="button"
+            variant="destructive"
+            disabled={isSelf || pending}
+            onClick={() => {
+              setTyped("");
+              setErrorKey(null);
+              setOpen(true);
+            }}
+          >
+            {t("remove.action")}
+          </Button>
+        </div>
       </CardContent>
 
       <ConfirmDialog
@@ -92,9 +94,9 @@ export function RemoveAccountCard({
             {t.rich("remove.typeEmail", {
               email,
               strong: (chunks) => (
-                <strong dir="auto" className="font-semibold break-all">
+                <bdi className="font-semibold break-all">
                   {chunks}
-                </strong>
+                </bdi>
               ),
             })}
           </FieldLabel>

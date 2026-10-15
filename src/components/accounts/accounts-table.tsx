@@ -61,8 +61,8 @@ function Localized({ name }: { name: { ar: string; en: string } }) {
   return (
     <div className="flex flex-col">
       <span>{name.en}</span>
-      <span dir="rtl" lang="ar" className="text-xs text-muted-foreground">
-        {name.ar}
+      <span lang="ar" className="text-xs text-muted-foreground">
+        <bdi>{name.ar}</bdi>
       </span>
     </div>
   );

@@ -11,14 +11,12 @@ function Value({ value }: { value: unknown }) {
   if (typeof value === "boolean") return <span>{value ? common("yes") : common("no")}</span>;
   const text = typeof value === "string" ? value : JSON.stringify(value);
   return (
-    <span dir="auto" className="break-words">
-      {text}
-    </span>
+    <bdi className="break-words">{text}</bdi>
   );
 }
 
 // The changed keys of an entry, before then after. Names and ban reasons are user text, so the
-// values use `dir="auto"`.
+// values are isolated in a `<bdi>`.
 export function AuditEntryChanges({ before, after }: { before: AuditValues; after: AuditValues }) {
   const t = useTranslations("AuditLog");
   const fields = useTranslations("AuditLog.fields");
