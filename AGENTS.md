@@ -1,0 +1,88 @@
+# Repository guidance
+
+The Becan admin dashboard: where Admins manage Accounts, the Catalog and Course content. It is a
+**client of the backend** with no database or secrets (`docs/adr/0001-*`). Role checks here only
+decide what to render; the backend re-checks every call.
+
+## Commands and toolchain
+
+- Use pnpm and the Node version in `.nvmrc` (`v24.12.0`). Non-interactive shells fall back to system
+  Node 18, so initialise NVM and pnpm in **every** shell invocation, then run the command:
+
+  ```bash
+  export NVM_DIR="$HOME/.nvm"
+  source "$NVM_DIR/nvm.sh" --no-use &&
+    nvm use --silent 24 &&
+    export PNPM_HOME="${PNPM_HOME:-$HOME/.local/share/pnpm}" &&
+    export PATH="$PNPM_HOME/bin:$PATH" &&
+    pnpm lint
+  ```
+
+- `pnpm dev` serves on **port 3002** (the backend's `ADMIN_ORIGIN` is `http://localhost:3002`).
+  `pnpm build`, `pnpm start`.
+- Verify in this order before calling work done: `pnpm lint`, then `pnpm type-check`, then
+  `pnpm build`. Tests: `pnpm test` (`vitest run`); one file: `pnpm test tests/<file>.test.ts`.
+- `BACKEND_URL` (see `.env.example`) defaults to `http://localhost:3000` in dev. In production the
+  app throws at startup when it is unset.
+- New packages whose install scripts are not approved fail `pnpm add`: list them in
+  `pnpm-workspace.yaml` under `allowBuilds` (we set the ones we do not need to `false`).
+
+## Stack
+
+Next.js 16 (App Router, `src/`, Cache Components on), React 19, TypeScript strict, Tailwind 4,
+shadcn (CLI v4, `radix-vega` style, neutral, `components.json`), next-intl, Better Auth client, zod,
+Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific code.
+
+- **The student web app's design rules do not apply here.** No Becan-branded tokens, no Arabic-first
+  RTL layout, no page patterns. This is a plain shadcn neutral look, light and dark, LTR.
+- **Interface text** lives in `messages/en.json` (English only, no locale prefix). Never hard-code
+  visible text in components. Show Better Auth errors through `Errors.<CODE>` in that file
+  (`src/lib/auth/errors.ts`), never the backend's own text.
+- **Arabic content** (names, titles) can appear anywhere. Put `dir="auto"` on every cell, field and
+  preview that shows user content.
+- Add shadcn components with `pnpm dlx shadcn@latest add <name>`.
+- The auth screens are our own (`src/components/auth/`), built from shadcn blocks and `authClient`.
+  Better Auth UI was evaluated and not used: it brings its own provider, TanStack Query and
+  localization, which clash with next-intl and the forced-setup flow.
+
+## Proxy and gate
+
+- `next.config.ts` rewrites `/api/auth/:path*` and `/api/v1/:path*` to `BACKEND_URL`, so cookies stay
+  first-party and host-only. Signing in here does not sign you in to the student app. Browser code
+  calls the same origin; server code calls `backendUrl()` and forwards only `cookie` and
+  `x-forwarded-for` (`src/lib/auth/forwarded-headers.ts`).
+- `src/proxy.ts` is only an optimistic check: no session cookie means a redirect to `/sign-in`.
+  `/sign-in` and `/two-factor` are public (the challenge runs before the session cookie exists).
+- The real check is server-side. `src/lib/auth/session.ts` fetches
+  `get-session?disableCookieCache=true` with the incoming cookie and validates it with zod.
+  `adminGate(session)` in `src/lib/auth/gate.ts` is a pure function returning `"sign-in" |
+  "no-access" | "setup-two-factor" | "ok"`; it decides from `user.role` through the copied `roles`
+  (permission `user: ["list"]`), never `role === "admin"`. `requireGate(expected)` in `guard.ts`
+  redirects to the page for the visitor's state. `(dashboard)/layout.tsx` requires `"ok"`;
+  `/no-access` and `/setup-two-factor` require their own state.
+- Request-time reads (cookies, the session) must sit inside `<Suspense>`: Cache Components is on.
+- Everything is noindex: `robots` metadata plus an `X-Robots-Tag` header in `next.config.ts`.
+- There is no sign-up page and no "trust this device" option.
+
+## Cross-repo contract
+
+`src/lib/auth/access-control.ts` is a **verbatim copy** of the backend's `src/lib/access-control.ts`
+(`Becan-Learning/bcn-backend-main`, branch `dev`). Change both together or not at all. Do not reformat
+or edit the copy; `tests/access-control-contract.test.ts` snapshots its statements and Role names and
+fails when the two sides drift.
+
+## Branches
+
+- `dev` is the working branch and the source of truth. Run `git switch dev && git pull` before
+  reading code. Work branches come from `dev`, and PRs target `dev`: `gh pr create --base dev`.
+- `main` is production. Never commit, push or merge to `main` unless asked for a production release.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
