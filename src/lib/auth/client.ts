@@ -7,6 +7,7 @@ import {
   twoFactorClient
 } from "better-auth/client/plugins";
 import { ac, roles } from "./access-control";
+import { RETURN_PARAM, returnPathFromLocation } from "./return-path";
 
 // Same origin: next.config.ts rewrites /api/auth/* to the backend, so cookies stay host-only.
 export const authClient = createAuthClient({
@@ -16,7 +17,11 @@ export const authClient = createAuthClient({
       // The pending sign-in lives in an HTTP-only cookie the backend set; the challenge page
       // finishes it.
       onTwoFactorRedirect() {
-        window.location.assign(new URL("/two-factor", window.location.origin));
+        // Keep the page to return to (set by "Sign in again") through the challenge.
+        const url = new URL("/two-factor", window.location.origin);
+        const back = returnPathFromLocation();
+        if (back) url.searchParams.set(RETURN_PARAM, back);
+        window.location.assign(url);
       }
     }),
     inferAdditionalFields({

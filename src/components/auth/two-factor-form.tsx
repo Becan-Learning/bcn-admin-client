@@ -9,6 +9,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth/client";
 import { authErrorKey, type AuthClientError, type AuthErrorKey } from "@/lib/auth/errors";
+import { returnPathFromLocation } from "@/lib/auth/return-path";
 import { FormError } from "./form-error";
 import { TOTP_LENGTH, TotpField } from "./totp-field";
 
@@ -38,7 +39,7 @@ export function TwoFactorForm() {
         setCode("");
         return;
       }
-      router.replace("/");
+      router.replace(returnPathFromLocation() ?? "/");
       router.refresh();
     } catch {
       setErrorKey("NETWORK");

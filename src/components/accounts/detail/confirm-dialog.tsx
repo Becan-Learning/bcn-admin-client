@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { FormError } from "@/components/auth/form-error";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,10 @@ export function ConfirmDialog({
   pending,
   errorKey,
   onConfirm,
+  destructive = false,
+  confirmDisabled = false,
+  children,
+  errorAction,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -36,6 +41,14 @@ export function ConfirmDialog({
   pending: boolean;
   errorKey: AuthErrorKey | null;
   onConfirm: () => void;
+  // Red confirm button, for a change that cannot be undone.
+  destructive?: boolean;
+  // Keeps the confirm button off until the caller's extra input is valid.
+  confirmDisabled?: boolean;
+  // Extra input between the description and the buttons (a field to fill in, say).
+  children?: ReactNode;
+  // Shown under the error, for an error with a way forward (like "Sign in again").
+  errorAction?: ReactNode;
 }) {
   const common = useTranslations("Common");
   return (
@@ -45,12 +58,19 @@ export function ConfirmDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription dir="auto">{description}</DialogDescription>
         </DialogHeader>
+        {children}
         <FormError errorKey={errorKey} />
+        {errorKey ? errorAction : null}
         <DialogFooter>
           <Button type="button" variant="outline" disabled={pending} onClick={() => onOpenChange(false)}>
             {common("cancel")}
           </Button>
-          <Button type="button" disabled={pending} onClick={onConfirm}>
+          <Button
+            type="button"
+            variant={destructive ? "destructive" : "default"}
+            disabled={pending || confirmDisabled}
+            onClick={onConfirm}
+          >
             {pending ? pendingLabel : confirmLabel}
           </Button>
         </DialogFooter>
