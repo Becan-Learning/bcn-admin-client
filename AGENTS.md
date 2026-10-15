@@ -64,6 +64,16 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
 - Everything is noindex: `robots` metadata plus an `X-Robots-Tag` header in `next.config.ts`.
 - There is no sign-up page and no "trust this device" option.
 
+## Accounts list
+
+- `/accounts` is a server component: inside `<Suspense>` it reads `searchParams` and the request headers,
+  fetches `GET /api/v1/admin/accounts` (backend `AGENTS.md`, "Admin Accounts list") with the forwarded
+  cookie, and hands the result to the client `AccountsView`. The URL is the only table state
+  (`src/lib/accounts/query-state.ts`, pure and tested); filters, sort and paging are navigations that
+  re-run the fetch. Expected failures return an error key shown through `Errors.<CODE>`, never raw
+  backend text. Follow this pattern for the other lists.
+- The table is TanStack Table v9 (`useTable`, manual sorting and paging, `rowCount` from the backend).
+
 ## Cross-repo contract
 
 `src/lib/auth/access-control.ts` is a **verbatim copy** of the backend's `src/lib/access-control.ts`

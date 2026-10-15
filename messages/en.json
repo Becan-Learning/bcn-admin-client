@@ -42,8 +42,7 @@
   "Pages": {
     "accounts": {
       "title": "Accounts",
-      "description": "Search and manage Accounts.",
-      "placeholder": "The Accounts list arrives with the next issues of Milestone 1."
+      "description": "Find any Account by name, email or phone, then open it."
     },
     "catalog": {
       "title": "Catalog",
@@ -244,5 +243,69 @@
       "loadFailed": "Could not load your Device sessions",
       "loading": "Loading Device sessions"
     }
+  },
+  "Accounts": {
+    "searchLabel": "Search Accounts",
+    "searchPlaceholder": "Search by name, email or phone",
+    "clearSearch": "Clear search",
+    "filters": "Filters",
+    "allRoles": "All Roles",
+    "roleLabel": "Role",
+    "roleStudent": "Student",
+    "roleAdmin": "Admin",
+    "allInstitutions": "All Institutions",
+    "institutionLabel": "Institution",
+    "allMajors": "All Majors",
+    "majorLabel": "Major",
+    "majorNeedsInstitution": "Choose an Institution first",
+    "allBanStatuses": "Banned or not",
+    "banLabel": "Ban status",
+    "onlyBanned": "Banned only",
+    "onlyNotBanned": "Not banned",
+    "clearFilters": "Clear filters",
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "institution": "Institution",
+      "major": "Major",
+      "role": "Role",
+      "emailVerified": "Email",
+      "twoFactor": "Two-factor",
+      "banned": "Banned",
+      "created": "Created"
+    },
+    "sortBy": "Sort by {column}",
+    "verified": "Verified",
+    "unverified": "Unverified",
+    "twoFactorOn": "On",
+    "twoFactorOff": "Off",
+    "banned": "Banned",
+    "bannedUntil": "Banned until {date}",
+    "notBanned": "No",
+    "summary": "{total, plural, =0 {No Accounts} one {1 Account} other {# Accounts}}",
+    "pageOf": "Page {page} of {pages}",
+    "previous": "Previous",
+    "next": "Next",
+    "loadingList": "Loading Accounts",
+    "emptyTitle": "No Accounts yet",
+    "emptyDescription": "Accounts appear here once people sign up.",
+    "noMatchesTitle": "No Accounts match",
+    "noMatchesDescription": "Try a different search or clear the filters.",
+    "pastEndTitle": "This page is empty",
+    "pastEndDescription": "There are fewer Accounts than this page number needs.",
+    "firstPage": "Go to the first page",
+    "errorTitle": "Could not load Accounts",
+    "openAccount": "Open {name}"
+  },
+  "AccountDetail": {
+    "title": "Account",
+    "description": "Account details.",
+    "backToList": "Back to Accounts",
+    "comingSoon": "Profile coming soon",
+    "comingSoonDescription": "Editing, Enrollments, Plan and Usage, and Sessions arrive in the next issue of Milestone 1.",
+    "notFoundTitle": "Account not found",
+    "notFoundDescription": "No Account has this id. It may have been removed.",
+    "errorTitle": "Could not load this Account"
   }
 }
