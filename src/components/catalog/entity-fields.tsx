@@ -66,6 +66,8 @@ export function EntityFields({
           className="font-mono"
           value={values.id}
           readOnly={idMode === "edit"}
+          // Out of the tab order when read-only, so an edit dialog opens on the first field you can change.
+          tabIndex={idMode === "edit" ? -1 : undefined}
           disabled={disabled && idMode === "create"}
           aria-invalid={invalid("id")}
           aria-describedby="catalog-id-help"
