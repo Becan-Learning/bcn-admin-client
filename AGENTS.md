@@ -125,8 +125,8 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
 
 ## Catalog
 
-The Catalog area is `/catalog/*`; AD1 (#22) built Institutions and Majors and AD2 (#23) built Courses; AD3 and AD4
-add Chapters and Content versions. Follow these patterns so the pages stay alike. The routes are the backend's Admin
+The Catalog area is `/catalog/*`; AD1 (#22) built Institutions and Majors, AD2 (#23) Courses and AD3 (#24) Chapters; AD4
+adds Content versions. Follow these patterns so the pages stay alike. The routes are the backend's Admin
 Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); permissions are `course:*`.
 
 - **Navigation.** `AppSidebar` (`src/components/shell/app-sidebar.tsx`) has a `NAV_ITEMS` entry with `children`
@@ -179,7 +179,7 @@ Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); per
 - **Detail** `/catalog/courses/[id]` (UUID). `fetchCourse` gives `counts` and `deletable`; unknown or malformed
   ids are `COURSE_NOT_FOUND` and render `not-found.tsx`. Sections, in `components/catalog/courses/detail/`:
   header (UUID read-only and copyable), `CourseDetailsSection`, `CourseStatusSection`, the slots
-  `ChaptersSection` (AD3) and `CourseContentVersionsSection` (AD4), then `CourseDeleteSection`. **The two slots
+  `ChaptersSection` (AD3, built) and `CourseContentVersionsSection` (AD4), then `CourseDeleteSection`. **The two slots
   are files that return `null` and take `{ course }`; the page already renders them, so AD3 and AD4 only edit their
   own file.**
 - **Details** sends only changed fields (`diffCourse`, `course-form.ts`). The slug is editable; changing it asks for
@@ -193,6 +193,41 @@ Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); per
 - **Delete** is offered only when the backend says `deletable`, and needs the slug typed. Otherwise one block lists
   why (`deleteBlockers`) and points to Archive. 409 `COURSE_IN_USE` is still handled. On success it goes to the list.
 - Creating a Course (`CourseDialog`) makes a Draft and opens its page.
+
+### Chapters (AD3, #24)
+
+- **Section.** `ChaptersSection` (`components/catalog/courses/detail/chapters-section.tsx`) is an async server
+  component with its own `<Suspense>` and error alert (`SectionError`, like the Account sections). It reads
+  `fetchChapters` (`GET /admin/courses/:id/chapters`, every state) and hands the list to the client `ChaptersCard`
+  (`.../detail/chapters/`). The Course page is untouched. A Chapter read carries `liveContentVersionId`, `counts`
+  and `deletable`; the Course read carries the Course's `liveContentVersionId`.
+- **Groups.** `groupChapters` (`chapter-rules.ts`): Coming soon and Published by number (the numbered list), then
+  Drafts, then Archived (collapsed). Only the numbered list is reordered; Drafts and Archived Chapters may share a
+  number with a live one. Arabic titles are in `<bdi>`.
+- **Reorder.** The Admin arranges the numbered ids locally (`moveToId`, `moveBy`); Save order sends the full list
+  once (`PUT /courses/:id/chapters/order`), Reset returns to the server order. Drag is `@dnd-kit` (pointer, and
+  keyboard on the handle: Space, arrows, Space); Move up and Move down in the row menu is the touch and keyboard
+  alternative. The arrangement is dropped when the server's list changes (`effectiveOrder`). While it is unsaved,
+  every other row action waits. A failed save restores the server order and shows the error; 409
+  `CHAPTER_ORDER_MISMATCH` also reloads the page data.
+- **State moves** are `chapterStateMoves`: any state to any other, each behind a `ConfirmDialog` that says the
+  effect. The dialog lists exactly why a move cannot work and keeps confirm off: `numberTaken` (another Coming soon
+  or Published Chapter holds the number) and, for Published, `chapterContent` and `courseContent` (from
+  `liveContentVersionId` of the Chapter and of the Course; `publishBlockers`). The backend's 409
+  `PUBLISH_PRECONDITION` and `CHAPTER_NUMBER_TAKEN` are still handled if the page was stale. Only our own
+  `messages/en.json` text is shown, never the backend's.
+- **Replace** (Coming soon or Published Chapters only): the dialog lists the Course's Drafts
+  (`replacementCandidates`); for a Published Chapter a Draft without live content (or a Course without live content)
+  is listed but off with the reason. It names both Chapters: the Draft takes the number and state, the old one is
+  archived. Handles `REPLACEMENT_INVALID` and `PUBLISH_PRECONDITION`.
+- **Create and edit** (`ChapterDialog`, `chapter-form.ts`): titles, minutes, lesson count, number (blank on create =
+  next free). Edits send only the changed fields; `CHAPTER_NUMBER_TAKEN` is shown on the number field
+  (`catalogFieldForError`). **Delete** only when `deletable`, behind a confirm; otherwise the row menu says why
+  (`chapterDeleteBlockers`) and points to Archive. `CHAPTER_IN_USE` is still handled.
+- **Chapter page** `/catalog/chapters/[id]` (`fetchChapter` + `fetchCourse`): header (titles, number, state, Course
+  link, UUID) and the slot `ChapterContentVersionsSection` (`components/catalog/chapters/detail/`), which returns
+  `null` and takes `{ chapter, course }`; **AD4 fills only that file**. Unknown ids render `not-found.tsx`. Audit
+  log entries targeting a Chapter link here; the sidebar keeps Courses highlighted on this page.
 
 ## Cross-repo contract
 

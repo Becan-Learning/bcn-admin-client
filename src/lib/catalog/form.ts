@@ -31,7 +31,14 @@ export function parseSortOrder(input: string): number | null {
   return value <= SORT_ORDER_MAX ? value : null;
 }
 
-export type FormIssue = "required" | "invalidId" | "tooLong" | "invalidSortOrder";
+export type FormIssue =
+  | "required"
+  | "invalidId"
+  | "tooLong"
+  | "invalidSortOrder"
+  | "invalidNumber"
+  | "invalidMinutes"
+  | "invalidLessonCount";
 export type FormIssues = Partial<Record<CatalogField, FormIssue>>;
 
 function nameIssue(value: string): FormIssue | null {

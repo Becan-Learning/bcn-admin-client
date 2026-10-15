@@ -1,12 +1,18 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  createChapter,
   createCourse,
   createInstitution,
   createMajor,
+  deleteChapter,
   deleteCourse,
+  editChapter,
   editCourse,
   editInstitution,
   editMajor,
+  reorderChapters,
+  replaceChapter,
+  setChapterState,
   setCourseStatus,
 } from "@/lib/catalog/api";
 
@@ -149,5 +155,101 @@ describe("Course writes", () => {
     const fetchMock = respond(200, {});
     await editCourse("a/b", { code: "x" });
     expect(fetchMock.mock.calls[0][0]).toBe("/api/v1/admin/courses/a%2Fb");
+  });
+});
+
+describe("Chapter writes", () => {
+  it("POST a Draft under the Course", async () => {
+    const fetchMock = respond(201, { id: "ch-1" });
+    const body = { titleEn: "Limits", titleAr: "النهايات", minutes: 20, lessonCount: 0 };
+    expect(await createChapter("c-1", body)).toEqual({ ok: true });
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe("/api/v1/admin/courses/c-1/chapters");
+    expect(init.method).toBe("POST");
+    expect(JSON.parse(init.body)).toEqual(body);
+  });
+
+  it("PATCH only the changes to the Chapter's own path, and place a taken number on its field", async () => {
+    const fetchMock = respond(200, {});
+    expect(await editChapter("ch-1", { minutes: 30 })).toEqual({ ok: true });
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe("/api/v1/admin/chapters/ch-1");
+    expect(init.method).toBe("PATCH");
+    expect(JSON.parse(init.body)).toEqual({ minutes: 30 });
+
+    respond(409, { error: { code: "CHAPTER_NUMBER_TAKEN" } });
+    expect(await editChapter("ch-1", { number: 2 })).toEqual({
+      ok: false,
+      field: "number",
+      errorKey: "CHAPTER_NUMBER_TAKEN",
+    });
+  });
+
+  it("PUT the state with only the state in the body", async () => {
+    const fetchMock = respond(200, {});
+    expect(await setChapterState("ch-1", "coming_soon")).toEqual({ ok: true });
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe("/api/v1/admin/chapters/ch-1/state");
+    expect(init.method).toBe("PUT");
+    expect(JSON.parse(init.body)).toEqual({ state: "coming_soon" });
+  });
+
+  it("show PUBLISH_PRECONDITION and CHAPTER_NUMBER_TAKEN of a state change for the dialog", async () => {
+    respond(409, { error: { code: "PUBLISH_PRECONDITION" } });
+    expect(await setChapterState("ch-1", "published")).toEqual({
+      ok: false,
+      field: null,
+      errorKey: "PUBLISH_PRECONDITION",
+    });
+    respond(409, { error: { code: "CHAPTER_NUMBER_TAKEN" } });
+    expect(await setChapterState("ch-1", "published")).toMatchObject({ ok: false, errorKey: "CHAPTER_NUMBER_TAKEN" });
+  });
+
+  it("PUT the full ordered list once", async () => {
+    const fetchMock = respond(200, { chapters: [] });
+    expect(await reorderChapters("c-1", ["b", "a", "c"])).toEqual({ ok: true });
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe("/api/v1/admin/courses/c-1/chapters/order");
+    expect(init.method).toBe("PUT");
+    expect(JSON.parse(init.body)).toEqual({ chapterIds: ["b", "a", "c"] });
+  });
+
+  it("show CHAPTER_ORDER_MISMATCH and a body-check 400 of a reorder", async () => {
+    respond(409, { error: { code: "CHAPTER_ORDER_MISMATCH" } });
+    expect(await reorderChapters("c-1", ["a"])).toEqual({
+      ok: false,
+      field: null,
+      errorKey: "CHAPTER_ORDER_MISMATCH",
+    });
+    respond(400, { error: { message: "Each Chapter id once", details: {} } });
+    expect(await reorderChapters("c-1", ["a", "a"])).toMatchObject({ ok: false, errorKey: "INVALID_REQUEST" });
+  });
+
+  it("POST the replacement with the Draft's id", async () => {
+    const fetchMock = respond(200, { archived: {}, replacement: {} });
+    expect(await replaceChapter("old-1", "draft-1")).toEqual({ ok: true });
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe("/api/v1/admin/chapters/old-1/replace");
+    expect(init.method).toBe("POST");
+    expect(JSON.parse(init.body)).toEqual({ draftChapterId: "draft-1" });
+  });
+
+  it("show REPLACEMENT_INVALID and PUBLISH_PRECONDITION of a replacement", async () => {
+    respond(409, { error: { code: "REPLACEMENT_INVALID" } });
+    expect(await replaceChapter("a", "b")).toMatchObject({ ok: false, errorKey: "REPLACEMENT_INVALID" });
+    respond(409, { error: { code: "PUBLISH_PRECONDITION" } });
+    expect(await replaceChapter("a", "b")).toMatchObject({ ok: false, errorKey: "PUBLISH_PRECONDITION" });
+  });
+
+  it("DELETE with no body, accept 204, and show CHAPTER_IN_USE", async () => {
+    const fetchMock = respond(204);
+    expect(await deleteChapter("ch-1")).toEqual({ ok: true });
+    const [url, init] = fetchMock.mock.calls[0];
+    expect(url).toBe("/api/v1/admin/chapters/ch-1");
+    expect(init.method).toBe("DELETE");
+    expect(init.body).toBeUndefined();
+
+    respond(409, { error: { code: "CHAPTER_IN_USE" } });
+    expect(await deleteChapter("ch-1")).toEqual({ ok: false, field: null, errorKey: "CHAPTER_IN_USE" });
   });
 });
