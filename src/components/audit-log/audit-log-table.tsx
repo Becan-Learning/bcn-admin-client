@@ -56,6 +56,19 @@ function targetHref(entry: AuditEntry): string | null {
   if (entry.targetType === "account" && entry.action !== "account.remove") return `/accounts/${id}`;
   if (entry.targetType === "course" && entry.action !== "course.delete") return `/catalog/courses/${id}`;
   if (entry.targetType === "chapter" && entry.action !== "chapter.delete") return `/catalog/chapters/${id}`;
+  if (entry.targetType === "content-version") return contentVersionOwnerHref(entry);
+  return null;
+}
+
+// A Content version has no page of its own: it is shown on its owner's page. The entry records the owner
+// (`ownerKind`, `ownerId`) on both sides; a deleted version still has an owner to open.
+function contentVersionOwnerHref(entry: AuditEntry): string | null {
+  const values = entry.after ?? entry.before;
+  const kind = values?.ownerKind;
+  const owner = values?.ownerId;
+  if (typeof owner !== "string" || owner === "") return null;
+  if (kind === "chapter") return `/catalog/chapters/${encodeURIComponent(owner)}`;
+  if (kind === "course") return `/catalog/courses/${encodeURIComponent(owner)}`;
   return null;
 }
 

@@ -1,4 +1,5 @@
-// Calls the browser makes to create and edit Institutions, Majors and Courses. Same origin: next.config.ts
+// Calls the browser makes to create and edit Institutions, Majors, Courses and Chapters (the Content version
+// calls are in ../content/api.ts and reuse `send` and `write`). Same origin: next.config.ts
 // rewrites /api/v1/* to the backend, so the Admin's cookie goes along. Each write is audited by the
 // backend (`institution.create|update`, `major.create|update`, `course.create|update|set-status|delete`,
 // `chapter.create|update|set-state|reorder|replace|delete`).
@@ -26,7 +27,7 @@ async function errorCode(response: Response): Promise<string | undefined> {
   }
 }
 
-async function send(
+export async function send(
   method: "POST" | "PATCH" | "PUT" | "DELETE",
   path: string,
   body?: object,
@@ -49,7 +50,7 @@ async function send(
   };
 }
 
-async function write(
+export async function write(
   method: "POST" | "PATCH" | "PUT" | "DELETE",
   path: string,
   body?: object,
