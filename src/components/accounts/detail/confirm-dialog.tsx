@@ -56,7 +56,7 @@ export function ConfirmDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription dir="auto">{description}</DialogDescription>
+          <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
         {children}
         <FormError errorKey={errorKey} />

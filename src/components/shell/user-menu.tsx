@@ -23,7 +23,7 @@ function initialOf(name: string, email: string): string {
   return (Array.from(name.trim())[0] ?? Array.from(email)[0] ?? "?").toUpperCase();
 }
 
-// The signed-in Admin and the sign-out action. Names can be Arabic, so they use `dir="auto"`.
+// The signed-in Admin and the sign-out action. Names can be Arabic, so they are isolated in a `<bdi>`.
 export function UserMenu({ admin }: { admin: SignedInAdmin }) {
   const t = useTranslations("Header");
   const common = useTranslations("Common");
@@ -32,8 +32,8 @@ export function UserMenu({ admin }: { admin: SignedInAdmin }) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="hidden max-w-48 truncate text-sm text-muted-foreground sm:inline" dir="auto">
-        {admin.name}
+      <span className="hidden max-w-48 truncate text-sm text-muted-foreground sm:inline">
+        <bdi>{admin.name}</bdi>
       </span>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -47,11 +47,11 @@ export function UserMenu({ admin }: { admin: SignedInAdmin }) {
           <DropdownMenuLabel className="font-normal">
             <span className="sr-only">{t("signedInAs", { name: admin.name })}</span>
             <div className="grid text-sm leading-tight" aria-hidden>
-              <span className="truncate font-medium" dir="auto">
-                {admin.name}
+              <span className="truncate font-medium">
+                <bdi>{admin.name}</bdi>
               </span>
-              <span className="truncate text-xs text-muted-foreground" dir="auto">
-                {admin.email}
+              <span className="truncate text-xs text-muted-foreground">
+                <bdi>{admin.email}</bdi>
               </span>
             </div>
           </DropdownMenuLabel>

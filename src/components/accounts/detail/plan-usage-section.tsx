@@ -48,11 +48,11 @@ async function PlanUsageData({ accountId }: { accountId: string }) {
           <div>
             <dt className="text-sm text-muted-foreground">{t("plan")}</dt>
             <dd className="flex flex-wrap items-center gap-2 font-medium">
-              <span dir="auto">{allowance.plan.name.en}</span>
+              <bdi>{allowance.plan.name.en}</bdi>
               {allowance.unlimited ? <Badge>{t("unlimitedAdmin")}</Badge> : null}
             </dd>
-            <dd dir="auto" lang="ar" className="text-xs text-muted-foreground">
-              {allowance.plan.name.ar}
+            <dd lang="ar" className="text-xs text-muted-foreground">
+              <bdi>{allowance.plan.name.ar}</bdi>
             </dd>
           </div>
           <div>

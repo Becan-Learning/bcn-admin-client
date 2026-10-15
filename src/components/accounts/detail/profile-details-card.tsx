@@ -103,7 +103,7 @@ export function ProfileDetailsCard({
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={save} className="flex flex-col gap-6" noValidate>
+        <form onSubmit={save} className="flex max-w-xl flex-col gap-6" noValidate>
           <FormError errorKey={formError} />
           {!catalogLoaded ? (
             <Alert role="status">

@@ -10,11 +10,11 @@ export async function AccountHeader({ account }: { account: AccountProfile }) {
 
   return (
     <header className="flex flex-col gap-2">
-      <h1 dir="auto" className="text-2xl font-semibold tracking-tight">
-        {account.name}
+      <h1 className="text-2xl font-semibold tracking-tight">
+        <bdi>{account.name}</bdi>
       </h1>
-      <p dir="auto" className="text-sm text-muted-foreground">
-        {account.email}
+      <p className="text-sm text-muted-foreground">
+        <bdi>{account.email}</bdi>
       </p>
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant={account.role === "admin" ? "default" : "secondary"}>{role}</Badge>

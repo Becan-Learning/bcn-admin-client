@@ -31,7 +31,7 @@ export default async function Page({
 }) {
   const t = await getTranslations("AccountDetail");
   return (
-    <div className="flex max-w-3xl flex-col gap-6">
+    <div className="flex max-w-5xl flex-col gap-6">
       <Link
         href="/accounts"
         className="inline-flex w-fit items-center gap-1 text-sm text-muted-foreground hover:text-foreground"

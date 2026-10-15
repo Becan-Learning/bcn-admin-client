@@ -23,7 +23,7 @@ import { timeValues } from "./date-time";
 import { useAccountAction } from "./use-account-action";
 
 // Ban with an optional reason and expiry, or lift a ban. Banning ends the Account's Device sessions
-// (done by the backend). The reason is user content, so it is `dir="auto"`.
+// (done by the backend). The reason is user content, so it is isolated in a `<bdi>`.
 export function BanCard({
   accountId,
   isSelf,
@@ -79,7 +79,7 @@ export function BanCard({
             </div>
             <p>
               <span className="font-medium">{t("reasonLabel")}: </span>
-              {reasonText ? <span dir="auto">{reasonText}</span> : <span className="text-muted-foreground">{t("noReason")}</span>}
+              {reasonText ? <bdi>{reasonText}</bdi> : <span className="text-muted-foreground">{t("noReason")}</span>}
             </p>
             <p className="text-muted-foreground">
               {state.kind === "never" ? (
