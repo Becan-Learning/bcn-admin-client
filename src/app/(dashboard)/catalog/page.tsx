@@ -1,12 +1,6 @@
-import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
-import { PlaceholderPage } from "@/components/shell/placeholder-page";
+import { redirect } from "next/navigation";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("Pages.catalog");
-  return { title: t("title") };
-}
-
+// The Catalog has no page of its own: the nav entry opens its first sub-page.
 export default function Page() {
-  return <PlaceholderPage page="catalog" />;
+  redirect("/catalog/institutions");
 }

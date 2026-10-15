@@ -123,6 +123,49 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
   (`langfuseSessionUrl`, the room is `ss_<study_session.id>`; Langfuse groups an agent Session's traces by room
   name). Unset or not an http(s) URL: no link. It is read at request time, so it needs no `NEXT_PUBLIC_` prefix.
 
+## Catalog
+
+The Catalog area is `/catalog/*`; AD1 (#22) built Institutions and Majors, AD2 to AD4 add Courses, Chapters
+and Content versions. Follow these patterns so the pages stay alike. The routes are the backend's Admin
+Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); permissions are `course:*`.
+
+- **Navigation.** `AppSidebar` (`src/components/shell/app-sidebar.tsx`) has a `NAV_ITEMS` entry with `children`
+  for sections: "Catalog" opens its first child and lists its children (always expanded, hidden when the sidebar
+  is collapsed to icons). Add a sub-page by adding a child there and its label under `Nav` in `messages/en.json`.
+  `/catalog` only redirects to `/catalog/institutions`. `/catalog/courses` is a `PlaceholderPage` until AD2.
+- **Reads** (`src/lib/catalog/fetch.ts`, `server-only`): the page is a server component and its fetch sits in a
+  component inside `<Suspense>`, with the request headers forwarded (`forwardedHeaders`). The result is
+  `{ ok: true, ... } | { ok: false, errorKey }`, never a throw. The client view draws it, including an error
+  panel with "Try again" (`router.refresh()`). Response shapes are zod schemas in `src/lib/catalog/types.ts`
+  (unknown fields dropped). The Institutions page makes two reads (Institutions, Majors) and joins them in
+  `groupMajors`, which keeps the backend's order.
+- **Writes** (`src/lib/catalog/api.ts`): run in the browser against the same-origin `/api/v1/admin/...`, then the
+  dialog's `useAccountAction` runs `router.refresh()`. The dialog closes when the write succeeded **and** the
+  refresh finished, so the list is already current. Each function returns `{ ok: true }` or
+  `{ ok: false, field, errorKey }`. A code that names a field (`catalogFieldForError`: `INSTITUTION_ID_TAKEN` and
+  `MAJOR_ID_TAKEN` on the id, `INVALID_INSTITUTION` and `MAJOR_IN_USE` on the Institution) is shown on that
+  field, any other under the form. A 400 from the body check has no `code`: it maps to `INVALID_REQUEST`.
+  Every code the backend answers has a message under `Errors`, and `tests/catalog-errors.test.ts` lists them:
+  add a new code to both.
+- **Forms** are dialogs (`InstitutionDialog`, `MajorDialog`). The form component is mounted only while the dialog
+  is open, so each opening starts clean. Shared fields (`entity-fields.tsx`: id, English name, Arabic name,
+  sort order) are for any record with that shape. Pure rules are in `src/lib/catalog/form.ts` (`validateForm`,
+  `diff*`, `*CreateBody`, `parseSortOrder`) and `slug.ts` (`isValidSlug`, `suggestSlug`), all tested.
+  - **Ids are slugs, set once.** Typed on create (suggested from the English name until the Admin edits it, with
+    a Major's Institution id in front) and shown read-only on edit. They are never in a PATCH body.
+  - **Edits send only the changed fields**; Save is off until something changed. The backend refuses unknown keys
+    and an empty body.
+  - Arabic inputs are `dir="auto"`. Arabic display text uses `LocalizedName` (English first, Arabic beneath in
+    `<bdi>`).
+- **No delete anywhere** for Institutions and Majors; the backend has no such route. A Major moves to another
+  Institution only while no Account holds it (the select is disabled with a note when `counts.accounts > 0`, and
+  `MAJOR_IN_USE` is still handled).
+- **Layout.** Pages use `max-w-5xl`. Below `md` the Major table hides the id column and below `sm` the order and
+  Account columns, folding them into a muted line under the name, so nothing scrolls sideways at 390 px.
+- **Audit log.** Catalog writes are audited by the backend with `targetType` `institution`, `major` (AD2 and AD3
+  add `course`, `chapter`). Add each new `action` to `AUDIT_ACTIONS` and its label to `AuditLog.actions`; the
+  labels test fails if they drift.
+
 ## Cross-repo contract
 
 `src/lib/auth/access-control.ts` is a **verbatim copy** of the backend's `src/lib/access-control.ts`
