@@ -6,7 +6,7 @@ import {
   placeCatalogError,
 } from "@/lib/catalog/errors";
 
-// Every code B2 answers on the Institution and Major routes (backend PR 43).
+// Every code B2 answers on the Institution, Major and Course routes (backend PR 43).
 const CODES = [
   "INSTITUTION_ID_TAKEN",
   "MAJOR_ID_TAKEN",
@@ -14,6 +14,10 @@ const CODES = [
   "MAJOR_IN_USE",
   "INSTITUTION_NOT_FOUND",
   "MAJOR_NOT_FOUND",
+  "SLUG_TAKEN",
+  "PUBLISH_PRECONDITION",
+  "COURSE_IN_USE",
+  "COURSE_NOT_FOUND",
   "UNAUTHENTICATED",
   "ADMIN_PERMISSION_REQUIRED",
   "ADMIN_TWO_FACTOR_REQUIRED",
@@ -52,8 +56,14 @@ describe("catalogFieldForError", () => {
     expect(catalogFieldForError("MAJOR_IN_USE")).toBe("institutionId");
   });
 
+  it("places a taken slug on the slug field", () => {
+    expect(catalogFieldForError("SLUG_TAKEN")).toBe("slug");
+  });
+
   it("leaves other codes for the form as a whole", () => {
     expect(catalogFieldForError("RATE_LIMITED")).toBeNull();
+    expect(catalogFieldForError("PUBLISH_PRECONDITION")).toBeNull();
+    expect(catalogFieldForError("COURSE_IN_USE")).toBeNull();
     expect(catalogFieldForError("constructor")).toBeNull();
     expect(catalogFieldForError(undefined)).toBeNull();
   });

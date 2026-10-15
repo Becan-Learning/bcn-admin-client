@@ -125,14 +125,14 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
 
 ## Catalog
 
-The Catalog area is `/catalog/*`; AD1 (#22) built Institutions and Majors, AD2 to AD4 add Courses, Chapters
-and Content versions. Follow these patterns so the pages stay alike. The routes are the backend's Admin
+The Catalog area is `/catalog/*`; AD1 (#22) built Institutions and Majors and AD2 (#23) built Courses; AD3 and AD4
+add Chapters and Content versions. Follow these patterns so the pages stay alike. The routes are the backend's Admin
 Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); permissions are `course:*`.
 
 - **Navigation.** `AppSidebar` (`src/components/shell/app-sidebar.tsx`) has a `NAV_ITEMS` entry with `children`
   for sections: "Catalog" opens its first child and lists its children (always expanded, hidden when the sidebar
   is collapsed to icons). Add a sub-page by adding a child there and its label under `Nav` in `messages/en.json`.
-  `/catalog` only redirects to `/catalog/institutions`. `/catalog/courses` is a `PlaceholderPage` until AD2.
+  `/catalog` only redirects to `/catalog/institutions`.
 - **Reads** (`src/lib/catalog/fetch.ts`, `server-only`): the page is a server component and its fetch sits in a
   component inside `<Suspense>`, with the request headers forwarded (`forwardedHeaders`). The result is
   `{ ok: true, ... } | { ok: false, errorKey }`, never a throw. The client view draws it, including an error
@@ -143,7 +143,7 @@ Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); per
   dialog's `useAccountAction` runs `router.refresh()`. The dialog closes when the write succeeded **and** the
   refresh finished, so the list is already current. Each function returns `{ ok: true }` or
   `{ ok: false, field, errorKey }`. A code that names a field (`catalogFieldForError`: `INSTITUTION_ID_TAKEN` and
-  `MAJOR_ID_TAKEN` on the id, `INVALID_INSTITUTION` and `MAJOR_IN_USE` on the Institution) is shown on that
+  `MAJOR_ID_TAKEN` on the id, `INVALID_INSTITUTION` and `MAJOR_IN_USE` on the Institution, and for Courses `SLUG_TAKEN` on the slug) is shown on that
   field, any other under the form. A 400 from the body check has no `code`: it maps to `INVALID_REQUEST`.
   Every code the backend answers has a message under `Errors`, and `tests/catalog-errors.test.ts` lists them:
   add a new code to both.
@@ -162,9 +162,37 @@ Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); per
   `MAJOR_IN_USE` is still handled).
 - **Layout.** Pages use `max-w-5xl`. Below `md` the Major table hides the id column and below `sm` the order and
   Account columns, folding them into a muted line under the name, so nothing scrolls sideways at 390 px.
-- **Audit log.** Catalog writes are audited by the backend with `targetType` `institution`, `major` (AD2 and AD3
-  add `course`, `chapter`). Add each new `action` to `AUDIT_ACTIONS` and its label to `AuditLog.actions`; the
-  labels test fails if they drift.
+- **Audit log.** Catalog writes are audited by the backend with `targetType` `institution`, `major`, `course` and
+  `chapter`. Add each new `action` to `AUDIT_ACTIONS` and its label to `AuditLog.actions`; the labels test fails
+  if they drift. All `course.*` and `chapter.*` actions and labels are already there (AD2 added the Chapter ones
+  for AD3), and a Course target links to its page; field labels for the Chapter fields exist too.
+
+### Courses (AD2, #23)
+
+- **List** `/catalog/courses` (server component, `fetchCourses` + `fetchAdminInstitutions`, drawn by `CoursesView`
+  in `src/components/catalog/courses/`). Every status; the status filter, the Institution filter and the search
+  (`SearchBox`, shared with Accounts) are the URL (`status`, `institution`, `search`; `course-query-state.ts`,
+  pure and tested) and go to the backend's `GET /admin/courses?status&institutionId&search`. **Not paged:** the
+  backend list is not paged and a Catalog has tens of Courses, so every match is shown in the backend's order
+  (Institution, sort order, code). Revisit if the Catalog grows past a few hundred. A row opens the detail page.
+  The Institutions feed the filter and the Add dialog; if their read fails the list still renders.
+- **Detail** `/catalog/courses/[id]` (UUID). `fetchCourse` gives `counts` and `deletable`; unknown or malformed
+  ids are `COURSE_NOT_FOUND` and render `not-found.tsx`. Sections, in `components/catalog/courses/detail/`:
+  header (UUID read-only and copyable), `CourseDetailsSection`, `CourseStatusSection`, the slots
+  `ChaptersSection` (AD3) and `CourseContentVersionsSection` (AD4), then `CourseDeleteSection`. **The two slots
+  are files that return `null` and take `{ course }`; the page already renders them, so AD3 and AD4 only edit their
+  own file.**
+- **Details** sends only changed fields (`diffCourse`, `course-form.ts`). The slug is editable; changing it asks for
+  confirmation first (Student links change: the old Course page stops resolving, session links with the old slug
+  redirect). `icon` and `tone` are selects over the backend's CHECK sets (`COURSE_ICONS`, `COURSE_TONES` in
+  `types.ts`, names under `Catalog.courses.icons` and `tones`).
+- **Status** moves are `courseStatusMoves` (`course-rules.ts`): any other status, each behind a `ConfirmDialog`
+  that says the effect. Back to Draft is disabled while `counts.chapters.published > 0` (the backend answers 409
+  `PUBLISH_PRECONDITION`, also shown in the dialog with the way forward); leaving Archived can answer 409
+  `SLUG_TAKEN`.
+- **Delete** is offered only when the backend says `deletable`, and needs the slug typed. Otherwise one block lists
+  why (`deleteBlockers`) and points to Archive. 409 `COURSE_IN_USE` is still handled. On success it goes to the list.
+- Creating a Course (`CourseDialog`) makes a Draft and opens its page.
 
 ## Cross-repo contract
 

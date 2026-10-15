@@ -54,3 +54,69 @@ export function groupMajors(
     majors: byInstitution.get(institution.id) ?? [],
   }));
 }
+
+// Courses (backend `AdminCourseDto`). The icon and tone sets are the backend's CHECK constraints on
+// `course.icon` and `course.tone` (src/db/schema/catalog-schema.ts); the student app draws them.
+export const COURSE_STATUSES = ["draft", "published", "archived"] as const;
+export type CourseStatus = (typeof COURSE_STATUSES)[number];
+
+export const COURSE_ICONS = [
+  "coins",
+  "bars",
+  "blocks",
+  "torus",
+  "flask",
+  "atom",
+  "donut",
+  "cube",
+  "bolt",
+] as const;
+export type CourseIcon = (typeof COURSE_ICONS)[number];
+
+export const COURSE_TONES = ["lilac", "base", "deep", "amber", "walnut", "olive", "oliveDark"] as const;
+export type CourseTone = (typeof COURSE_TONES)[number];
+
+export function isCourseStatus(value: unknown): value is CourseStatus {
+  return COURSE_STATUSES.some((status) => status === value);
+}
+export function isCourseIcon(value: unknown): value is CourseIcon {
+  return COURSE_ICONS.some((icon) => icon === value);
+}
+export function isCourseTone(value: unknown): value is CourseTone {
+  return COURSE_TONES.some((tone) => tone === value);
+}
+
+const count = z.number().int().nonnegative();
+
+export const adminCourseSchema = z.object({
+  id: z.string().min(1),
+  slug: z.string().min(1),
+  status: z.enum(COURSE_STATUSES),
+  code: z.string(),
+  name: localized,
+  institution: z.object({ id: z.string().min(1), name: localized }),
+  icon: z.enum(COURSE_ICONS),
+  tone: z.enum(COURSE_TONES),
+  sortOrder: z.number().int(),
+  liveContentVersionId: z.string().nullable(),
+  counts: z.object({
+    chapters: z.object({
+      draft: count,
+      comingSoon: count,
+      published: count,
+      archived: count,
+    }),
+    enrollments: count,
+    activeEnrollments: count,
+    sessions: count,
+    contentVersions: count,
+  }),
+  deletable: z.boolean(),
+  createdAt: z.string(),
+});
+
+// GET /api/v1/admin/courses answers `{ courses }`, in the backend's order (Institution sort order,
+// Course sort order, code, id); GET /courses/:id answers one Course.
+export const adminCoursesResponseSchema = z.object({ courses: z.array(adminCourseSchema) });
+
+export type AdminCourse = z.infer<typeof adminCourseSchema>;
