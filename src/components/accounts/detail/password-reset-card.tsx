@@ -26,7 +26,7 @@ export function PasswordResetCard({ accountId, email }: { accountId: string; ema
         <CardTitle>{t("title")}</CardTitle>
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
-      <CardContent className="flex items-center gap-3">
+      <CardContent className="flex-row flex-wrap items-center gap-3">
         <Button
           type="button"
           variant="outline"
