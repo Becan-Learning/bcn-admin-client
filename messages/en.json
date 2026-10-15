@@ -11,7 +11,17 @@
     "signOut": "Sign out",
     "signingOut": "Signing out",
     "email": "Email",
-    "password": "Password"
+    "password": "Password",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "saving": "Saving",
+    "copy": "Copy",
+    "copied": "Copied",
+    "download": "Download",
+    "yes": "Yes",
+    "no": "No",
+    "empty": "empty"
   },
   "Nav": {
     "label": "Navigation",
@@ -42,13 +52,11 @@
     },
     "auditLog": {
       "title": "Audit log",
-      "description": "Every Admin action: who, what and when.",
-      "placeholder": "The Audit log arrives with the next issues of Milestone 1."
+      "description": "Every Admin action: who, what and when."
     },
     "myAccount": {
       "title": "My account",
-      "description": "Your profile, two-factor and Device sessions.",
-      "placeholder": "Your account settings arrive with the next issues of Milestone 1."
+      "description": "Your profile, two-factor and Device sessions."
     }
   },
   "SignIn": {
@@ -118,6 +126,123 @@
     "ACCOUNT_TEMPORARILY_LOCKED": "Too many failed attempts. This Account is locked for a while.",
     "RATE_LIMITED": "Too many requests. Wait a moment, then try again.",
     "NETWORK": "Could not reach the server. Check your connection and try again.",
-    "UNKNOWN": "Something went wrong. Try again."
+    "UNKNOWN": "Something went wrong. Try again.",
+    "UNAUTHENTICATED": "Your session expired. Sign in again.",
+    "ADMIN_PERMISSION_REQUIRED": "Your Account does not have permission for this.",
+    "FRESH_SESSION_REQUIRED": "Sign in again to confirm it is you."
+  },
+  "AuditLog": {
+    "filters": {
+      "label": "Filters",
+      "action": "Action",
+      "anyAction": "Any action",
+      "actor": "Admin",
+      "anyActor": "Any Admin",
+      "actorsLoading": "Loading Admins",
+      "actorsFailed": "The Admin list could not be loaded.",
+      "unknownActor": "Admin {id}",
+      "targetId": "Account id",
+      "targetIdPlaceholder": "Paste an Account id",
+      "from": "From",
+      "to": "To",
+      "dateHelp": "Dates cover whole days in UTC.",
+      "apply": "Apply filters",
+      "clear": "Clear filters"
+    },
+    "columns": {
+      "time": "Time",
+      "actor": "Admin",
+      "action": "Action",
+      "target": "Target",
+      "changes": "Changes"
+    },
+    "removedAdmin": "Removed Admin",
+    "reason": "Reason: {reason}",
+    "targetTypes": {
+      "account": "Account"
+    },
+    "actions": {
+      "account_ban": "Banned an Account",
+      "account_unban": "Unbanned an Account",
+      "account_set_role": "Changed an Account Role",
+      "account_update": "Edited an Account",
+      "account_remove": "Removed an Account",
+      "account_revoke_session": "Revoked a Device session",
+      "account_revoke_sessions": "Revoked all Device sessions"
+    },
+    "fields": {
+      "name": "Name",
+      "email": "Email",
+      "phoneNumber": "Phone",
+      "institutionId": "Institution",
+      "majorId": "Major",
+      "emailVerified": "Email verified",
+      "role": "Role",
+      "banned": "Banned",
+      "banReason": "Ban reason",
+      "banExpires": "Ban expires",
+      "sessionId": "Session id",
+      "sessionCount": "Device sessions"
+    },
+    "noChanges": "No recorded changes",
+    "empty": {
+      "title": "No entries",
+      "filtered": "No entries match these filters.",
+      "none": "Nothing has been recorded yet."
+    },
+    "pageBeyond": "This page is past the last entry.",
+    "firstPage": "Go to the first page",
+    "loadFailed": "Could not load the Audit log",
+    "summary": "Showing {from} to {to} of {total}",
+    "page": "Page {page} of {pages}",
+    "previous": "Previous",
+    "next": "Next",
+    "pagination": "Pages",
+    "loadingEntries": "Loading entries"
+  },
+  "MyAccount": {
+    "profile": {
+      "title": "Profile",
+      "description": "Your name is shown in the audit trail of other Admins.",
+      "name": "Name",
+      "email": "Email",
+      "emailHelp": "Contact another Admin to change your email.",
+      "saved": "Name updated."
+    },
+    "twoFactor": {
+      "title": "Two-factor",
+      "description": "Authenticator app codes protect every Admin sign-in.",
+      "on": "On",
+      "requiredNote": "Admins cannot turn two-factor off. It is required for all Admin access.",
+      "backupTitle": "Backup codes",
+      "backupDescription": "Each code works once if you lose your authenticator. Making new codes cancels the old ones.",
+      "regenerate": "Make new backup codes",
+      "dialogTitle": "Make new backup codes",
+      "dialogDescription": "Confirm your password. The old codes stop working.",
+      "generate": "Make codes",
+      "generating": "Making codes",
+      "resultTitle": "Your new backup codes",
+      "resultDescription": "Save them now. They are shown only once.",
+      "copyCodes": "Copy codes",
+      "downloadCodes": "Download codes",
+      "downloadName": "becan-admin-backup-codes.txt",
+      "done": "Done"
+    },
+    "sessions": {
+      "title": "Device sessions",
+      "description": "Where your Account is signed in.",
+      "current": "This device",
+      "unknownDevice": "Unknown device",
+      "unknownIp": "Unknown address",
+      "signedInAt": "Signed in {date}",
+      "revoke": "Sign out",
+      "revoking": "Signing out",
+      "revokeLabel": "Sign out device {device}",
+      "revokeOthers": "Sign out other devices",
+      "revokingOthers": "Signing out",
+      "noOthers": "No other devices are signed in.",
+      "loadFailed": "Could not load your Device sessions",
+      "loading": "Loading Device sessions"
+    }
   }
 }
