@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageHeader } from "./page-header";
 
-type PlaceholderKey = "catalog";
+type PlaceholderKey = "catalogCourses";
 
 // A dashboard page that exists for navigation but has no content yet.
 export async function PlaceholderPage({ page }: { page: PlaceholderKey }) {

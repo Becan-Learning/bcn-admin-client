@@ -188,7 +188,7 @@ Each ticket updates its own repo's docs, glossary and contract files. The Milest
 | B3 | backend | Content versions API: upload token, zip ingest to Bunny (all or nothing), validation report (the schema copy plus cross-field checks), manifest, set live, rollback, delete when allowed, Course content versions; Bunny write env vars; audited with `targetType` `content-version` | B1, A1 |
 | B4 | backend | Admin preview: an uncached Admin-only Catalog read (Draft Courses, every Chapter and its versions); an Admin Session may pin any validated version (`contentVersionId`); an Admin Session marks that version previewed | B1 |
 | W2 | web | Draft preview for Admins: Draft Courses and unpublished Chapters, marked; start without an Enrollment; the "preview this version" link target | B4, W1 |
-| AD1 | admin | Catalog navigation, Institutions and Majors pages | B2 |
+| AD1 | admin | Catalog navigation, Institutions and Majors pages (#22, PR open) | B2 (merged, backend #43) |
 | AD2 | admin | Courses list, create, edit, status changes, delete | B2 |
 | AD3 | admin | Chapters list, drag to reorder, state changes, replacement | B2 |
 | AD4 | admin | Content versions and Course content versions: upload with the token, validation report, file list, set live, rollback, delete, preview link and status | B3, B4 |
