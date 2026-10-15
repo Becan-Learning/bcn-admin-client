@@ -120,3 +120,33 @@ export const adminCourseSchema = z.object({
 export const adminCoursesResponseSchema = z.object({ courses: z.array(adminCourseSchema) });
 
 export type AdminCourse = z.infer<typeof adminCourseSchema>;
+
+// Chapters (backend `AdminChapterDto`). Draft and Archived Chapters may share a number with a live one;
+// only Coming soon and Published Chapters have a number that is unique within their Course.
+export const CHAPTER_STATES = ["draft", "coming_soon", "published", "archived"] as const;
+export type ChapterState = (typeof CHAPTER_STATES)[number];
+
+export function isChapterState(value: unknown): value is ChapterState {
+  return CHAPTER_STATES.some((state) => state === value);
+}
+
+export const adminChapterSchema = z.object({
+  id: z.string().min(1),
+  courseId: z.string().min(1),
+  number: z.number().int(),
+  title: localized,
+  minutes: z.number().int(),
+  lessonCount: z.number().int().nonnegative(),
+  state: z.enum(CHAPTER_STATES),
+  // The live Chapter content version, or null while the Chapter has none.
+  liveContentVersionId: z.string().nullable(),
+  counts: z.object({ sessions: count, contentVersions: count }),
+  deletable: z.boolean(),
+  createdAt: z.string(),
+});
+
+// GET /api/v1/admin/courses/:id/chapters answers `{ chapters }` in every state, by number; GET
+// /chapters/:id answers one Chapter.
+export const adminChaptersResponseSchema = z.object({ chapters: z.array(adminChapterSchema) });
+
+export type AdminChapter = z.infer<typeof adminChapterSchema>;

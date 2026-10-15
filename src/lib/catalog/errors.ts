@@ -21,7 +21,12 @@ export type CatalogField =
   | "sortOrder"
   | "institutionId"
   | "icon"
-  | "tone";
+  | "tone"
+  | "titleEn"
+  | "titleAr"
+  | "minutes"
+  | "lessonCount"
+  | "number";
 
 const FIELD_ERRORS: Record<string, CatalogField> = {
   INSTITUTION_ID_TAKEN: "id",
@@ -29,6 +34,7 @@ const FIELD_ERRORS: Record<string, CatalogField> = {
   INVALID_INSTITUTION: "institutionId",
   MAJOR_IN_USE: "institutionId",
   SLUG_TAKEN: "slug",
+  CHAPTER_NUMBER_TAKEN: "number",
 };
 
 export function catalogFieldForError(code: string | undefined): CatalogField | null {

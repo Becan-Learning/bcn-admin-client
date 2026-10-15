@@ -154,7 +154,12 @@
     "MAJOR_NOT_FOUND": "This Major no longer exists. Reload the page to refresh the list.",
     "SLUG_TAKEN": "Another active Course already uses this slug. Choose a different slug.",
     "PUBLISH_PRECONDITION": "A publishing rule blocks this change, so nothing was changed.",
-    "COURSE_IN_USE": "This Course has Enrollments, Sessions or Content versions that were live or uploaded, so it cannot be deleted. Archive it instead."
+    "COURSE_IN_USE": "This Course has Enrollments, Sessions or Content versions that were live or uploaded, so it cannot be deleted. Archive it instead.",
+    "CHAPTER_NUMBER_TAKEN": "Another Coming soon or Published Chapter of this Course already has this number. Choose a free number, or reorder the Chapters.",
+    "CHAPTER_ORDER_MISMATCH": "The Course's Chapters changed since this page loaded, so the order was not saved. The list now shows the current order. Arrange it again.",
+    "REPLACEMENT_INVALID": "That Draft cannot replace this Chapter any more. Reload the page, then pick again.",
+    "CHAPTER_IN_USE": "This Chapter has study Sessions, or Content versions that were live or uploaded, so it cannot be deleted. Archive it instead.",
+    "CHAPTER_NOT_FOUND": "This Chapter no longer exists. Reload the page to refresh the list."
   },
   "AuditLog": {
     "filters": {
@@ -629,7 +634,10 @@
         "required": "Required.",
         "invalidId": "Use lowercase letters, digits, \"-\" and \"_\", starting with a letter or digit, up to 80 characters.",
         "tooLong": "At most 200 characters.",
-        "invalidSortOrder": "Enter a whole number from 0 to 1,000,000."
+        "invalidSortOrder": "Enter a whole number from 0 to 1,000,000.",
+        "invalidNumber": "Enter a whole number from 1 to 10,000.",
+        "invalidMinutes": "Enter a whole number of minutes from 1 to 1,000.",
+        "invalidLessonCount": "Enter a whole number from 0 to 1,000."
       }
     },
     "institutions": {
@@ -765,6 +773,12 @@
         "noInstitutions": "There are no Institutions to choose from. Add an Institution first.",
         "institutionsFailed": "The Institutions could not be loaded, so a Course cannot be added now. Reload the page to try again."
       }
+    },
+    "chapterState": {
+      "draft": "Draft",
+      "coming_soon": "Coming soon",
+      "published": "Published",
+      "archived": "Archived"
     }
   },
   "CourseDetail": {
@@ -842,6 +856,157 @@
       },
       "blockedArchive": "Archive it instead. It is then hidden from the Catalog and takes no new Enrollments, and everything that exists stays.",
       "blockedArchived": "It is already archived, which is the right place for it."
+    },
+    "chapters": {
+      "title": "Chapters",
+      "description": "Coming soon and Published Chapters are numbered and listed to Students in that order. Drafts and Archived Chapters are hidden from Students.",
+      "loading": "Loading Chapters",
+      "loadFailed": "The Chapters could not be loaded",
+      "add": "Add Chapter",
+      "empty": "This Course has no Chapters yet. Add a Draft, upload its content, then publish it.",
+      "groups": {
+        "numbered": "Coming soon and Published",
+        "numberedEmpty": "No Coming soon or Published Chapters. Move a Draft here when it is ready.",
+        "drafts": "Drafts",
+        "archived": "Archived"
+      },
+      "row": {
+        "chapterNumber": "Chapter {number}",
+        "minutes": "{minutes} min",
+        "lessons": "{count, plural, one {# lesson} other {# lessons}}",
+        "contentLive": "Live content",
+        "contentNone": "No live content",
+        "willBecome": "becomes {number}",
+        "actions": "Actions for {title}",
+        "content": "Content versions",
+        "edit": "Edit details",
+        "moveUp": "Move up",
+        "moveDown": "Move down",
+        "stateLabel": "Change state",
+        "moveTo": "Move to {state}",
+        "unavailable": "Unavailable",
+        "replace": "Replace with a Draft…",
+        "delete": "Delete…",
+        "deleteBlocked": "Cannot be deleted: {reason} Archive it instead.",
+        "deleteBlockers": {
+          "sessions": "it has study Sessions.",
+          "contentVersions": "it has Content versions that were live or uploaded."
+        }
+      },
+      "order": {
+        "handle": "Reorder {title}",
+        "instructions": "To reorder, press Space or Enter on the handle, move with the arrow keys, then press Space or Enter again to drop. Press Escape to cancel. The Move up and Move down actions do the same.",
+        "changed": "The order has changed. Save it to renumber the Chapters from 1 in this order.",
+        "locked": "Save or reset the new order before changing a Chapter.",
+        "save": "Save order",
+        "saving": "Saving order",
+        "reset": "Reset",
+        "saved": "Order saved."
+      },
+      "dialog": {
+        "createTitle": "Add a Chapter",
+        "createDescription": "It is created as a Draft, hidden from Students. Upload its content, then move it to Coming soon or Published.",
+        "editTitle": "Edit Chapter",
+        "editDescription": "Only the fields you change are saved. To change the state, use the Chapter's actions menu.",
+        "create": "Add Chapter",
+        "created": "Chapter added.",
+        "save": "Save changes",
+        "saved": "Chapter saved."
+      },
+      "form": {
+        "titleEn": "English title",
+        "titleAr": "Arabic title",
+        "minutes": "Minutes",
+        "minutesHelp": "How long the Chapter takes, a whole number from 1 to 1,000.",
+        "lessonCount": "Lessons",
+        "lessonCountHelp": "How many lessons it has. Content uploads can set this too.",
+        "number": "Number",
+        "numberHelpCreate": "Leave blank to use the next free number, {next}. A Draft may share a number with a Coming soon or Published Chapter.",
+        "numberPlaceholder": "Next: {next}",
+        "numberHelpLive": "Must not be used by another Coming soon or Published Chapter. To move a Chapter among the others, drag it instead.",
+        "numberHelpOther": "Only has to be free when the Chapter goes Coming soon or Published."
+      },
+      "state": {
+        "pending": "Updating",
+        "updated": "State updated.",
+        "leavesNumbered": "Its number is freed. The other Chapters keep their numbers until you save the order.",
+        "joinsNumbered": "It takes number {number} in the Coming soon and Published list.",
+        "blockedIntro": "This cannot be done yet:",
+        "blockers": {
+          "numberTaken": "Another Coming soon or Published Chapter already has number {number}. Change this Chapter's number first, in Edit details.",
+          "chapterContent": "This Chapter has no live Chapter content version. Upload one and set it live first.",
+          "courseContent": "The Course has no live Course content version. Upload one and set it live first."
+        },
+        "preconditionStale": "A live content version changed since this page loaded. Reload the page to see the current state.",
+        "numberTakenHelp": "Change the number in Edit details, or reorder the Chapters, then try again.",
+        "moves": {
+          "draft": {
+            "title": "Move this Chapter back to Draft?",
+            "description": "Students no longer see the Chapter and cannot start it. Its content and study history stay.",
+            "confirm": "Move to Draft"
+          },
+          "coming_soon": {
+            "title": "Mark this Chapter as Coming soon?",
+            "description": "Students see the Chapter in the Course's list with its number, but cannot start it. It needs no content.",
+            "confirm": "Mark as Coming soon"
+          },
+          "published": {
+            "title": "Publish this Chapter?",
+            "description": "Students can start this Chapter. It teaches from its live Chapter content version and the Course's live Course content version.",
+            "confirm": "Publish"
+          },
+          "archived": {
+            "title": "Archive this Chapter?",
+            "description": "The Chapter is hidden from Students and cannot be started. Its content, numbers and study history stay, and it can come back as a Draft.",
+            "confirm": "Archive"
+          }
+        }
+      },
+      "replace": {
+        "title": "Replace this Chapter with a Draft",
+        "description": "Pick one of the Course's Drafts. In one step, the Draft takes this Chapter's number and state, and this Chapter is archived.",
+        "pickLabel": "Drafts of this Course",
+        "none": "This Course has no Drafts. Add a Draft Chapter and give it live content, then come back.",
+        "draftMeta": "Draft, number {number}",
+        "blockers": {
+          "chapterContent": "No live Chapter content version.",
+          "courseContent": "The Course has no live Course content version."
+        },
+        "summary": "<name>{draft}</name> takes number {number} and becomes {state}. <name>{old}</name> is archived.",
+        "confirm": "Replace Chapter",
+        "pending": "Replacing",
+        "done": "Chapter replaced.",
+        "preconditionHelp": "Replacing a Published Chapter needs the Draft to have a live Chapter content version, and the Course a live Course content version. Set them live, then try again.",
+        "invalidHelp": "Reload the page to see the Chapters as they are now."
+      },
+      "delete": {
+        "title": "Delete this Chapter?",
+        "description": "This permanently deletes {title}. It cannot be undone. The other Chapters keep their numbers, and saving the order closes the gap.",
+        "confirm": "Delete Chapter",
+        "pending": "Deleting",
+        "done": "Chapter deleted."
+      }
     }
+  },
+  "ChapterDetail": {
+    "title": "Chapter",
+    "backToCourse": "Back to the Course",
+    "notFoundTitle": "Chapter not found",
+    "notFoundDescription": "This Chapter does not exist, or it was deleted.",
+    "errorTitle": "The Chapter could not be loaded",
+    "header": {
+      "chapterNumber": "Chapter {number}",
+      "course": "Course",
+      "minutes": "Length",
+      "minutesValue": "{minutes} min",
+      "lessons": "Lessons",
+      "content": "Live content",
+      "contentLive": "Has a live Chapter content version",
+      "contentNone": "No live Chapter content version",
+      "id": "Chapter id",
+      "idHelp": "Fixed for the life of the Chapter.",
+      "copyLabel": "Copy the Chapter id"
+    },
+    "backToCourses": "Back to Courses"
   }
 }
