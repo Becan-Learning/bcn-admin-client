@@ -133,6 +133,9 @@
     "PHONE_NUMBER_TAKEN": "Another Account already uses this phone number.",
     "INVALID_INSTITUTION": "Choose an Institution from the list.",
     "INVALID_MAJOR": "This Major does not belong to the chosen Institution.",
+    "ENROLLMENT_LIMIT_REACHED": "This Student's Plan has no free Course slots. End one of their Enrollments to free a slot. Changing the Plan is not available yet.",
+    "COURSE_NOT_FOUND": "This Course no longer exists in the Catalog. Reload the page to refresh the list.",
+    "ENROLLMENT_NOT_FOUND": "This Enrollment has already ended. Reload the page to see the current list.",
     "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Another Account already uses this email.",
     "ADMIN_UPDATE_FIELD_NOT_ALLOWED": "That field cannot be changed from here.",
     "ACCOUNT_NOT_FOUND": "This Account no longer exists.",
@@ -177,7 +180,9 @@
       "account_revoke_session": "Revoked a Device session",
       "account_revoke_sessions": "Revoked all Device sessions",
       "account_password_reset_sent": "Sent a password-reset email",
-      "account_verification_email_sent": "Sent a verification email"
+      "account_verification_email_sent": "Sent a verification email",
+      "enrollment_grant": "Granted an Enrollment",
+      "enrollment_end": "Ended an Enrollment"
     },
     "fields": {
       "name": "Name",
@@ -191,7 +196,9 @@
       "banReason": "Ban reason",
       "banExpires": "Ban expires",
       "sessionId": "Session id",
-      "sessionCount": "Device sessions"
+      "sessionCount": "Device sessions",
+      "courseId": "Course id",
+      "enrollmentId": "Enrollment id"
     },
     "noChanges": "No recorded changes",
     "empty": {
@@ -321,6 +328,106 @@
       "banned": "Banned",
       "twoFactorOn": "Two-factor on",
       "twoFactorOff": "Two-factor off"
+    },
+    "enrollments": {
+      "title": "Enrollments",
+      "description": "The Courses this Student holds and has held. Granting follows the Student's Plan slot limit.",
+      "loading": "Loading Enrollments",
+      "loadFailed": "Could not load Enrollments",
+      "emptyTitle": "No Enrollments",
+      "emptyDescription": "This Student has never been enrolled in a Course.",
+      "columns": {
+        "course": "Course",
+        "enrolled": "Enrolled",
+        "ended": "Ended",
+        "endReason": "End reason",
+        "actions": "Actions"
+      },
+      "active": "Active",
+      "endReasons": {
+        "unenrolled": "Left by the Student",
+        "ended_by_admin": "Ended by an Admin"
+      },
+      "end": "End",
+      "endLabel": "End Enrollment in {course}",
+      "endTitle": "End this Enrollment?",
+      "endDescription": "{course} is removed from the Student's Courses and its slot is freed. The row stays in this list as ended by an Admin. The Student can enroll again.",
+      "endConfirm": "End Enrollment",
+      "ending": "Ending",
+      "ended": "Enrollment ended.",
+      "grantTitle": "Grant an Enrollment",
+      "grantDescription": "Enroll this Student in a Course. It counts against their Plan's Course slots.",
+      "course": "Course",
+      "chooseCourse": "Choose a Course",
+      "noGrantable": "This Student already holds every Course in the Catalog.",
+      "catalogFailed": "The Catalog could not be loaded, so a Course cannot be chosen now. Reload the page to try again.",
+      "catalogEmpty": "The Catalog has no Courses yet.",
+      "grant": "Grant Enrollment",
+      "granting": "Granting",
+      "granted": "Enrollment granted."
+    },
+    "planUsage": {
+      "title": "Plan and Usage",
+      "description": "The same figures the Student sees in the student app.",
+      "loading": "Loading Plan and Usage",
+      "loadFailed": "Could not load Plan and Usage",
+      "plan": "Plan",
+      "period": "Current Period",
+      "periodRange": "{start} to {end}",
+      "unlimitedAdmin": "Unlimited (Admin)",
+      "unlimitedAdminNote": "This Admin Account is not held to its Plan limits. The figures below are for reference.",
+      "unlimited": "Unlimited",
+      "sessions": "Sessions",
+      "minutes": "Minutes",
+      "slots": "Course slots",
+      "usedOf": "{used} of {limit}",
+      "usedOnly": "{used} used",
+      "meterLabel": "{name}: {used} of {limit}",
+      "longestSession": "Longest Session",
+      "minStart": "Minimum to start a Session",
+      "minutesValue": "{minutes} min",
+      "noLimit": "No limit"
+    },
+    "sessions": {
+      "title": "Sessions",
+      "description": "Every study Session issued to this Account, newest first, with its Langfuse trace.",
+      "loading": "Loading Sessions",
+      "loadFailed": "Could not load Sessions",
+      "emptyTitle": "No Sessions",
+      "emptyDescription": "This Account has not started a Session yet.",
+      "pastEnd": "This page is past the last Session.",
+      "firstPage": "Go to the first page",
+      "columns": {
+        "issued": "Issued",
+        "course": "Course and Chapter",
+        "kind": "Kind",
+        "state": "State",
+        "time": "Connected / granted",
+        "endReason": "End reason",
+        "trace": "Trace"
+      },
+      "chapter": "Chapter {number}",
+      "kinds": {
+        "student": "Student",
+        "admin": "Admin"
+      },
+      "states": {
+        "held": "Held",
+        "open": "Open",
+        "ended": "Ended"
+      },
+      "endReasons": {
+        "superseded": "Replaced by a newer Session",
+        "no_leave_event": "No leave event received"
+      },
+      "noEndReason": "None",
+      "langfuse": "Langfuse",
+      "langfuseLabel": "Open the Langfuse trace for {room}",
+      "summary": "Showing {from} to {to} of {total}",
+      "page": "Page {page} of {pages}",
+      "pagination": "Sessions pages",
+      "previous": "Previous",
+      "next": "Next"
     },
     "profile": {
       "title": "Profile",
