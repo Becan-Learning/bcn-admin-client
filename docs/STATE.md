@@ -2,7 +2,10 @@
 
 Entry point for anyone (person or agent) picking up admin work. The decisions are in
 [plans/admin-dashboard-v1.md](plans/admin-dashboard-v1.md) and the ADRs it names. Terms follow the backend
-`GLOSSARY.md`. Last updated 2026-10-15 (after the final Milestone 1 end-to-end run).
+`GLOSSARY.md`. Last updated 2026-10-15 (Milestone 2 code complete; the release runbook is written).
+
+**Next step: the release.** Milestones 1 and 2 ship together in one maintenance window, staging first. Follow
+[release-m2-runbook.md](release-m2-runbook.md) (tracking: #26, which also covers the Milestone 1 deploy, #8).
 
 ## Milestone 1: Admin basics. Code complete, not yet deployed
 
@@ -72,13 +75,50 @@ remains (#8, a task for a person).
 - **Bare sign-in redirect.** `proxy.ts` redirects to `/sign-in` without `next`. Only "Sign in again" sets it.
 - **Impersonation.** Deferred, as decided. If it comes back, do it as a hand-off to the student app with Better Auth's one-time-token plugin.
 
-## Milestone 2: Catalog and content. Decided, not yet ticketed
+## Milestone 2: Catalog and content. Code complete, not yet deployed
 
 Decided in the design interview. Recorded in backend ADR 0004 (dashboard owns the Catalog) and ADR 0005 (stable
 ids, versioned content), agent ADR 0008 (content location from the backend) and ADR 0009 (lesson-plan JSON
 Schema), web ADR 0005 (Chapter-id URLs, draft preview), and the "Catalog and content" section of the plan. It
 changes contracts in **all four repos**. It ships as one release in a short **maintenance window**: backend, agent,
 web and admin deploy together (decided 2026-10-15, see "Decisions" below). This replaces the expand/contract plan.
+
+Tracking issue: #21. Every code ticket is merged into `dev`. Only the release remains (R1, #26): see
+[release-m2-runbook.md](release-m2-runbook.md). Nothing was run end to end across the four repos locally; the
+staging checks in the runbook are that run.
+
+### What shipped
+
+| Ticket | Repo | PR | What |
+|---|---|---|---|
+| A1 | agent | #45 | `schemas/`: JSON Schema for `lessons_list.json`, the v2 lesson plan and `cast.json`, with shared fixtures (valid Chapters, plus `invalid-schema` and `invalid-cross-field` cases as base-plus-patch) and a test that keeps them in agreement with `parse_plan` |
+| B1 | backend | #42 | The identity and versions migration (Course and Chapter UUIDs, `slug`, Course status, Chapter state, Content version tables, live pointers, `becan-test` registered as version 1 in place); insert-only seed; the public Catalog by state; token by `chapterId`, pinning both versions, with the four new attributes |
+| A2 | agent | #46 | Content read from `content_path` and `course_content_path`, with no fallback; Chapter number and title from the attributes; Langfuse trace metadata |
+| W1 | web | #56 | `/session/{courseSlug}/{chapterId}`, content from the pinned `contentPath`, no more `ch_{n}` paths |
+| B2 | backend | #43 | Admin Catalog API: Institutions, Majors, Courses, Chapters, reorder, replacement, publish rules, deletes, audited |
+| B5 | backend | #45 | `GET /chapters/:id`; Archived Courses by slug for their enrolled Students; Course `status` on reads |
+| W3 | web | #58 | Session pages resolve with one read; enrolled Students keep Archived Courses |
+| B3 | backend | #46 | Content versions: upload token, direct upload, all-or-nothing Bunny writes, validation (the agent schema copy plus TypeScript cross-field rules pinned by the agent fixtures), set live, rollback, delete |
+| B4 | backend | #47 | Admin preview reads (Draft Courses, every version) and version pinning for Admin Sessions |
+| W2 | web | #59 | Draft and version preview for Admins, uncached and marked; the preview URL `?version=&courseVersion=` |
+| AD1 | admin | #27 | Catalog navigation, Institutions and Majors |
+| AD2 | admin | #28 | Courses list and detail: edit, status, delete |
+| AD3 | admin | #29 | Chapters: reorder, states, replacement, delete; the Chapter page |
+| AD4 | admin | #30 | Content versions and Course content versions: upload with progress, report, files, set live, rollback, delete, preview link |
+
+New environment variables (all in the runbook): backend `BUNNY_STORAGE_ZONE`, `BUNNY_STORAGE_HOST`,
+`BUNNY_STORAGE_KEY`, `PUBLIC_API_ORIGIN`, optional `CONTENT_UPLOAD_MAX_BYTES`; admin optional `STUDENT_APP_URL`.
+
+### Known gaps and follow-ups
+
+- **Slug shared with an Archived Course.** `/c/{slug}` shows the non-Archived Course, so an Archived Course's
+  "back to the Course" link can land on the other one.
+- **Course content version preview.** Course versions show a preview status, but only Chapter versions have a
+  preview link. To preview a Course version, use the student app's `courseVersion` parameter by hand.
+- **Code-less 400s.** The backend's body-validation errors carry no `code`; the admin app shows them as
+  `INVALID_REQUEST`.
+- **Agent tests.** `tests/test_units_plan_v3.py` has 5 failures on `dev` from content drift, unrelated to Milestone 2.
+  The agent repo has no CI.
 
 ### Requirements by area
 
@@ -174,25 +214,7 @@ These settle the open questions from the design interview.
   `course: create/read/update/delete/publish` statements. There is one Admin Role, so finer statements would gain
   nothing and would change the access-control contract.
 
-### Tickets (proposed)
+### Tickets
 
-Each ticket updates its own repo's docs, glossary and contract files. The Milestone 2 tracking issue lives in this repo.
-
-| # | Repo | Ticket | Needs |
-|---|---|---|---|
-| A1 | agent | JSON Schema for `lessons_list.json` and the v2 plan, shared fixtures, CI test that the schema and `parse_plan` agree | none |
-| B1 | backend | Identity and versions migration: Course UUID, `slug`, `status`; Chapter UUID, `state`, partial-unique `number`; Chapter and Course content version tables, live pointers, manifests; `enrollment` and `study_session` rewritten to UUIDs; `study_session.chapter_id` and `content_version_id`; `becan-test` `ch_1` and its Course files registered as version 1 in place; the seed inserts only missing rows; the public Catalog shows only Published Courses and Coming soon or Published Chapters; token issuance takes `chapterId`, pins the live versions and sets `content_path`, `course_content_path`, `chapter_number` and `chapter_title`; the Account Sessions read shows the Chapter | none |
-| A2 | agent | Read content from `content_path` and `course_content_path`; say `chapter_number` and `chapter_title`; ignore the Chapter fields in `lessons_list.json`; add the Langfuse metadata; amend ADR 0008 | B1 contract |
-| W1 | web | `/session/{courseSlug}/{chapterId}` with the stale-slug redirect; token request with `chapterId`; `lessons_list.json` and `slides.pdf` from `content_path`; Coming soon Chapters in the Catalog | B1 contract |
-| B2 | backend | Admin Catalog API: Institutions and Majors (create, edit); Courses (create, edit, slug, status, delete when allowed); Chapters (create, edit, atomic reorder, states, replacement, delete when allowed); the publish rules above; audited with `targetType` `course` and `chapter` | B1 |
-| B3 | backend | Content versions API: upload token, zip ingest to Bunny (all or nothing), validation report (the schema copy plus cross-field checks), manifest, set live, rollback, delete when allowed, Course content versions; Bunny write env vars; audited with `targetType` `content-version` | B1, A1 |
-| B4 | backend | Admin preview: an uncached Admin-only Catalog read (Draft Courses, every Chapter and its versions); an Admin Session may pin any validated version (`contentVersionId`); an Admin Session marks that version previewed | B1 |
-| W2 | web | Draft preview for Admins: Draft Courses and unpublished Chapters, marked; start without an Enrollment; the "preview this version" link target | B4, W1 |
-| AD1 | admin | Catalog navigation, Institutions and Majors pages (#22, PR open) | B2 (merged, backend #43) |
-| AD2 | admin | Courses list, create, edit, status changes, delete (#23, PR open) | B2 (merged, backend #43 and #45) |
-| AD3 | admin | Chapters list, drag to reorder, state changes, replacement (#24, PR open). Adds the `/catalog/chapters/[id]` page with the `ChapterContentVersionsSection` slot for AD4 | B2 |
-| AD4 | admin | Content versions and Course content versions: upload with the token, validation report, file list, set live, rollback, delete, preview link and status (#25, PR open). Fills the two `*ContentVersionsSection` slots; `STUDENT_APP_URL` is a new server-only env var; disables the Chapter dialog's lesson count while a live version exists | B3, B4 |
-| R1 | admin (tracking) | Release runbook: the maintenance window order, Bunny env vars, staging run, then production; check token issuance and a full Session on staging | everything |
-
-**Order.** A1 and B1 start now and run in parallel. B1, A2 and W1 break the contract between them, so they merge into
-`dev` back to back, B1 first. B2, B3 and B4 follow B1. The admin pages follow their APIs. Nothing deploys until R1.
+All are merged, apart from R1 (#26, the release). The table above lists their PRs; the decisions that
+shaped them are in "Decisions" above.
