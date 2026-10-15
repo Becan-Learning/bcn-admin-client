@@ -74,6 +74,27 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
   backend text. Follow this pattern for the other lists.
 - The table is TanStack Table v9 (`useTable`, manual sorting and paging, `rowCount` from the backend).
 
+## Account detail
+
+- `/accounts/[id]` is a server component: inside `<Suspense>` it fetches Better Auth's `admin/get-user` and the
+  public Institutions (`fetchAccountProfile`, `fetchInstitutions`), then renders `AccountHeader` and one
+  component per section, all in `src/components/accounts/detail/`. The header shows the name (`dir="auto"`),
+  email, Role, banned and two-factor badges.
+- **Sections are slots.** `ProfileSection` is built. `AccountActionsSection` (#5: ban, Device sessions, Role,
+  removal), `EnrollmentsSection`, `PlanUsageSection` and `SessionsSection` (#6) are files that return `null`;
+  the page already renders them, so a later issue fills in its own file and never edits the page. A section may
+  be an async server component (own fetch, own `<Suspense>`) with client children. Reuse `ConfirmDialog` and
+  `useAccountAction` (pending, error key, success line, then `router.refresh()`).
+- **Profile.** Name, phone, Institution and Major go through `authClient.admin.updateUser` with only the changed
+  fields (`diffProfile`, `src/lib/accounts/profile-form.ts`, pure and tested; a new Institution always sends its
+  Major). Backend codes land on their field (`INVALID_PHONE_NUMBER`, `PHONE_NUMBER_TAKEN`, `INVALID_INSTITUTION`,
+  `INVALID_MAJOR`, and `USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL` for the email field), shown through `Errors`.
+- **Email.** Changing it asks for confirmation first: the backend makes the new address unverified and sends the
+  verification email to it, on the web origin. "Mark email verified" is `updateUser({ emailVerified: true })`.
+  "Resend verification email" and "Send password-reset email" call `POST /api/v1/admin/accounts/:id/
+  verification-email` and `/password-reset` (backend "Admin emails"). There is no way to set a password in this
+  UI and there must not be one.
+
 ## Cross-repo contract
 
 `src/lib/auth/access-control.ts` is a **verbatim copy** of the backend's `src/lib/access-control.ts`

@@ -6,18 +6,32 @@ import type { AuthErrorKey } from "@/lib/auth/errors";
 import { forwardedHeaders } from "@/lib/auth/forwarded-headers";
 import { backendErrorKey } from "./errors";
 
-// Better Auth's admin `get-user`, which returns the user row. Only the name and email are read here;
-// the detail page grows its own fetch with the next issue.
-const summarySchema = z.object({ id: z.string(), name: z.string(), email: z.string() });
+// Better Auth's admin `get-user`, which returns the user row (the plugin allows it for `user: get`).
+// Only the columns the detail page shows are read; unknown fields are dropped.
+const profileSchema = z.object({
+  id: z.string().min(1),
+  name: z.string(),
+  email: z.string(),
+  emailVerified: z.boolean(),
+  phoneNumber: z.string(),
+  institutionId: z.string(),
+  majorId: z.string(),
+  role: z.string().nullish(),
+  banned: z.boolean().nullish(),
+  banExpires: z.string().nullish(),
+  twoFactorEnabled: z.boolean().nullish(),
+});
 
-export type AccountSummaryResult =
-  | { ok: true; account: z.infer<typeof summarySchema> }
+export type AccountProfile = z.infer<typeof profileSchema>;
+
+export type AccountProfileResult =
+  | { ok: true; account: AccountProfile }
   | { ok: false; errorKey: AuthErrorKey };
 
-export async function fetchAccountSummary(
+export async function fetchAccountProfile(
   id: string,
   incoming: Pick<Headers, "get">,
-): Promise<AccountSummaryResult> {
+): Promise<AccountProfileResult> {
   let response: Response;
   try {
     response = await fetch(`${backendUrl()}/api/auth/admin/get-user?id=${encodeURIComponent(id)}`, {
@@ -40,7 +54,10 @@ export async function fetchAccountSummary(
     };
   }
 
-  const parsed = summarySchema.safeParse(body);
-  if (!parsed.success) return { ok: false, errorKey: "UNKNOWN" };
+  const parsed = profileSchema.safeParse(body);
+  if (!parsed.success) {
+    console.error("Invalid get-user response from the backend");
+    return { ok: false, errorKey: "UNKNOWN" };
+  }
   return { ok: true, account: parsed.data };
 }

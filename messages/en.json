@@ -128,7 +128,15 @@
     "UNKNOWN": "Something went wrong. Try again.",
     "UNAUTHENTICATED": "Your session expired. Sign in again.",
     "ADMIN_PERMISSION_REQUIRED": "Your Account does not have permission for this.",
-    "FRESH_SESSION_REQUIRED": "Sign in again to confirm it is you."
+    "FRESH_SESSION_REQUIRED": "Sign in again to confirm it is you.",
+    "INVALID_PHONE_NUMBER": "Enter a Saudi mobile number, like +966501234567.",
+    "PHONE_NUMBER_TAKEN": "Another Account already uses this phone number.",
+    "INVALID_INSTITUTION": "Choose an Institution from the list.",
+    "INVALID_MAJOR": "This Major does not belong to the chosen Institution.",
+    "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "Another Account already uses this email.",
+    "ADMIN_UPDATE_FIELD_NOT_ALLOWED": "That field cannot be changed from here.",
+    "ACCOUNT_NOT_FOUND": "This Account no longer exists.",
+    "EMAIL_ALREADY_VERIFIED": "This email is already verified."
   },
   "AuditLog": {
     "filters": {
@@ -167,7 +175,9 @@
       "account_update": "Edited an Account",
       "account_remove": "Removed an Account",
       "account_revoke_session": "Revoked a Device session",
-      "account_revoke_sessions": "Revoked all Device sessions"
+      "account_revoke_sessions": "Revoked all Device sessions",
+      "account_password_reset_sent": "Sent a password-reset email",
+      "account_verification_email_sent": "Sent a verification email"
     },
     "fields": {
       "name": "Name",
@@ -302,10 +312,66 @@
     "title": "Account",
     "description": "Account details.",
     "backToList": "Back to Accounts",
-    "comingSoon": "Profile coming soon",
-    "comingSoonDescription": "Editing, Enrollments, Plan and Usage, and Sessions arrive in the next issue of Milestone 1.",
     "notFoundTitle": "Account not found",
     "notFoundDescription": "No Account has this id. It may have been removed.",
-    "errorTitle": "Could not load this Account"
+    "errorTitle": "Could not load this Account",
+    "header": {
+      "roleStudent": "Student",
+      "roleAdmin": "Admin",
+      "banned": "Banned",
+      "twoFactorOn": "Two-factor on",
+      "twoFactorOff": "Two-factor off"
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Fix a Student's details. The same checks as sign-up apply.",
+      "name": "Name",
+      "phone": "Phone",
+      "phoneHelp": "Saudi mobile number, like +966501234567.",
+      "institution": "Institution",
+      "major": "Major",
+      "chooseInstitution": "Choose an Institution",
+      "chooseMajor": "Choose a Major",
+      "majorNeedsInstitution": "Choose an Institution first",
+      "catalogUnavailable": "The Institutions could not be loaded, so the Institution and Major cannot be edited now. Reload the page to try again.",
+      "required": "This field is required.",
+      "save": "Save changes",
+      "saved": "Profile updated.",
+      "unknownInstitution": "Unknown Institution ({id})",
+      "unknownMajor": "Unknown Major ({id})"
+    },
+    "email": {
+      "title": "Email",
+      "description": "The address this Student signs in with and receives emails at.",
+      "current": "Current email",
+      "verified": "Verified",
+      "unverified": "Unverified",
+      "newEmail": "New email",
+      "sameEmail": "This is already the current email.",
+      "change": "Change email",
+      "changeTitle": "Change this Account's email?",
+      "changeDescription": "{email} replaces the current address. It becomes unverified and a verification email is sent to it. The Student must open that link to verify it.",
+      "changeConfirm": "Change email",
+      "changing": "Changing",
+      "changed": "Email changed. A verification email was sent to {email}.",
+      "markVerified": "Mark email verified",
+      "markingVerified": "Marking",
+      "markVerifiedHelp": "Use this when you have confirmed the address yourself. No email is sent.",
+      "markedVerified": "Email marked as verified.",
+      "resend": "Resend verification email",
+      "resending": "Sending",
+      "resent": "Verification email sent.",
+      "verifiedNote": "This email is verified."
+    },
+    "password": {
+      "title": "Password",
+      "description": "Send the Student a link to choose a new password. Admins never see or set passwords.",
+      "send": "Send password-reset email",
+      "sending": "Sending",
+      "dialogTitle": "Send a password-reset email?",
+      "dialogDescription": "{email} receives a link to choose a new password. Their current password keeps working until they use it.",
+      "confirm": "Send email",
+      "sent": "Password-reset email sent."
+    }
   }
 }
