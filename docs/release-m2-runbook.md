@@ -32,7 +32,7 @@ safe. Do it for staging now, and for production before its window.
 
 | Service | Variable | Value | Notes |
 |---|---|---|---|
-| Backend (Railway) | `ADMIN_ORIGIN` | the admin app origin, e.g. `https://admin.<domain>` | Milestone 1. Scheme, host and port only, no trailing slash, same scheme as `CORS_ORIGIN`. Also the only origin the upload route's CORS allows. |
+| Backend (Render) | `ADMIN_ORIGIN` | the admin app origin, e.g. `https://admin.<domain>` | Milestone 1. Scheme, host and port only, no trailing slash, same scheme as `CORS_ORIGIN`. Also the only origin the upload route's CORS allows. |
 | Backend | `BUNNY_STORAGE_ZONE` | the storage zone name | All three Bunny variables are required in production, or the server refuses to start. |
 | Backend | `BUNNY_STORAGE_HOST` | the zone's storage host, e.g. `storage.bunnycdn.com` or a regional one | The same host the agent uses as `BUNNY_STORAGE_REGION`. |
 | Backend | `BUNNY_STORAGE_KEY` | the zone's **read-write** password | Never exposed to a browser. |
@@ -64,7 +64,7 @@ Run every step in order. Note the time of each one.
 1. **Back up the database.** Create a Neon branch (or a point-in-time restore point) of the staging database
    **just before** the backend deploys. That backup is the only way back.
 2. **Backend.** Open a PR from `dev` to `stage` in `bcn-backend-main` and merge it. `deploy-staging.yml` runs the
-   tests, then `pnpm db:migrate`, then `pnpm db:seed`, then the Railway deploy.
+   tests, then `pnpm db:migrate`, then `pnpm db:seed`, then the Render deploy hook.
    - Watch the migrate step. If it fails, it rolls back its own transaction. The likely cause is a Study Session row
      that names a Chapter that doesn't exist; the error says how many rows. Fix the data, then re-run the workflow.
    - The seed now only inserts missing rows. It never reverts an edit.
@@ -98,7 +98,7 @@ Work through these as the Admin from step 6 and a separate Student Account. Reco
 - [ ] Upload a real Chapter zip **larger than 5 MB**, then a zip made in macOS Finder. Both are valid, and the file
       list shows only the real files. The files are in Bunny under `courses/<courseId>/chapters/<chapterId>/v1/`.
 - [ ] Upload a broken zip (no `slides.pdf`). It is stored as invalid with a report, and it can't go live.
-- [ ] **Confirm** that Railway accepts an upload close to the size limit (try about 50 MB).
+- [ ] **Confirm** that Render accepts an upload close to the size limit (try about 50 MB).
 
 **Preview**
 - [ ] "Preview in student app" opens the web app on the Draft Chapter, marked «مسوّدة» and "Preview: version 1".

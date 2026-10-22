@@ -67,7 +67,7 @@ remains (#8, a task for a person).
   - backend: `ADMIN_ORIGIN`;
   - admin: `BACKEND_URL`, optionally `LANGFUSE_PROJECT_URL`, and the `admin.` domain, with Vercel deployment protection on previews.
   Promote the first Admin with `pnpm admin:promote <email>`; that Account must have signed up in the web app first.
-  Then check, on staging, that a password reset requested from the admin app links to the admin domain. Vercel's rewrite headers, and Railway's handling of `x-forwarded-host`, are unconfirmed. If they don't pass the host through, links fall back to the web origin, which is safe.
+  Then check, on staging, that a password reset requested from the admin app links to the admin domain. Vercel's rewrite headers, and Render's handling of `x-forwarded-host`, are unconfirmed. If they don't pass the host through, links fall back to the web origin, which is safe.
 - **Streamed redirects.** With Cache Components, the gate's redirect for a refused visitor is streamed (HTTP 200 plus a meta refresh), not a 307. No gated content renders. Unknown `/accounts/<id>` renders "not found" with 200.
 - **A Session already running is not ended by a ban.** Since backend #37 a banned or revoked Student cannot get a new
   token, but a LiveKit room they are already in runs to its granted length (at most the Plan's longest Session). Ending
