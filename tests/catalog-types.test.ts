@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  adminCourseSchema,
-  adminCoursesResponseSchema,
   adminInstitutionsResponseSchema,
   adminMajorsResponseSchema,
   groupMajors,
@@ -56,46 +54,5 @@ describe("response schemas", () => {
   it("refuse a malformed response", () => {
     expect(adminInstitutionsResponseSchema.safeParse({ institutions: [{ id: "x" }] }).success).toBe(false);
     expect(adminMajorsResponseSchema.safeParse([]).success).toBe(false);
-  });
-});
-
-describe("Course schemas", () => {
-  const course = {
-    id: "11111111-1111-4111-8111-111111111111",
-    slug: "calc-1",
-    status: "published",
-    code: "MATH101",
-    name: { ar: "التفاضل", en: "Calculus 1" },
-    institution: { id: "ksu", name: { ar: "جامعة", en: "KSU" } },
-    icon: "atom",
-    tone: "olive",
-    sortOrder: 1,
-    liveContentVersionId: null,
-    counts: {
-      chapters: { draft: 1, comingSoon: 2, published: 3, archived: 0 },
-      enrollments: 4,
-      activeEnrollments: 2,
-      sessions: 9,
-      contentVersions: 1,
-    },
-    deletable: false,
-    createdAt: "2026-10-15T00:00:00.000Z",
-  };
-
-  it("accept the backend's shape and drop unknown fields", () => {
-    const parsed = adminCoursesResponseSchema.parse({ courses: [{ ...course, extra: true }] });
-    expect(parsed.courses[0]).not.toHaveProperty("extra");
-    expect(parsed.courses[0].counts.chapters.comingSoon).toBe(2);
-  });
-
-  it("refuse a status, icon or tone the backend never sends", () => {
-    expect(adminCourseSchema.safeParse({ ...course, status: "deleted" }).success).toBe(false);
-    expect(adminCourseSchema.safeParse({ ...course, icon: "rocket" }).success).toBe(false);
-    expect(adminCourseSchema.safeParse({ ...course, tone: "pink" }).success).toBe(false);
-  });
-
-  it("accept a live Content version id", () => {
-    const parsed = adminCourseSchema.parse({ ...course, liveContentVersionId: "v-1" });
-    expect(parsed.liveContentVersionId).toBe("v-1");
   });
 });

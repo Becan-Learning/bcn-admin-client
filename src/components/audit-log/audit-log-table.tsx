@@ -50,26 +50,19 @@ function Action({ entry }: { entry: AuditEntry }) {
   );
 }
 
-// The page that shows the target, when there is one. A removed Account or a deleted Course has none.
-function targetHref(entry: AuditEntry): string | null {
-  const id = encodeURIComponent(entry.targetId);
-  if (entry.targetType === "account" && entry.action !== "account.remove") return `/accounts/${id}`;
-  if (entry.targetType === "course" && entry.action !== "course.delete") return `/catalog/courses/${id}`;
-  return null;
-}
-
 function Target({ entry }: { entry: AuditEntry }) {
   const types = useTranslations("AuditLog.targetTypes");
   const typeKey = targetTypeLabelKey(entry.targetType);
-  const href = targetHref(entry);
+  // A removed Account has no page to open.
+  const linkable = entry.targetType === "account" && entry.action !== "account.remove";
   return (
     <div className="grid gap-0.5">
       <span className="text-xs text-muted-foreground">
         {typeKey ? types(typeKey) : entry.targetType}
       </span>
-      {href ? (
+      {linkable ? (
         <Link
-          href={href}
+          href={`/accounts/${encodeURIComponent(entry.targetId)}`}
           dir="ltr"
           className="font-mono text-xs break-all underline-offset-4 hover:underline"
         >

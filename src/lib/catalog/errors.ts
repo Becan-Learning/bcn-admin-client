@@ -12,23 +12,13 @@ export function catalogErrorKey(failure: { status: number; code?: string }): Aut
 }
 
 // The form fields a backend code belongs to. A code not listed here is shown for the form as a whole.
-export type CatalogField =
-  | "id"
-  | "slug"
-  | "code"
-  | "nameEn"
-  | "nameAr"
-  | "sortOrder"
-  | "institutionId"
-  | "icon"
-  | "tone";
+export type CatalogField = "id" | "nameEn" | "nameAr" | "sortOrder" | "institutionId";
 
 const FIELD_ERRORS: Record<string, CatalogField> = {
   INSTITUTION_ID_TAKEN: "id",
   MAJOR_ID_TAKEN: "id",
   INVALID_INSTITUTION: "institutionId",
   MAJOR_IN_USE: "institutionId",
-  SLUG_TAKEN: "slug",
 };
 
 export function catalogFieldForError(code: string | undefined): CatalogField | null {

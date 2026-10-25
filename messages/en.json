@@ -52,7 +52,8 @@
     },
     "catalogCourses": {
       "title": "Courses",
-      "description": "Every Course in every status. Open one to edit it, change its status or delete it."
+      "description": "Courses and their Chapters.",
+      "placeholder": "The Courses list arrives soon."
     },
     "auditLog": {
       "title": "Audit log",
@@ -151,10 +152,7 @@
     "MAJOR_ID_TAKEN": "Another Major already uses this id. Choose a different id.",
     "MAJOR_IN_USE": "Accounts hold this Major, so it cannot move to another Institution. Its names and sort order can still change.",
     "INSTITUTION_NOT_FOUND": "This Institution no longer exists. Reload the page to refresh the list.",
-    "MAJOR_NOT_FOUND": "This Major no longer exists. Reload the page to refresh the list.",
-    "SLUG_TAKEN": "Another active Course already uses this slug. Choose a different slug.",
-    "PUBLISH_PRECONDITION": "A publishing rule blocks this change, so nothing was changed.",
-    "COURSE_IN_USE": "This Course has Enrollments, Sessions or Content versions that were live or uploaded, so it cannot be deleted. Archive it instead."
+    "MAJOR_NOT_FOUND": "This Major no longer exists. Reload the page to refresh the list."
   },
   "AuditLog": {
     "filters": {
@@ -166,8 +164,8 @@
       "actorsLoading": "Loading Admins",
       "actorsFailed": "The Admin list could not be loaded.",
       "unknownActor": "Admin {id}",
-      "targetId": "Target id",
-      "targetIdPlaceholder": "Paste an Account, Course or Chapter id",
+      "targetId": "Account id",
+      "targetIdPlaceholder": "Paste an Account id",
       "from": "From",
       "to": "To",
       "dateHelp": "Dates cover whole days in UTC.",
@@ -186,9 +184,7 @@
     "targetTypes": {
       "account": "Account",
       "institution": "Institution",
-      "major": "Major",
-      "course": "Course",
-      "chapter": "Chapter"
+      "major": "Major"
     },
     "actions": {
       "account_ban": "Banned an Account",
@@ -205,17 +201,7 @@
       "institution_create": "Added an Institution",
       "institution_update": "Edited an Institution",
       "major_create": "Added a Major",
-      "major_update": "Edited a Major",
-      "course_create": "Added a Course",
-      "course_update": "Edited a Course",
-      "course_set_status": "Changed a Course status",
-      "course_delete": "Deleted a Course",
-      "chapter_create": "Added a Chapter",
-      "chapter_update": "Edited a Chapter",
-      "chapter_set_state": "Changed a Chapter state",
-      "chapter_reorder": "Reordered Chapters",
-      "chapter_replace": "Replaced a Chapter",
-      "chapter_delete": "Deleted a Chapter"
+      "major_update": "Edited a Major"
     },
     "fields": {
       "name": "Name",
@@ -234,21 +220,7 @@
       "enrollmentId": "Enrollment id",
       "nameEn": "English name",
       "nameAr": "Arabic name",
-      "sortOrder": "Sort order",
-      "slug": "Slug",
-      "code": "Code",
-      "icon": "Icon",
-      "tone": "Tone",
-      "status": "Status",
-      "state": "State",
-      "chapters": "Chapters",
-      "number": "Number",
-      "numbers": "Chapter numbers",
-      "titleEn": "English title",
-      "titleAr": "Arabic title",
-      "minutes": "Minutes",
-      "lessonCount": "Lesson count",
-      "replacement": "Replacement"
+      "sortOrder": "Sort order"
     },
     "noChanges": "No recorded changes",
     "empty": {
@@ -685,163 +657,6 @@
         "save": "Save changes",
         "saved": "Major saved."
       }
-    },
-    "courseStatus": {
-      "draft": "Draft",
-      "published": "Published",
-      "archived": "Archived"
-    },
-    "courses": {
-      "add": "Add Course",
-      "errorTitle": "The Courses could not be loaded",
-      "loading": "Loading Courses",
-      "searchLabel": "Search Courses",
-      "searchPlaceholder": "Search by code, slug or name",
-      "clearSearch": "Clear search",
-      "statusLabel": "Status",
-      "allStatuses": "All statuses",
-      "institutionLabel": "Institution",
-      "allInstitutions": "All Institutions",
-      "clearFilters": "Clear filters",
-      "summary": "{total, plural, one {# Course} other {# Courses}}",
-      "emptyTitle": "No Courses yet",
-      "emptyDescription": "Add the first Course. It starts as a Draft, hidden from Students until you publish it.",
-      "noMatchesTitle": "No Courses match",
-      "noMatchesDescription": "Try a different search, or clear the filters.",
-      "columns": {
-        "course": "Course",
-        "slug": "Slug",
-        "institution": "Institution",
-        "status": "Status",
-        "chapters": "Chapters",
-        "code": "Code"
-      },
-      "chapters": {
-        "published": "{count} published",
-        "comingSoon": "{count} coming soon",
-        "draft": "{count} draft",
-        "archived": "{count} archived",
-        "none": "No Chapters"
-      },
-      "icons": {
-        "coins": "Coins",
-        "bars": "Bars",
-        "blocks": "Blocks",
-        "torus": "Torus",
-        "flask": "Flask",
-        "atom": "Atom",
-        "donut": "Donut",
-        "cube": "Cube",
-        "bolt": "Bolt"
-      },
-      "tones": {
-        "lilac": "Lilac",
-        "base": "Base",
-        "deep": "Deep",
-        "amber": "Amber",
-        "walnut": "Walnut",
-        "olive": "Olive",
-        "oliveDark": "Olive dark"
-      },
-      "form": {
-        "slug": "Slug",
-        "slugHelp": "Used in Student links. Lowercase letters, digits, \"-\" and \"_\". Suggested from the English name.",
-        "slugEditHelp": "Used in Student links. Changing it changes those links: the old Course page stops resolving, and session links with the old slug redirect to the new one.",
-        "code": "Code",
-        "codeHelp": "The short code Students know the Course by, like CS101. Up to 40 characters.",
-        "institution": "Institution",
-        "chooseInstitution": "Choose an Institution",
-        "icon": "Icon",
-        "chooseIcon": "Choose an icon",
-        "tone": "Tone",
-        "chooseTone": "Choose a tone",
-        "look": "The icon and tone decide how the Student app draws the Course card."
-      },
-      "dialog": {
-        "createTitle": "Add a Course",
-        "createDescription": "A new Course is a Draft: Students cannot see it until you publish it. Every field can be changed later, including the slug.",
-        "create": "Add Course",
-        "created": "Course added.",
-        "noInstitutions": "There are no Institutions to choose from. Add an Institution first.",
-        "institutionsFailed": "The Institutions could not be loaded, so a Course cannot be added now. Reload the page to try again."
-      }
-    }
-  },
-  "CourseDetail": {
-    "title": "Course",
-    "backToList": "Back to Courses",
-    "notFoundTitle": "Course not found",
-    "notFoundDescription": "This Course does not exist, or it was deleted.",
-    "errorTitle": "The Course could not be loaded",
-    "header": {
-      "code": "Code",
-      "slug": "Slug",
-      "institution": "Institution",
-      "id": "Course id",
-      "idHelp": "Fixed for the life of the Course. The slug can change; this cannot.",
-      "copyLabel": "Copy the Course id"
-    },
-    "details": {
-      "title": "Details",
-      "description": "Names, code, slug, Institution and how the Course card looks. Only the fields you change are saved.",
-      "save": "Save changes",
-      "saved": "Course saved.",
-      "institutionsFailed": "The Institution list could not be loaded, so the Institution cannot be changed now.",
-      "slugDialogTitle": "Change the slug?",
-      "slugDialogDescription": "Student links to this Course use the slug. After this change the Course page at the old slug stops resolving, while session links that still carry the old slug redirect to the new one. Share the new links.",
-      "slugConfirm": "Change slug",
-      "slugPending": "Saving"
-    },
-    "status": {
-      "title": "Status",
-      "description": "Draft Courses are hidden from Students. Published Courses are visible in the Catalog. Archived Courses are hidden and take no new Enrollments, and the existing Enrollments continue.",
-      "current": "Current status",
-      "updated": "Status updated.",
-      "blockedPublishedChapters": "Not available while the Course has a Published Chapter. Move its Chapters out of Published first, or archive the Course.",
-      "moves": {
-        "draft": {
-          "action": "Back to Draft",
-          "title": "Move this Course back to Draft?",
-          "description": "The Course is hidden from the Student Catalog and Students cannot enroll in it. Only Admins see it.",
-          "confirm": "Move to Draft"
-        },
-        "published": {
-          "action": "Publish",
-          "title": "Publish this Course?",
-          "description": "The Course becomes visible in the Student Catalog and Students can enroll in it. Students see its Coming soon and Published Chapters.",
-          "confirm": "Publish"
-        },
-        "archived": {
-          "action": "Archive",
-          "title": "Archive this Course?",
-          "description": "The Course is hidden from the Student Catalog and takes no new Enrollments. Students who are already enrolled keep their Enrollment and can keep studying.",
-          "confirm": "Archive"
-        }
-      },
-      "leavesArchived": "The slug counts as unique again once the Course leaves Archived. If another active Course already uses it, this is refused and you can change the slug first.",
-      "pending": "Updating",
-      "preconditionHelp": "A Course cannot go back to Draft while it has a Published Chapter, because Students could lose a Chapter they can start. Move the Chapters out of Published first, or archive the Course.",
-      "slugTakenHelp": "Change this Course's slug in Details, or archive the other Course that uses it, then try again."
-    },
-    "delete": {
-      "title": "Delete Course",
-      "description": "Permanently deletes this Course and its Chapters. This cannot be undone.",
-      "action": "Delete Course",
-      "dialogTitle": "Delete this Course?",
-      "dialogDescription": "This permanently deletes the Course and all its Chapters. It cannot be undone.",
-      "typeSlug": "Type <strong>{slug}</strong> to confirm.",
-      "confirm": "Delete Course",
-      "pending": "Deleting",
-      "deleted": "Course deleted.",
-      "blockedTitle": "This Course cannot be deleted",
-      "blockedIntro": "It has:",
-      "blockers": {
-        "enrollments": "Enrollments, active or ended",
-        "sessions": "study Sessions",
-        "contentVersions": "Content versions that were live or uploaded"
-      },
-      "blockedArchive": "Archive it instead. It is then hidden from the Catalog and takes no new Enrollments, and everything that exists stays.",
-      "blockedArchived": "It is already archived, which is the right place for it."
     }
   }
 }

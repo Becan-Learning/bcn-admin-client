@@ -10,8 +10,6 @@ describe("action labels", () => {
     expect(actionMessageKey("account.revoke-sessions")).toBe("account_revoke_sessions");
     expect(actionMessageKey("enrollment.grant")).toBe("enrollment_grant");
     expect(actionMessageKey("enrollment.end")).toBe("enrollment_end");
-    expect(actionMessageKey("course.set-status")).toBe("course_set_status");
-    expect(actionMessageKey("chapter.set-state")).toBe("chapter_set_state");
   });
 
   it("has an English label for every action the backend writes", () => {
@@ -48,17 +46,8 @@ describe("field and target type labels", () => {
     expect(fieldLabelKey("constructor")).toBeNull();
   });
 
-  it("labels the Account, Catalog and Chapter target types", () => {
+  it("labels the Account target type", () => {
     expect(targetTypeLabelKey("account")).toBe("account");
-    expect(targetTypeLabelKey("institution")).toBe("institution");
-    expect(targetTypeLabelKey("course")).toBe("course");
-    expect(targetTypeLabelKey("chapter")).toBe("chapter");
-    expect(targetTypeLabelKey("content-version")).toBeNull();
-  });
-
-  it("labels the fields the Course and Chapter entries record", () => {
-    for (const field of ["slug", "code", "icon", "tone", "status", "state", "number", "numbers"]) {
-      expect(fieldLabelKey(field), field).toBe(field);
-    }
+    expect(targetTypeLabelKey("course")).toBeNull();
   });
 });

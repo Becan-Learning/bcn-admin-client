@@ -16,16 +16,6 @@ export const AUDIT_ACTIONS = [
   "institution.update",
   "major.create",
   "major.update",
-  "course.create",
-  "course.update",
-  "course.set-status",
-  "course.delete",
-  "chapter.create",
-  "chapter.update",
-  "chapter.set-state",
-  "chapter.reorder",
-  "chapter.replace",
-  "chapter.delete",
 ] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];

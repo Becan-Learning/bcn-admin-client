@@ -4,15 +4,10 @@ import { backendErrorKey } from "@/lib/accounts/errors";
 import { backendUrl } from "@/lib/auth/backend";
 import type { AuthErrorKey } from "@/lib/auth/errors";
 import { forwardedHeaders } from "@/lib/auth/forwarded-headers";
-import { toBackendCoursesQuery, type CoursesQueryState } from "./course-query-state";
 import {
-  adminCourseSchema,
-  adminCoursesResponseSchema,
   adminInstitutionsResponseSchema,
   adminMajorsResponseSchema,
   groupMajors,
-  type AdminCourse,
-  type AdminInstitution,
   type InstitutionWithMajors,
 } from "./types";
 
@@ -67,64 +62,4 @@ export async function fetchInstitutionsWithMajors(
     return { ok: false, errorKey: "UNKNOWN" };
   }
   return { ok: true, institutions: groupMajors(institutions.data.institutions, majors.data.majors) };
-}
-
-export type AdminInstitutionsResult =
-  | { ok: true; institutions: AdminInstitution[] }
-  | { ok: false; errorKey: AuthErrorKey };
-
-// The Institutions alone (`GET /admin/institutions`), for the Course filter and the Course forms. The
-// caller decides how bad a failure is: the Courses list still works without them.
-export async function fetchAdminInstitutions(
-  incoming: Pick<Headers, "get">,
-): Promise<AdminInstitutionsResult> {
-  const response = await get("institutions", incoming);
-  if (!response) return { ok: false, errorKey: "NETWORK" };
-  if (!response.ok) return failure(response);
-  const parsed = adminInstitutionsResponseSchema.safeParse(await response.json().catch(() => null));
-  if (!parsed.success) {
-    console.error("Invalid Institutions response from the backend");
-    return { ok: false, errorKey: "UNKNOWN" };
-  }
-  return { ok: true, institutions: parsed.data.institutions };
-}
-
-export type CoursesResult =
-  | { ok: true; courses: AdminCourse[] }
-  | { ok: false; errorKey: AuthErrorKey };
-
-// Every Course in every status that matches the filters (`GET /admin/courses?status&institutionId&search`),
-// in the backend's order. Not paged: the backend list is not paged.
-export async function fetchCourses(
-  state: CoursesQueryState,
-  incoming: Pick<Headers, "get">,
-): Promise<CoursesResult> {
-  const query = toBackendCoursesQuery(state).toString();
-  const response = await get(query ? `courses?${query}` : "courses", incoming);
-  if (!response) return { ok: false, errorKey: "NETWORK" };
-  if (!response.ok) return failure(response);
-  const parsed = adminCoursesResponseSchema.safeParse(await response.json().catch(() => null));
-  if (!parsed.success) {
-    console.error("Invalid Courses response from the backend");
-    return { ok: false, errorKey: "UNKNOWN" };
-  }
-  return { ok: true, courses: parsed.data.courses };
-}
-
-export type CourseResult =
-  | { ok: true; course: AdminCourse }
-  | { ok: false; errorKey: AuthErrorKey };
-
-// One Course with its counts and `deletable` (`GET /admin/courses/:id`). A malformed or unknown id is
-// `COURSE_NOT_FOUND`, which the page turns into its not-found screen.
-export async function fetchCourse(id: string, incoming: Pick<Headers, "get">): Promise<CourseResult> {
-  const response = await get(`courses/${encodeURIComponent(id)}`, incoming);
-  if (!response) return { ok: false, errorKey: "NETWORK" };
-  if (!response.ok) return failure(response);
-  const parsed = adminCourseSchema.safeParse(await response.json().catch(() => null));
-  if (!parsed.success) {
-    console.error("Invalid Course response from the backend");
-    return { ok: false, errorKey: "UNKNOWN" };
-  }
-  return { ok: true, course: parsed.data };
 }
