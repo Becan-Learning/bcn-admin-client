@@ -108,8 +108,8 @@ to reverse are ADRs: admin 0001, backend 0002 to 0005, agent 0008 and 0009, web 
 - **What the agent receives:** token issuance pins both live versions and passes `content_path`,
   `course_content_path`, `chapter_number` and `chapter_title`. `study_session` stores `chapter_id` and
   `content_version_id`.
-- **Upload transport:** a short-lived upload token, so the browser posts directly to the backend and the
-  Vercel rewrite's 4.5 MB limit never applies (decided 2026-10-15).
+- **To check first:** whether uploads larger than 4.5 MB pass through the Vercel rewrite. If they don't,
+  use a short-lived upload token so the browser posts directly to the backend.
 
 ## Dashboard pages
 
@@ -128,8 +128,8 @@ to reverse are ADRs: admin 0001, backend 0002 to 0005, agent 0008 and 0009, web 
    - Audit log.
    - Accounts pages, Enrollments and Usage views.
    - Admin Sessions on existing published Chapters.
-2. **Catalog and content.** Repos: backend, agent, web and admin, released together in one maintenance
-   window (decided 2026-10-15; see `docs/STATE.md`, "Decisions").
+2. **Catalog and content.** Repos: backend, agent, web and admin, released in the order backend
+   migration (expand, then contract), agent with fallback, web, admin.
    - Identity and versioning migration, Course status and Chapter states.
    - Uploads and validation.
    - Draft preview in the student app.
