@@ -1,6 +1,6 @@
 # Repository guidance
 
-The Becan admin dashboard: where Admins manage Accounts (the Catalog is managed by hand with SQL, not here). It is a
+The Becan admin dashboard: where Admins manage Accounts and read Insights (the Catalog is managed by hand with SQL, not here). It is a
 **client of the backend** with no database or secrets (`docs/adr/0001-*`). Role checks here only
 decide what to render; the backend re-checks every call.
 
@@ -66,6 +66,13 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
 - Request-time reads (cookies, the session) must sit inside `<Suspense>`: Cache Components is on.
 - Everything is noindex: `robots` metadata plus an `X-Robots-Tag` header in `next.config.ts`.
 - There is no sign-up page and no "trust this device" option.
+
+## Insights
+
+- `/` is the home page. Same pattern as the Accounts list: a server component fetches `GET /api/v1/admin/insights`
+  (`docs/backend-insights-contract.md`) inside `<Suspense>`, the range is `?range=7d|30d|90d` (default 30d), and the
+  client `InsightsView` draws it. Charts are shadcn `chart` (Recharts) with the `--chart-*` tokens. Allowance by Plan is
+  the current Period and ignores the range. Pure helpers: `src/lib/insights/`.
 
 ## Accounts list
 

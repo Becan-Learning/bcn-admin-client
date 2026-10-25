@@ -2,12 +2,31 @@
 
 Entry point for anyone (person or agent) picking up admin work. The decisions are in
 [plans/admin-dashboard-v1.md](plans/admin-dashboard-v1.md) and the ADRs it names. Terms follow the backend
-`GLOSSARY.md`. Last updated 2026-10-25 (Milestone 2 reverted).
+`GLOSSARY.md`. Last updated 2026-10-25 (Insights home page in code).
 
-**Scope.** This dashboard does Account management only. Milestone 1 is code complete on `dev`. Milestone 2
+**Scope.** This dashboard does Account management and Insights. Milestone 1 is code complete on `dev`. Milestone 2
 ("Catalog and content") was dropped.
 
-**Next step.** An Insights home page (a later PR), then the deploy of Milestone 1 (#8, below).
+**Next step.** Merge the backend Insights endpoint, then the deploy of Milestone 1 (#8, below).
+
+## Insights (home page `/`)
+
+Shipped in code, **waits on the backend PR** for `GET /api/v1/admin/insights?range=7d|30d|90d`. The contract is
+[backend-insights-contract.md](backend-insights-contract.md) (mirrored in the backend; change both together). It
+was built against fixtures shaped like the contract, never against the real endpoint.
+
+- `/` is a server component like the Accounts list: inside `<Suspense>` it reads `?range=` (`src/lib/insights/range.ts`,
+  default 30 days, pure and tested), fetches with the forwarded cookie (`fetch.ts`, parsed with zod in `types.ts`) and
+  hands the result to the client `InsightsView`. Picking a range is a navigation. Errors show through `Errors.<CODE>`
+  with a retry; zero Students shows an empty state.
+- Sections, all in `src/components/insights/`: KPI cards, four shadcn charts (Recharts; `--chart-*` tokens), Courses
+  and Institutions tables whose rows open to Chapters and Majors, and Allowance by Plan (a table plus a stacked bar of
+  the usage bands). Allowance is the current Period and ignores the range; the UI says so. Pure transforms are in
+  `format.ts`; tests use `tests/fixtures/insights.ts`.
+- Added shadcn `chart` and `toggle-group` (and `toggle`). `chart.tsx` was changed to format tooltip numbers with
+  `toLocaleString("en-US")`, so digits stay ASCII in any browser locale.
+- Not checked: a run against the real backend, and a visual check of the charts in a browser (a local mock backend
+  confirmed the server-rendered page, the empty and error states).
 
 ## Milestone 2: reverted on 2026-10-25
 
@@ -23,7 +42,7 @@ The simpler model that replaces it (backend ADR 0007, 2026-10-25):
 - Each Chapter has **one content folder on Bunny** (`courses/{course_id}/{chapter_id}/`), as before.
 
 What this app still reads from the Catalog: the public `GET /api/v1/courses`, only to fill the Course picker in
-the Enrollments card. The Institutions list for the Profile card is also public. The sidebar has Accounts, Audit
+the Enrollments card. The Institutions list for the Profile card is also public. The sidebar has Insights, Accounts, Audit
 log and My account. The Audit log shows an unknown target type as its raw value.
 
 The history is in git (`git log` for the reverted merges) and in the dropped "Catalog and content" section of
