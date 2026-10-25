@@ -29,9 +29,7 @@
     "catalog": "Catalog",
     "auditLog": "Audit log",
     "myAccount": "My account",
-    "toggleSidebar": "Toggle sidebar",
-    "catalogInstitutions": "Institutions & Majors",
-    "catalogCourses": "Courses"
+    "toggleSidebar": "Toggle sidebar"
   },
   "Header": {
     "signedInAs": "Signed in as {name}",
@@ -46,14 +44,10 @@
       "title": "Accounts",
       "description": "Find any Account by name, email or phone, then open it."
     },
-    "catalogInstitutions": {
-      "title": "Institutions & Majors",
-      "description": "The Institutions Students belong to and the Majors under each. They can be added and edited, never deleted."
-    },
-    "catalogCourses": {
-      "title": "Courses",
-      "description": "Courses and their Chapters.",
-      "placeholder": "The Courses list arrives soon."
+    "catalog": {
+      "title": "Catalog",
+      "description": "Institutions, Majors, Courses and Chapters.",
+      "placeholder": "The Catalog arrives in Milestone 2."
     },
     "auditLog": {
       "title": "Audit log",
@@ -146,13 +140,7 @@
     "ADMIN_UPDATE_FIELD_NOT_ALLOWED": "That field cannot be changed from here.",
     "ACCOUNT_NOT_FOUND": "This Account no longer exists.",
     "EMAIL_ALREADY_VERIFIED": "This email is already verified.",
-    "ADMIN_SELF_TARGET": "You cannot do this to your own Account.",
-    "INVALID_REQUEST": "Some of the details are not valid. Check the fields and try again.",
-    "INSTITUTION_ID_TAKEN": "Another Institution already uses this id. Choose a different id.",
-    "MAJOR_ID_TAKEN": "Another Major already uses this id. Choose a different id.",
-    "MAJOR_IN_USE": "Accounts hold this Major, so it cannot move to another Institution. Its names and sort order can still change.",
-    "INSTITUTION_NOT_FOUND": "This Institution no longer exists. Reload the page to refresh the list.",
-    "MAJOR_NOT_FOUND": "This Major no longer exists. Reload the page to refresh the list."
+    "ADMIN_SELF_TARGET": "You cannot do this to your own Account."
   },
   "AuditLog": {
     "filters": {
@@ -182,9 +170,7 @@
     "removedAdmin": "Removed Admin",
     "reason": "Reason: {reason}",
     "targetTypes": {
-      "account": "Account",
-      "institution": "Institution",
-      "major": "Major"
+      "account": "Account"
     },
     "actions": {
       "account_ban": "Banned an Account",
@@ -197,11 +183,7 @@
       "account_password_reset_sent": "Sent a password-reset email",
       "account_verification_email_sent": "Sent a verification email",
       "enrollment_grant": "Granted an Enrollment",
-      "enrollment_end": "Ended an Enrollment",
-      "institution_create": "Added an Institution",
-      "institution_update": "Edited an Institution",
-      "major_create": "Added a Major",
-      "major_update": "Edited a Major"
+      "enrollment_end": "Ended an Enrollment"
     },
     "fields": {
       "name": "Name",
@@ -217,10 +199,7 @@
       "sessionId": "Session id",
       "sessionCount": "Device sessions",
       "courseId": "Course id",
-      "enrollmentId": "Enrollment id",
-      "nameEn": "English name",
-      "nameAr": "Arabic name",
-      "sortOrder": "Sort order"
+      "enrollmentId": "Enrollment id"
     },
     "noChanges": "No recorded changes",
     "empty": {
@@ -586,76 +565,6 @@
         "typeEmail": "Type <strong>{email}</strong> to confirm.",
         "confirm": "Remove Account",
         "pending": "Removing"
-      }
-    }
-  },
-  "Catalog": {
-    "form": {
-      "id": "Id",
-      "idReadOnly": "The id was set when this was created and cannot be changed.",
-      "nameEn": "English name",
-      "nameAr": "Arabic name",
-      "sortOrder": "Sort order",
-      "sortOrderHelp": "Lower numbers come first. A whole number from 0 to 1,000,000.",
-      "issues": {
-        "required": "Required.",
-        "invalidId": "Use lowercase letters, digits, \"-\" and \"_\", starting with a letter or digit, up to 80 characters.",
-        "tooLong": "At most 200 characters.",
-        "invalidSortOrder": "Enter a whole number from 0 to 1,000,000."
-      }
-    },
-    "institutions": {
-      "add": "Add Institution",
-      "edit": "Edit",
-      "editLabel": "Edit Institution {name}",
-      "sortOrder": "Order {order}",
-      "counts": {
-        "majors": "{count, plural, one {# Major} other {# Majors}}",
-        "courses": "{count, plural, one {# Course} other {# Courses}}",
-        "accounts": "{count, plural, one {# Account} other {# Accounts}}"
-      },
-      "emptyTitle": "No Institutions yet",
-      "emptyDescription": "Add the first Institution, then its Majors.",
-      "errorTitle": "The Institutions could not be loaded",
-      "loading": "Loading Institutions",
-      "dialog": {
-        "createTitle": "Add an Institution",
-        "createDescription": "The id is used in links and by Accounts and Courses. You set it now and it cannot be changed later.",
-        "editTitle": "Edit Institution",
-        "editDescription": "Change the names or the sort order. The id stays the same.",
-        "idHelp": "Lowercase letters, digits, \"-\" and \"_\". Suggested from the English name.",
-        "create": "Add Institution",
-        "save": "Save changes",
-        "saved": "Institution saved."
-      }
-    },
-    "majors": {
-      "heading": "Majors",
-      "empty": "No Majors yet.",
-      "add": "Add Major",
-      "edit": "Edit",
-      "editLabel": "Edit Major {name}",
-      "sortOrder": "Order {order}",
-      "accountsCount": "{count, plural, one {# Account} other {# Accounts}}",
-      "columns": {
-        "major": "Major",
-        "id": "Id",
-        "order": "Order",
-        "accounts": "Accounts",
-        "actions": "Actions"
-      },
-      "dialog": {
-        "createTitle": "Add a Major",
-        "createDescription": "A Major belongs to one Institution. The id is set now and cannot be changed later.",
-        "editTitle": "Edit Major",
-        "editDescription": "Change the names or the sort order, or move it to another Institution. The id stays the same.",
-        "institution": "Institution",
-        "chooseInstitution": "Choose an Institution",
-        "institutionLocked": "Accounts hold this Major, so it cannot move to another Institution.",
-        "idHelp": "Lowercase letters, digits, \"-\" and \"_\". Suggested from the Institution and the English name.",
-        "create": "Add Major",
-        "save": "Save changes",
-        "saved": "Major saved."
       }
     }
   }

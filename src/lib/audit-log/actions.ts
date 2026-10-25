@@ -12,10 +12,6 @@ export const AUDIT_ACTIONS = [
   "account.verification-email-sent",
   "enrollment.grant",
   "enrollment.end",
-  "institution.create",
-  "institution.update",
-  "major.create",
-  "major.update",
 ] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];
