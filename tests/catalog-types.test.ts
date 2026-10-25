@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest";
 import {
-  adminChapterSchema,
-  adminChaptersResponseSchema,
   adminCourseSchema,
   adminCoursesResponseSchema,
   adminInstitutionsResponseSchema,
@@ -99,36 +97,5 @@ describe("Course schemas", () => {
   it("accept a live Content version id", () => {
     const parsed = adminCourseSchema.parse({ ...course, liveContentVersionId: "v-1" });
     expect(parsed.liveContentVersionId).toBe("v-1");
-  });
-});
-
-describe("Chapter schemas", () => {
-  const raw = {
-    id: "ch-1",
-    courseId: "c-1",
-    number: 2,
-    title: { ar: "النهايات", en: "Limits" },
-    minutes: 20,
-    lessonCount: 3,
-    state: "coming_soon",
-    liveContentVersionId: null,
-    counts: { sessions: 0, contentVersions: 0 },
-    deletable: true,
-    createdAt: "2026-10-15T00:00:00.000Z",
-  };
-
-  it("accept the backend's shape and drop unknown fields", () => {
-    const parsed = adminChaptersResponseSchema.parse({ chapters: [{ ...raw, extra: 1 }] });
-    expect(parsed.chapters[0]).toEqual(raw);
-    expect(adminChapterSchema.parse({ ...raw, state: "published", liveContentVersionId: "v1" }).liveContentVersionId).toBe(
-      "v1",
-    );
-  });
-
-  it("refuse an unknown state or a missing live version field", () => {
-    expect(adminChapterSchema.safeParse({ ...raw, state: "live" }).success).toBe(false);
-    const { liveContentVersionId, ...without } = raw;
-    void liveContentVersionId;
-    expect(adminChapterSchema.safeParse(without).success).toBe(false);
   });
 });

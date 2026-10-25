@@ -42,11 +42,6 @@ function isOn(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-// A Chapter's page (`/catalog/chapters/[id]`) is reached from its Course, so Courses stays highlighted there.
-function isOnChild(pathname: string, href: string): boolean {
-  return isOn(pathname, href) || (href === "/catalog/courses" && isOn(pathname, "/catalog/chapters"));
-}
-
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const t = useTranslations("Nav");
   const meta = useTranslations("Metadata");
@@ -92,7 +87,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                       <SidebarMenuSub>
                         {children.map((child) => (
                           <SidebarMenuSubItem key={child.key}>
-                            <SidebarMenuSubButton asChild isActive={isOnChild(pathname, child.href)}>
+                            <SidebarMenuSubButton asChild isActive={isOn(pathname, child.href)}>
                               <Link href={child.href}>
                                 <span>{t(child.key)}</span>
                               </Link>

@@ -6,14 +6,11 @@ import type { AuthErrorKey } from "@/lib/auth/errors";
 import { forwardedHeaders } from "@/lib/auth/forwarded-headers";
 import { toBackendCoursesQuery, type CoursesQueryState } from "./course-query-state";
 import {
-  adminChapterSchema,
-  adminChaptersResponseSchema,
   adminCourseSchema,
   adminCoursesResponseSchema,
   adminInstitutionsResponseSchema,
   adminMajorsResponseSchema,
   groupMajors,
-  type AdminChapter,
   type AdminCourse,
   type AdminInstitution,
   type InstitutionWithMajors,
@@ -130,43 +127,4 @@ export async function fetchCourse(id: string, incoming: Pick<Headers, "get">): P
     return { ok: false, errorKey: "UNKNOWN" };
   }
   return { ok: true, course: parsed.data };
-}
-
-export type ChaptersResult =
-  | { ok: true; chapters: AdminChapter[] }
-  | { ok: false; errorKey: AuthErrorKey };
-
-// Every Chapter of a Course in every state, by number (`GET /admin/courses/:id/chapters`). Drafts and
-// Archived Chapters may share a number with a live one, so the caller groups them.
-export async function fetchChapters(
-  courseId: string,
-  incoming: Pick<Headers, "get">,
-): Promise<ChaptersResult> {
-  const response = await get(`courses/${encodeURIComponent(courseId)}/chapters`, incoming);
-  if (!response) return { ok: false, errorKey: "NETWORK" };
-  if (!response.ok) return failure(response);
-  const parsed = adminChaptersResponseSchema.safeParse(await response.json().catch(() => null));
-  if (!parsed.success) {
-    console.error("Invalid Chapters response from the backend");
-    return { ok: false, errorKey: "UNKNOWN" };
-  }
-  return { ok: true, chapters: parsed.data.chapters };
-}
-
-export type ChapterResult =
-  | { ok: true; chapter: AdminChapter }
-  | { ok: false; errorKey: AuthErrorKey };
-
-// One Chapter with its counts and `deletable` (`GET /admin/chapters/:id`). A malformed or unknown id is
-// `CHAPTER_NOT_FOUND`, which the Chapter page turns into its not-found screen.
-export async function fetchChapter(id: string, incoming: Pick<Headers, "get">): Promise<ChapterResult> {
-  const response = await get(`chapters/${encodeURIComponent(id)}`, incoming);
-  if (!response) return { ok: false, errorKey: "NETWORK" };
-  if (!response.ok) return failure(response);
-  const parsed = adminChapterSchema.safeParse(await response.json().catch(() => null));
-  if (!parsed.success) {
-    console.error("Invalid Chapter response from the backend");
-    return { ok: false, errorKey: "UNKNOWN" };
-  }
-  return { ok: true, chapter: parsed.data };
 }

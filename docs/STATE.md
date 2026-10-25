@@ -190,7 +190,7 @@ Each ticket updates its own repo's docs, glossary and contract files. The Milest
 | W2 | web | Draft preview for Admins: Draft Courses and unpublished Chapters, marked; start without an Enrollment; the "preview this version" link target | B4, W1 |
 | AD1 | admin | Catalog navigation, Institutions and Majors pages (#22, PR open) | B2 (merged, backend #43) |
 | AD2 | admin | Courses list, create, edit, status changes, delete (#23, PR open) | B2 (merged, backend #43 and #45) |
-| AD3 | admin | Chapters list, drag to reorder, state changes, replacement (#24, PR open). Adds the `/catalog/chapters/[id]` page with the `ChapterContentVersionsSection` slot for AD4 | B2 |
+| AD3 | admin | Chapters list, drag to reorder, state changes, replacement | B2 |
 | AD4 | admin | Content versions and Course content versions: upload with the token, validation report, file list, set live, rollback, delete, preview link and status | B3, B4 |
 | R1 | admin (tracking) | Release runbook: the maintenance window order, Bunny env vars, staging run, then production; check token issuance and a full Session on staging | everything |
 

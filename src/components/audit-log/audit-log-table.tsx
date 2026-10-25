@@ -50,12 +50,11 @@ function Action({ entry }: { entry: AuditEntry }) {
   );
 }
 
-// The page that shows the target, when there is one. A removed Account or a deleted Course or Chapter has none.
+// The page that shows the target, when there is one. A removed Account or a deleted Course has none.
 function targetHref(entry: AuditEntry): string | null {
   const id = encodeURIComponent(entry.targetId);
   if (entry.targetType === "account" && entry.action !== "account.remove") return `/accounts/${id}`;
   if (entry.targetType === "course" && entry.action !== "course.delete") return `/catalog/courses/${id}`;
-  if (entry.targetType === "chapter" && entry.action !== "chapter.delete") return `/catalog/chapters/${id}`;
   return null;
 }
 
