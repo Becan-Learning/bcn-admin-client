@@ -22,11 +22,6 @@ const nextConfig: NextConfig = {
       },
     },
   },
-  async redirects() {
-    // There is no overview page in v1: Accounts is the home. proxy.ts then sends a visitor without
-    // a session on to /sign-in.
-    return [{ source: "/", destination: "/accounts", permanent: false }];
-  },
   async rewrites() {
     // The browser only talks to this origin, so session cookies stay first-party. The backend
     // holds all Admin authority (ADR 0001).

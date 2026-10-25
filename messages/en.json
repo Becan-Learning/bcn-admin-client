@@ -25,6 +25,7 @@
   },
   "Nav": {
     "label": "Navigation",
+    "insights": "Insights",
     "accounts": "Accounts",
     "auditLog": "Audit log",
     "myAccount": "My account",
@@ -39,6 +40,10 @@
     "themeSystem": "System"
   },
   "Pages": {
+    "insights": {
+      "title": "Insights",
+      "description": "How Students sign up, study and use their Allowance."
+    },
     "accounts": {
       "title": "Accounts",
       "description": "Find any Account by name, email or phone, then open it."
@@ -560,6 +565,82 @@
         "confirm": "Remove Account",
         "pending": "Removing"
       }
+    }
+  },
+  "Insights": {
+    "rangeLabel": "Range",
+    "ranges": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days"
+    },
+    "rangePhrases": {
+      "7d": "Last 7 days",
+      "30d": "Last 30 days",
+      "90d": "Last 90 days"
+    },
+    "duration": "{hours, plural, =0 {{minutes}m} other {{hours}h {minutes}m}}",
+    "hoursTick": "{value}h",
+    "loading": "Loading Insights",
+    "errorTitle": "Could not load Insights",
+    "emptyTitle": "No Students yet",
+    "emptyDescription": "Insights appear here once Students sign up.",
+    "footnote": {
+      "timeZone": "Days are in {timeZone} time. Updated {time}.",
+      "day": "Each point is one day.",
+      "week": "Each point is one week, starting on Sunday."
+    },
+    "kpi": {
+      "students": "Students",
+      "studentsHint": "All time",
+      "signups": "Signups",
+      "activeStudents": "Active Students",
+      "heldSessions": "Held Sessions",
+      "studyTime": "Study time"
+    },
+    "charts": {
+      "signups": "Signups",
+      "activeStudents": "Active Students",
+      "heldSessions": "Held Sessions",
+      "studyTime": "Study time",
+      "studyTimeUnit": "Hours",
+      "weekOf": "Week of {date}"
+    },
+    "courses": {
+      "title": "Courses",
+      "description": "Every Course in the Catalog for the selected range, including those nobody used.",
+      "course": "Course",
+      "heldSessions": "Held Sessions",
+      "studyTime": "Study time",
+      "activeStudents": "Active Students",
+      "chapter": "Chapter {number}",
+      "unpublished": "Unpublished",
+      "expand": "Show Chapters of {name}",
+      "collapse": "Hide Chapters of {name}",
+      "noChapters": "This Course has no Chapters.",
+      "empty": "There are no Courses in the Catalog."
+    },
+    "institutions": {
+      "title": "Institutions",
+      "description": "Students all time, Signups in the selected range.",
+      "institution": "Institution",
+      "major": "Major",
+      "students": "Students",
+      "signups": "Signups",
+      "expand": "Show Majors of {name}",
+      "collapse": "Hide Majors of {name}",
+      "noMajors": "This Institution has no Majors.",
+      "empty": "There are no Institutions."
+    },
+    "allowance": {
+      "title": "Allowance by Plan",
+      "note": "This is the current Period of each Student. The selected range does not change it.",
+      "plan": "Plan",
+      "students": "Students",
+      "atLimit": "At limit",
+      "bandsTitle": "Share of the limit used",
+      "bandsDescription": "Students by how much of their Plan's limit they have used in the current Period.",
+      "empty": "There are no Plans."
     }
   }
 }

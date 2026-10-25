@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ScrollTextIcon, ShieldCheckIcon, UserRoundIcon, UsersIcon } from "lucide-react";
+import { ChartColumnIcon, ScrollTextIcon, ShieldCheckIcon, UserRoundIcon, UsersIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 
 const NAV_ITEMS = [
+  { key: "insights", href: "/", icon: ChartColumnIcon },
   { key: "accounts", href: "/accounts", icon: UsersIcon },
   { key: "auditLog", href: "/audit-log", icon: ScrollTextIcon },
   { key: "myAccount", href: "/my-account", icon: UserRoundIcon },
@@ -34,7 +35,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-              <Link href="/accounts">
+              <Link href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                   <ShieldCheckIcon className="size-4" />
                 </div>
@@ -54,7 +55,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuButton
                     asChild
                     tooltip={t(key)}
-                    isActive={pathname === href || pathname.startsWith(`${href}/`)}
+                    isActive={href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`)}
                   >
                     <Link href={href}>
                       <Icon />
