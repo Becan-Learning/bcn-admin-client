@@ -8,7 +8,7 @@ describe("insightsSchema", () => {
     expect(parsed.success).toBe(true);
     if (parsed.success) {
       expect(parsed.data.courses[0].chapters[1].published).toBe(false);
-      expect(parsed.data.institutions[1]).toMatchObject({ id: null, name: null });
+      expect(parsed.data.institutions[1]).toMatchObject({ id: "ksu", majors: [] });
     }
   });
 
@@ -40,7 +40,8 @@ describe("insightsSchema", () => {
       { ...base, totals: { ...base.totals, signups: "57" } },
       { ...base, series: [{ ...base.series[0], date: "26/07/2026" }] },
       { ...base, courses: [{ ...base.courses[0], chapters: [{ ...base.courses[0].chapters[0], published: "yes" }] }] },
-      { ...base, institutions: [{ ...base.institutions[0], name: null, id: "" }] },
+      { ...base, institutions: [{ ...base.institutions[0], id: "" }] },
+      { ...base, institutions: [{ ...base.institutions[0], id: null, name: null }] },
       { ...base, allowance: { plans: [{ ...base.allowance.plans[0], usage: [{ band: "101", students: 1 }] }] } },
     ];
     for (const value of bad) {

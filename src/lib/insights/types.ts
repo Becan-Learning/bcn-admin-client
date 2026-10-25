@@ -44,9 +44,8 @@ const courseRow = z.object({
 });
 
 const institutionRow = z.object({
-  // null: the Students with no Institution. Then `name` is null too.
-  id: z.string().min(1).nullable(),
-  name: localized.nullable(),
+  id: z.string().min(1),
+  name: localized,
   students: count,
   signups: count,
   majors: z.array(

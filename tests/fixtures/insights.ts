@@ -20,7 +20,13 @@ export function insightsFixture() {
         signups: 14,
         majors: [{ id: "kau-cs", name: { ar: "علوم الحاسب", en: "Computer Science" }, students: 40, signups: 5 }],
       },
-      { id: null, name: null, students: 12, signups: 1, majors: [] },
+      {
+        id: "ksu",
+        name: { ar: "جامعة الملك سعود", en: "King Saud University" },
+        students: 12,
+        signups: 1,
+        majors: [],
+      },
     ],
     courses: [
       {

@@ -627,7 +627,6 @@
       "major": "Major",
       "students": "Students",
       "signups": "Signups",
-      "noInstitution": "No institution",
       "expand": "Show Majors of {name}",
       "collapse": "Hide Majors of {name}",
       "noMajors": "This Institution has no Majors.",

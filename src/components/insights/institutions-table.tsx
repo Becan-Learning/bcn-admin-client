@@ -9,8 +9,7 @@ import type { InstitutionRow } from "@/lib/insights/types";
 import { ExpandToggle } from "./expand-toggle";
 import { LocalizedName } from "./localized-name";
 
-// Students (all time) and Signups (selected range) per Institution, each opening to its Majors. The
-// Students with no Institution have a null id and no name.
+// Students (all time) and Signups (selected range) per Institution, each opening to its Majors.
 export function InstitutionsTable({ institutions }: { institutions: InstitutionRow[] }) {
   const t = useTranslations("Insights.institutions");
   const [open, setOpen] = useState<ReadonlySet<string>>(new Set());
@@ -42,9 +41,9 @@ export function InstitutionsTable({ institutions }: { institutions: InstitutionR
             </TableHeader>
             <TableBody>
               {institutions.map((institution) => {
-                const key = institution.id ?? "none";
+                const key = institution.id;
                 const expanded = open.has(key);
-                const name = institution.name?.en ?? t("noInstitution");
+                const name = institution.name.en;
                 const expandable = institution.majors.length > 0;
                 return (
                   <Fragment key={key}>
@@ -61,11 +60,7 @@ export function InstitutionsTable({ institutions }: { institutions: InstitutionR
                             // Keeps the names of rows without Majors aligned with the others.
                             <span aria-hidden className="size-8 shrink-0" />
                           )}
-                          {institution.name ? (
-                            <LocalizedName name={institution.name} />
-                          ) : (
-                            <span className="text-muted-foreground">{t("noInstitution")}</span>
-                          )}
+                          <LocalizedName name={institution.name} />
                         </div>
                       </TableCell>
                       <TableCell className="text-end tabular-nums">{formatCount(institution.students)}</TableCell>

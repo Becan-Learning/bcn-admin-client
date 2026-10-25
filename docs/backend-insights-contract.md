@@ -39,7 +39,7 @@ Status: agreed 2026-10-25. Mirrored in both repos: backend `docs/admin-insights-
   "range": "30d",
   "timeZone": "Asia/Riyadh",
   "bucket": "day",                       // "day" | "week"
-  "from": "2026-09-26T21:00:00.000Z",    // range start (local midnight), ISO UTC
+  "from": "2026-09-25T21:00:00.000Z",    // range start (local midnight), ISO UTC
   "to": "2026-10-25T15:40:00.000Z",      // now
   "generatedAt": "2026-10-25T15:40:00.000Z",
   "totals": {
@@ -50,12 +50,12 @@ Status: agreed 2026-10-25. Mirrored in both repos: backend `docs/admin-insights-
     "studySeconds": 712345    // in range
   },
   "series": [                 // one entry per bucket, oldest first
-    { "date": "2026-09-27", "signups": 3, "activeStudents": 18, "heldSessions": 22, "studySeconds": 24410 }
+    { "date": "2026-09-26", "signups": 3, "activeStudents": 18, "heldSessions": 22, "studySeconds": 24410 }
   ],
-  "institutions": [           // every Institution, then Students with no Institution as id null
+  "institutions": [           // every Institution
     {
-      "id": "kau",            // null for "no Institution"
-      "name": { "ar": "…", "en": "…" },   // null when id is null
+      "id": "kau",
+      "name": { "ar": "…", "en": "…" },
       "students": 120,        // all time
       "signups": 14,          // in range
       "majors": [ { "id": "kau-cs", "name": { "ar": "…", "en": "…" }, "students": 40, "signups": 5 } ]
@@ -112,8 +112,11 @@ Status: agreed 2026-10-25. Mirrored in both repos: backend `docs/admin-insights-
   percent, capped at 100. A Student with no non-null limit goes in band `"0"` and never counts as
   `atLimit`.
 - Bands are always all six, in this order, zero-filled.
+- `plans` lists every Plan, including those with zero Students.
+- A Student with no current Plan assignment is skipped: they are in no Plan and no band.
+- A limit of `0` counts as 100% used, so that Student is in band `"100"` and at limit.
 
 ## Errors
 
-- `400 INVALID_REQUEST` for a bad `range`.
+- `400` with `error.code: "INVALID_REQUEST"` (the shared Zod error handler) for a bad `range`.
 - `401` and `403` as for every Admin route (including two-factor and the permission check).
