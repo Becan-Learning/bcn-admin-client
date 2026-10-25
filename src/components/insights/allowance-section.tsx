@@ -17,13 +17,14 @@ import { ALLOWANCE_BANDS, type PlanRow } from "@/lib/insights/types";
 import { LocalizedName } from "./localized-name";
 
 // A light-to-dark ramp of the theme's `--chart-3`, then the destructive color for Students at their
-// limit. Mixed with transparency, so it reads on a light and a dark card alike.
+// limit. Mixed with transparency, so it reads on a light and a dark card alike. The 0% band starts at
+// 30% so it stays visible on a dark card.
 const BAND_COLORS = [
-  "color-mix(in oklab, var(--chart-3) 15%, transparent)",
   "color-mix(in oklab, var(--chart-3) 30%, transparent)",
   "color-mix(in oklab, var(--chart-3) 45%, transparent)",
-  "color-mix(in oklab, var(--chart-3) 65%, transparent)",
-  "color-mix(in oklab, var(--chart-3) 85%, transparent)",
+  "color-mix(in oklab, var(--chart-3) 60%, transparent)",
+  "color-mix(in oklab, var(--chart-3) 75%, transparent)",
+  "color-mix(in oklab, var(--chart-3) 90%, transparent)",
   "var(--destructive)",
 ] as const;
 
