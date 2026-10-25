@@ -31,7 +31,7 @@ export function CoursesTable({ courses }: { courses: CourseRow[] }) {
         <CardTitle>{t("title")}</CardTitle>
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 sm:px-(--card-spacing)">
         {courses.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("empty")}</p>
         ) : (
@@ -39,9 +39,9 @@ export function CoursesTable({ courses }: { courses: CourseRow[] }) {
             <TableHeader>
               <TableRow>
                 <TableHead>{t("course")}</TableHead>
-                <TableHead className="text-end">{t("heldSessions")}</TableHead>
-                <TableHead className="text-end">{t("studyTime")}</TableHead>
-                <TableHead className="text-end">{t("activeStudents")}</TableHead>
+                <TableHead className="px-1 text-end text-xs whitespace-normal sm:px-2 sm:text-sm">{t("heldSessions")}</TableHead>
+                <TableHead className="px-1 text-end text-xs whitespace-normal sm:px-2 sm:text-sm">{t("studyTime")}</TableHead>
+                <TableHead className="px-1 text-end text-xs whitespace-normal sm:px-2 sm:text-sm">{t("activeStudents")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -51,8 +51,8 @@ export function CoursesTable({ courses }: { courses: CourseRow[] }) {
                 return (
                   <Fragment key={course.id}>
                     <TableRow>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
+                      <TableCell className="pe-1 whitespace-normal sm:pe-2">
+                        <div className="flex items-center gap-1 sm:gap-2">
                           <ExpandToggle
                             expanded={expanded}
                             label={t(expanded ? "collapse" : "expand", { name: label })}
@@ -78,7 +78,7 @@ export function CoursesTable({ courses }: { courses: CourseRow[] }) {
                     {expanded
                       ? course.chapters.map((chapter) => (
                           <TableRow key={chapter.number} className="bg-muted/30">
-                            <TableCell className="ps-12">
+                            <TableCell className="ps-12 whitespace-normal">
                               <div className="flex flex-wrap items-start gap-x-2 gap-y-1">
                                 <LocalizedName
                                   prefix={t("chapter", { number: chapter.number })}
@@ -121,7 +121,7 @@ function Metrics({
   duration: (seconds: number) => string;
 }) {
   const cell = (value: number, text: string) => (
-    <TableCell className={cn("text-end tabular-nums", value === 0 && "text-muted-foreground")}>{text}</TableCell>
+    <TableCell className={cn("px-1 text-end tabular-nums sm:px-2", value === 0 && "text-muted-foreground")}>{text}</TableCell>
   );
   return (
     <>

@@ -42,7 +42,7 @@ export function AllowanceSection({ plans }: { plans: PlanRow[] }) {
         <CardTitle>{t("title")}</CardTitle>
         <CardDescription>{t("note")}</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-6">
+      <CardContent className="flex flex-col gap-6 px-2 sm:px-(--card-spacing)">
         {plans.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("empty")}</p>
         ) : (
@@ -58,7 +58,7 @@ export function AllowanceSection({ plans }: { plans: PlanRow[] }) {
               <TableBody>
                 {plans.map((plan) => (
                   <TableRow key={plan.id}>
-                    <TableCell>
+                    <TableCell className="whitespace-normal">
                       <LocalizedName name={plan.name} />
                     </TableCell>
                     <TableCell className="text-end tabular-nums">{formatCount(plan.students)}</TableCell>

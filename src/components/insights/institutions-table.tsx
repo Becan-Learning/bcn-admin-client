@@ -27,7 +27,7 @@ export function InstitutionsTable({ institutions }: { institutions: InstitutionR
         <CardTitle>{t("title")}</CardTitle>
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-2 sm:px-(--card-spacing)">
         {institutions.length === 0 ? (
           <p className="text-sm text-muted-foreground">{t("empty")}</p>
         ) : (
@@ -48,8 +48,8 @@ export function InstitutionsTable({ institutions }: { institutions: InstitutionR
                 return (
                   <Fragment key={key}>
                     <TableRow>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
+                      <TableCell className="whitespace-normal">
+                        <div className="flex items-center gap-1 sm:gap-2">
                           {expandable ? (
                             <ExpandToggle
                               expanded={expanded}
@@ -69,7 +69,7 @@ export function InstitutionsTable({ institutions }: { institutions: InstitutionR
                     {expanded
                       ? institution.majors.map((major) => (
                           <TableRow key={major.id} className="bg-muted/30">
-                            <TableCell className="ps-12">
+                            <TableCell className="ps-12 whitespace-normal">
                               <LocalizedName name={major.name} />
                             </TableCell>
                             <TableCell className="text-end tabular-nums">{formatCount(major.students)}</TableCell>
