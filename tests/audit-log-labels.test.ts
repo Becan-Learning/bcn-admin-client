@@ -12,7 +12,6 @@ describe("action labels", () => {
     expect(actionMessageKey("enrollment.end")).toBe("enrollment_end");
     expect(actionMessageKey("course.set-status")).toBe("course_set_status");
     expect(actionMessageKey("chapter.set-state")).toBe("chapter_set_state");
-    expect(actionMessageKey("content-version.set-live")).toBe("content_version_set_live");
   });
 
   it("has an English label for every action the backend writes", () => {
@@ -49,29 +48,16 @@ describe("field and target type labels", () => {
     expect(fieldLabelKey("constructor")).toBeNull();
   });
 
-  it("labels the Account, Catalog, Chapter and Content version target types", () => {
+  it("labels the Account, Catalog and Chapter target types", () => {
     expect(targetTypeLabelKey("account")).toBe("account");
     expect(targetTypeLabelKey("institution")).toBe("institution");
     expect(targetTypeLabelKey("course")).toBe("course");
     expect(targetTypeLabelKey("chapter")).toBe("chapter");
-    expect(targetTypeLabelKey("content-version")).toBe("content-version");
-    expect(targetTypeLabelKey("session")).toBeNull();
+    expect(targetTypeLabelKey("content-version")).toBeNull();
   });
 
   it("labels the fields the Course and Chapter entries record", () => {
     for (const field of ["slug", "code", "icon", "tone", "status", "state", "number", "numbers"]) {
-      expect(fieldLabelKey(field), field).toBe(field);
-    }
-  });
-});
-
-describe("Content version entries", () => {
-  it("labels the actions and the fields the backend records", () => {
-    for (const action of ["content-version.upload", "content-version.set-live", "content-version.delete"]) {
-      expect(isAuditAction(action), action).toBe(true);
-      expect(actionLabelKey(action), action).not.toBeNull();
-    }
-    for (const field of ["ownerKind", "ownerId", "version", "valid", "prefix", "files", "issues", "liveVersionId", "liveVersion", "lessonCount"]) {
       expect(fieldLabelKey(field), field).toBe(field);
     }
   });

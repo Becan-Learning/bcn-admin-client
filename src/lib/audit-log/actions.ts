@@ -26,9 +26,6 @@ export const AUDIT_ACTIONS = [
   "chapter.reorder",
   "chapter.replace",
   "chapter.delete",
-  "content-version.upload",
-  "content-version.set-live",
-  "content-version.delete",
 ] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];

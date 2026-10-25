@@ -125,8 +125,8 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
 
 ## Catalog
 
-The Catalog area is `/catalog/*`; AD1 (#22) built Institutions and Majors, AD2 (#23) Courses, AD3 (#24) Chapters and AD4
-(#25) Content versions. Follow these patterns so the pages stay alike. The routes are the backend's Admin
+The Catalog area is `/catalog/*`; AD1 (#22) built Institutions and Majors, AD2 (#23) Courses and AD3 (#24) Chapters; AD4
+adds Content versions. Follow these patterns so the pages stay alike. The routes are the backend's Admin
 Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); permissions are `course:*`.
 
 - **Navigation.** `AppSidebar` (`src/components/shell/app-sidebar.tsx`) has a `NAV_ITEMS` entry with `children`
@@ -165,8 +165,7 @@ Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); per
 - **Audit log.** Catalog writes are audited by the backend with `targetType` `institution`, `major`, `course` and
   `chapter`. Add each new `action` to `AUDIT_ACTIONS` and its label to `AuditLog.actions`; the labels test fails
   if they drift. All `course.*` and `chapter.*` actions and labels are already there (AD2 added the Chapter ones
-  for AD3) and so are the `content-version.*` ones (AD4); a Course target links to its page; field labels for the Chapter fields
-  exist too.
+  for AD3), and a Course target links to its page; field labels for the Chapter fields exist too.
 
 ### Courses (AD2, #23)
 
@@ -180,7 +179,7 @@ Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); per
 - **Detail** `/catalog/courses/[id]` (UUID). `fetchCourse` gives `counts` and `deletable`; unknown or malformed
   ids are `COURSE_NOT_FOUND` and render `not-found.tsx`. Sections, in `components/catalog/courses/detail/`:
   header (UUID read-only and copyable), `CourseDetailsSection`, `CourseStatusSection`, the slots
-  `ChaptersSection` (AD3, built) and `CourseContentVersionsSection` (AD4, built), then `CourseDeleteSection`. **The two slots
+  `ChaptersSection` (AD3, built) and `CourseContentVersionsSection` (AD4), then `CourseDeleteSection`. **The two slots
   are files that return `null` and take `{ course }`; the page already renders them, so AD3 and AD4 only edit their
   own file.**
 - **Details** sends only changed fields (`diffCourse`, `course-form.ts`). The slug is editable; changing it asks for
@@ -226,54 +225,9 @@ Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); per
   (`catalogFieldForError`). **Delete** only when `deletable`, behind a confirm; otherwise the row menu says why
   (`chapterDeleteBlockers`) and points to Archive. `CHAPTER_IN_USE` is still handled.
 - **Chapter page** `/catalog/chapters/[id]` (`fetchChapter` + `fetchCourse`): header (titles, number, state, Course
-  link, UUID) and the slot `ChapterContentVersionsSection` (`components/catalog/chapters/detail/`), which takes `{ chapter, course }`
-  and is filled by AD4 (see "Content versions"). Unknown ids render `not-found.tsx`. Audit
+  link, UUID) and the slot `ChapterContentVersionsSection` (`components/catalog/chapters/detail/`), which returns
+  `null` and takes `{ chapter, course }`; **AD4 fills only that file**. Unknown ids render `not-found.tsx`. Audit
   log entries targeting a Chapter link here; the sidebar keeps Courses highlighted on this page.
-
-### Content versions (AD4, #25)
-
-- **Where.** `ChapterContentVersionsSection` (Chapter page) and `CourseContentVersionsSection` (Course page) are the two
-  slots; both are thin wrappers over `ContentVersionsSection` (`components/catalog/content/content-versions-data.tsx`), an
-  async server component with its own `<Suspense>` and `SectionError`. It reads `fetchContentVersions`
-  (`GET /admin/{chapters|courses}/:id/versions`, newest first). **One read carries everything** (report, manifest, preview
-  status, `deletable`), so the detail is an expandable row (`VersionRow`), not a sub-page. The client `ContentVersionsCard`
-  holds the upload panel, the rows and the dialogs. Types are zod schemas in `lib/content/types.ts`.
-- **Upload** (`UploadPanel`, `lib/content/api.ts`, `folder-zip.ts`). Pick a folder (`<input webkitdirectory>`) or a `.zip`,
-  then Upload. A folder is zipped in the browser with `fflate` (`planFolder` keeps the relative paths with the picked
-  folder as the first segment, which the backend accepts as one wrapping folder; `.DS_Store`, `__MACOSX`, `Thumbs.db` and
-  `._*` are left out; PDFs are stored, not deflated). Then: `POST /admin/{...}/upload-token` through the same-origin proxy
-  gives `{ token, uploadUrl, expiresAt }`, and the browser POSTs the zip **straight to `uploadUrl`** (the backend's own
-  origin, from the token response, so there is no `NEXT_PUBLIC_` var) with `XMLHttpRequest` (only it reports upload
-  progress): `Authorization: Bearer <token>`, `Content-Type: application/zip`, no cookies. The token is single use and
-  lasts five minutes, so **every attempt, including a retry, asks for a new one**. 201 carries the version even when it
-  failed validation (`valid: false` plus a report); the card then opens that row on its report. Cancel aborts the XHR.
-- **Errors.** Every code maps to `Errors.<CODE>` (`UPLOAD_TOKEN_*`, `PAYLOAD_TOO_LARGE`, `UNSUPPORTED_UPLOAD_TYPE`,
-  `EMPTY_UPLOAD`, `INVALID_ARCHIVE`, `EMPTY_ARCHIVE`, `UNSAFE_ARCHIVE_PATH`, `TOO_MANY_ENTRIES`, `ARCHIVE_TOO_LARGE`,
-  `CONTENT_STORAGE_UNAVAILABLE|FAILED`, `VERSION_INVALID`, `VERSION_IN_USE`, `CONTENT_VERSION_NOT_FOUND`, plus our own
-  `FOLDER_UNREADABLE`). On the upload route a 401 is a refused token, not an ended session, so `uploadErrorKey` lets the
-  code win over the status; `tests/content-api.test.ts` lists the codes.
-- **Report and files.** The validation report is grouped by file (`groupReport`); rule, location and message are the
-  validator's own English output, shown as written and labelled so (in `<bdi>`: they can quote lesson text). The file list
-  is the manifest (path, human size, `formatBytes`). A version registered in place has `manifest: null` and
-  `report: null`: "Registered in place; no upload record."
-- **Actions** (`liveAction`, `deleteBlockers`, `needsPreview` in `lib/content/rules.ts`, all tested), each behind a
-  `ConfirmDialog`. **Set live** is offered on a valid version that is not live. It is worded **Roll back** when a newer
-  version is live. The dialog says new Sessions use it and running Sessions keep theirs, and for a Chapter that the lesson
-  count becomes the version's and that the Chapter's state does not change. **Delete** only when `deletable`; otherwise the
-  row names why (live, was live, Sessions). 409 `VERSION_INVALID`, 409 `VERSION_IN_USE` and 502 `CONTENT_STORAGE_FAILED`
-  are shown in the dialog.
-- **Preview** (Chapter versions only). **`STUDENT_APP_URL`** (server-only, optional, see `.env.example`): the student app's
-  base URL. Each valid version links to `${STUDENT_APP_URL}/session/{courseSlug}/{chapterId}?version={versionId}` in a new
-  tab (`previewUrl`; `&courseVersion=` is supported by the helper but not sent, so the Course's live version applies).
-  Links are built on the server, at request time like `LANGFUSE_PROJECT_URL`; unset or not an http(s) URL
-  (`parseStudentAppUrl`) means no link and the row says why. A valid, never-live version that no Admin Session has used
-  shows "Not previewed yet" in amber and a notice, and its preview button is the primary one. Course versions show the
-  same preview status but no link.
-- **Chapter edit dialog.** Set live fills `lessonCount` from the version's `lessons_list.json`, so the field is disabled
-  with a note while the Chapter has a live version (`liveContentVersionId`) and stays editable otherwise.
-- **Audit log.** `content-version.upload|set-live|delete` have labels, the `content-version` target type is labelled and
-  links to the owner's page (from `ownerKind` and `ownerId` in the entry), and the fields the backend records for these
-  actions have labels.
 
 ## Cross-repo contract
 

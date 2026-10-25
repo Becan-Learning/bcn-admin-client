@@ -25,7 +25,7 @@ import {
   validateChapterForm,
   type ChapterValues,
 } from "@/lib/catalog/chapter-form";
-import { hasLiveContent, isNumbered, nextChapterNumber } from "@/lib/catalog/chapter-rules";
+import { isNumbered, nextChapterNumber } from "@/lib/catalog/chapter-rules";
 import type { CatalogField } from "@/lib/catalog/errors";
 import { hasChanges, hasIssues, NAME_MAX_LENGTH, type FormIssues } from "@/lib/catalog/form";
 import type { AdminChapter } from "@/lib/catalog/types";
@@ -86,8 +86,6 @@ function ChapterForm({
   const messageFor = useFieldMessage(issues, backendErrors);
   const invalid = (field: CatalogField) => Boolean(messageFor(field)) || undefined;
   const next = nextChapterNumber(chapters);
-  // Set live reads the lesson count from the live version's lessons_list.json, so it is not editable then.
-  const lessonCountLocked = chapter !== null && hasLiveContent(chapter);
 
   const changes = chapter ? diffChapter(initial, values) : null;
   const canSave = !action.pending && (changes === null || hasChanges(changes));
@@ -194,14 +192,12 @@ function ChapterForm({
               inputMode="numeric"
               autoComplete="off"
               value={values.lessonCount}
-              disabled={action.pending || lessonCountLocked}
+              disabled={action.pending}
               aria-invalid={invalid("lessonCount")}
               aria-describedby="chapter-lessons-help"
               onChange={(event) => change("lessonCount", event.target.value)}
             />
-            <FieldDescription id="chapter-lessons-help">
-              {lessonCountLocked ? f("lessonCountFromContent") : f("lessonCountHelp")}
-            </FieldDescription>
+            <FieldDescription id="chapter-lessons-help">{f("lessonCountHelp")}</FieldDescription>
             <FieldError>{messageFor("lessonCount")}</FieldError>
           </Field>
         </div>

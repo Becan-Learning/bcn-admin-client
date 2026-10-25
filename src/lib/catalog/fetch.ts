@@ -4,7 +4,6 @@ import { backendErrorKey } from "@/lib/accounts/errors";
 import { backendUrl } from "@/lib/auth/backend";
 import type { AuthErrorKey } from "@/lib/auth/errors";
 import { forwardedHeaders } from "@/lib/auth/forwarded-headers";
-import { contentVersionsResponseSchema, ownerPath, type ContentOwnerKind, type ContentVersion } from "@/lib/content/types";
 import { toBackendCoursesQuery, type CoursesQueryState } from "./course-query-state";
 import {
   adminChapterSchema,
@@ -170,26 +169,4 @@ export async function fetchChapter(id: string, incoming: Pick<Headers, "get">): 
     return { ok: false, errorKey: "UNKNOWN" };
   }
   return { ok: true, chapter: parsed.data };
-}
-
-export type ContentVersionsResult =
-  | { ok: true; versions: ContentVersion[] }
-  | { ok: false; errorKey: AuthErrorKey };
-
-// Every Content version of a Chapter or a Course, newest first, with its report, manifest, preview status and
-// `deletable` (`GET /admin/{chapters|courses}/:id/versions`). One read carries everything the page shows.
-export async function fetchContentVersions(
-  kind: ContentOwnerKind,
-  ownerId: string,
-  incoming: Pick<Headers, "get">,
-): Promise<ContentVersionsResult> {
-  const response = await get(`${ownerPath(kind, ownerId)}/versions`, incoming);
-  if (!response) return { ok: false, errorKey: "NETWORK" };
-  if (!response.ok) return failure(response);
-  const parsed = contentVersionsResponseSchema.safeParse(await response.json().catch(() => null));
-  if (!parsed.success) {
-    console.error("Invalid Content versions response from the backend");
-    return { ok: false, errorKey: "UNKNOWN" };
-  }
-  return { ok: true, versions: parsed.data.versions };
 }
