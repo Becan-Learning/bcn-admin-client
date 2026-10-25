@@ -50,40 +50,19 @@ function Action({ entry }: { entry: AuditEntry }) {
   );
 }
 
-// The page that shows the target, when there is one. A removed Account or a deleted Course or Chapter has none.
-function targetHref(entry: AuditEntry): string | null {
-  const id = encodeURIComponent(entry.targetId);
-  if (entry.targetType === "account" && entry.action !== "account.remove") return `/accounts/${id}`;
-  if (entry.targetType === "course" && entry.action !== "course.delete") return `/catalog/courses/${id}`;
-  if (entry.targetType === "chapter" && entry.action !== "chapter.delete") return `/catalog/chapters/${id}`;
-  if (entry.targetType === "content-version") return contentVersionOwnerHref(entry);
-  return null;
-}
-
-// A Content version has no page of its own: it is shown on its owner's page. The entry records the owner
-// (`ownerKind`, `ownerId`) on both sides; a deleted version still has an owner to open.
-function contentVersionOwnerHref(entry: AuditEntry): string | null {
-  const values = entry.after ?? entry.before;
-  const kind = values?.ownerKind;
-  const owner = values?.ownerId;
-  if (typeof owner !== "string" || owner === "") return null;
-  if (kind === "chapter") return `/catalog/chapters/${encodeURIComponent(owner)}`;
-  if (kind === "course") return `/catalog/courses/${encodeURIComponent(owner)}`;
-  return null;
-}
-
 function Target({ entry }: { entry: AuditEntry }) {
   const types = useTranslations("AuditLog.targetTypes");
   const typeKey = targetTypeLabelKey(entry.targetType);
-  const href = targetHref(entry);
+  // A removed Account has no page to open.
+  const linkable = entry.targetType === "account" && entry.action !== "account.remove";
   return (
     <div className="grid gap-0.5">
       <span className="text-xs text-muted-foreground">
         {typeKey ? types(typeKey) : entry.targetType}
       </span>
-      {href ? (
+      {linkable ? (
         <Link
-          href={href}
+          href={`/accounts/${encodeURIComponent(entry.targetId)}`}
           dir="ltr"
           className="font-mono text-xs break-all underline-offset-4 hover:underline"
         >

@@ -12,23 +12,6 @@ export const AUDIT_ACTIONS = [
   "account.verification-email-sent",
   "enrollment.grant",
   "enrollment.end",
-  "institution.create",
-  "institution.update",
-  "major.create",
-  "major.update",
-  "course.create",
-  "course.update",
-  "course.set-status",
-  "course.delete",
-  "chapter.create",
-  "chapter.update",
-  "chapter.set-state",
-  "chapter.reorder",
-  "chapter.replace",
-  "chapter.delete",
-  "content-version.upload",
-  "content-version.set-live",
-  "content-version.delete",
 ] as const;
 
 export type AuditAction = (typeof AUDIT_ACTIONS)[number];

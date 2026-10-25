@@ -3,7 +3,7 @@
 The admin dashboard is a Next.js app that works the way the student web app does. It proxies
 `/api/auth/*` and `/api/v1/*` to the backend through its own origin, and its server code forwards the
 `cookie` header. Admin authority lives only in the backend: Better Auth's admin plugin for Accounts,
-and new `/api/v1/admin/*` routes for the Catalog, content, Enrollments and the Audit log. The admin
+and `/api/v1/admin/*` routes for Enrollments, Usage, Sessions and the Audit log. The admin
 app has no database connection, no Drizzle schema and no Bunny or LiveKit credentials. Its role
 checks only decide what to render; the backend re-checks every call.
 

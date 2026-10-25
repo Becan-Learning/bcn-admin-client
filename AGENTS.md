@@ -1,6 +1,6 @@
 # Repository guidance
 
-The Becan admin dashboard: where Admins manage Accounts, the Catalog and Course content. It is a
+The Becan admin dashboard: where Admins manage Accounts and read Insights (the Catalog is managed by hand with SQL, not here). It is a
 **client of the backend** with no database or secrets (`docs/adr/0001-*`). Role checks here only
 decide what to render; the backend re-checks every call.
 
@@ -67,6 +67,13 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
 - Everything is noindex: `robots` metadata plus an `X-Robots-Tag` header in `next.config.ts`.
 - There is no sign-up page and no "trust this device" option.
 
+## Insights
+
+- `/` is the home page. Same pattern as the Accounts list: a server component fetches `GET /api/v1/admin/insights`
+  (`docs/backend-insights-contract.md`) inside `<Suspense>`, the range is `?range=7d|30d|90d` (default 30d), and the
+  client `InsightsView` draws it. Charts are shadcn `chart` (Recharts) with the `--chart-*` tokens. Allowance by Plan is
+  the current Period and ignores the range. Pure helpers: `src/lib/insights/`.
+
 ## Accounts list
 
 - `/accounts` is a server component: inside `<Suspense>` it reads `searchParams` and the request headers,
@@ -122,158 +129,6 @@ Vitest. Read the guide in `node_modules/next/dist/docs/` before Next-specific co
   `https://cloud.langfuse.com/project/<id>`. Each Session links to `${LANGFUSE_PROJECT_URL}/sessions/<room>`
   (`langfuseSessionUrl`, the room is `ss_<study_session.id>`; Langfuse groups an agent Session's traces by room
   name). Unset or not an http(s) URL: no link. It is read at request time, so it needs no `NEXT_PUBLIC_` prefix.
-
-## Catalog
-
-The Catalog area is `/catalog/*`; AD1 (#22) built Institutions and Majors, AD2 (#23) Courses, AD3 (#24) Chapters and AD4
-(#25) Content versions. Follow these patterns so the pages stay alike. The routes are the backend's Admin
-Catalog API (`/api/v1/admin/...`, backend `AGENTS.md`, "Admin Catalog API"); permissions are `course:*`.
-
-- **Navigation.** `AppSidebar` (`src/components/shell/app-sidebar.tsx`) has a `NAV_ITEMS` entry with `children`
-  for sections: "Catalog" opens its first child and lists its children (always expanded, hidden when the sidebar
-  is collapsed to icons). Add a sub-page by adding a child there and its label under `Nav` in `messages/en.json`.
-  `/catalog` only redirects to `/catalog/institutions`.
-- **Reads** (`src/lib/catalog/fetch.ts`, `server-only`): the page is a server component and its fetch sits in a
-  component inside `<Suspense>`, with the request headers forwarded (`forwardedHeaders`). The result is
-  `{ ok: true, ... } | { ok: false, errorKey }`, never a throw. The client view draws it, including an error
-  panel with "Try again" (`router.refresh()`). Response shapes are zod schemas in `src/lib/catalog/types.ts`
-  (unknown fields dropped). The Institutions page makes two reads (Institutions, Majors) and joins them in
-  `groupMajors`, which keeps the backend's order.
-- **Writes** (`src/lib/catalog/api.ts`): run in the browser against the same-origin `/api/v1/admin/...`, then the
-  dialog's `useAccountAction` runs `router.refresh()`. The dialog closes when the write succeeded **and** the
-  refresh finished, so the list is already current. Each function returns `{ ok: true }` or
-  `{ ok: false, field, errorKey }`. A code that names a field (`catalogFieldForError`: `INSTITUTION_ID_TAKEN` and
-  `MAJOR_ID_TAKEN` on the id, `INVALID_INSTITUTION` and `MAJOR_IN_USE` on the Institution, and for Courses `SLUG_TAKEN` on the slug) is shown on that
-  field, any other under the form. A 400 from the body check has no `code`: it maps to `INVALID_REQUEST`.
-  Every code the backend answers has a message under `Errors`, and `tests/catalog-errors.test.ts` lists them:
-  add a new code to both.
-- **Forms** are dialogs (`InstitutionDialog`, `MajorDialog`). The form component is mounted only while the dialog
-  is open, so each opening starts clean. Shared fields (`entity-fields.tsx`: id, English name, Arabic name,
-  sort order) are for any record with that shape. Pure rules are in `src/lib/catalog/form.ts` (`validateForm`,
-  `diff*`, `*CreateBody`, `parseSortOrder`) and `slug.ts` (`isValidSlug`, `suggestSlug`), all tested.
-  - **Ids are slugs, set once.** Typed on create (suggested from the English name until the Admin edits it, with
-    a Major's Institution id in front) and shown read-only on edit. They are never in a PATCH body.
-  - **Edits send only the changed fields**; Save is off until something changed. The backend refuses unknown keys
-    and an empty body.
-  - Arabic inputs are `dir="auto"`. Arabic display text uses `LocalizedName` (English first, Arabic beneath in
-    `<bdi>`).
-- **No delete anywhere** for Institutions and Majors; the backend has no such route. A Major moves to another
-  Institution only while no Account holds it (the select is disabled with a note when `counts.accounts > 0`, and
-  `MAJOR_IN_USE` is still handled).
-- **Layout.** Pages use `max-w-5xl`. Below `md` the Major table hides the id column and below `sm` the order and
-  Account columns, folding them into a muted line under the name, so nothing scrolls sideways at 390 px.
-- **Audit log.** Catalog writes are audited by the backend with `targetType` `institution`, `major`, `course` and
-  `chapter`. Add each new `action` to `AUDIT_ACTIONS` and its label to `AuditLog.actions`; the labels test fails
-  if they drift. All `course.*` and `chapter.*` actions and labels are already there (AD2 added the Chapter ones
-  for AD3) and so are the `content-version.*` ones (AD4); a Course target links to its page; field labels for the Chapter fields
-  exist too.
-
-### Courses (AD2, #23)
-
-- **List** `/catalog/courses` (server component, `fetchCourses` + `fetchAdminInstitutions`, drawn by `CoursesView`
-  in `src/components/catalog/courses/`). Every status; the status filter, the Institution filter and the search
-  (`SearchBox`, shared with Accounts) are the URL (`status`, `institution`, `search`; `course-query-state.ts`,
-  pure and tested) and go to the backend's `GET /admin/courses?status&institutionId&search`. **Not paged:** the
-  backend list is not paged and a Catalog has tens of Courses, so every match is shown in the backend's order
-  (Institution, sort order, code). Revisit if the Catalog grows past a few hundred. A row opens the detail page.
-  The Institutions feed the filter and the Add dialog; if their read fails the list still renders.
-- **Detail** `/catalog/courses/[id]` (UUID). `fetchCourse` gives `counts` and `deletable`; unknown or malformed
-  ids are `COURSE_NOT_FOUND` and render `not-found.tsx`. Sections, in `components/catalog/courses/detail/`:
-  header (UUID read-only and copyable), `CourseDetailsSection`, `CourseStatusSection`, the slots
-  `ChaptersSection` (AD3, built) and `CourseContentVersionsSection` (AD4, built), then `CourseDeleteSection`. **The two slots
-  are files that return `null` and take `{ course }`; the page already renders them, so AD3 and AD4 only edit their
-  own file.**
-- **Details** sends only changed fields (`diffCourse`, `course-form.ts`). The slug is editable; changing it asks for
-  confirmation first (Student links change: the old Course page stops resolving, session links with the old slug
-  redirect). `icon` and `tone` are selects over the backend's CHECK sets (`COURSE_ICONS`, `COURSE_TONES` in
-  `types.ts`, names under `Catalog.courses.icons` and `tones`).
-- **Status** moves are `courseStatusMoves` (`course-rules.ts`): any other status, each behind a `ConfirmDialog`
-  that says the effect. Back to Draft is disabled while `counts.chapters.published > 0` (the backend answers 409
-  `PUBLISH_PRECONDITION`, also shown in the dialog with the way forward); leaving Archived can answer 409
-  `SLUG_TAKEN`.
-- **Delete** is offered only when the backend says `deletable`, and needs the slug typed. Otherwise one block lists
-  why (`deleteBlockers`) and points to Archive. 409 `COURSE_IN_USE` is still handled. On success it goes to the list.
-- Creating a Course (`CourseDialog`) makes a Draft and opens its page.
-
-### Chapters (AD3, #24)
-
-- **Section.** `ChaptersSection` (`components/catalog/courses/detail/chapters-section.tsx`) is an async server
-  component with its own `<Suspense>` and error alert (`SectionError`, like the Account sections). It reads
-  `fetchChapters` (`GET /admin/courses/:id/chapters`, every state) and hands the list to the client `ChaptersCard`
-  (`.../detail/chapters/`). The Course page is untouched. A Chapter read carries `liveContentVersionId`, `counts`
-  and `deletable`; the Course read carries the Course's `liveContentVersionId`.
-- **Groups.** `groupChapters` (`chapter-rules.ts`): Coming soon and Published by number (the numbered list), then
-  Drafts, then Archived (collapsed). Only the numbered list is reordered; Drafts and Archived Chapters may share a
-  number with a live one. Arabic titles are in `<bdi>`.
-- **Reorder.** The Admin arranges the numbered ids locally (`moveToId`, `moveBy`); Save order sends the full list
-  once (`PUT /courses/:id/chapters/order`), Reset returns to the server order. Drag is `@dnd-kit` (pointer, and
-  keyboard on the handle: Space, arrows, Space); Move up and Move down in the row menu is the touch and keyboard
-  alternative. The arrangement is dropped when the server's list changes (`effectiveOrder`). While it is unsaved,
-  every other row action waits. A failed save restores the server order and shows the error; 409
-  `CHAPTER_ORDER_MISMATCH` also reloads the page data.
-- **State moves** are `chapterStateMoves`: any state to any other, each behind a `ConfirmDialog` that says the
-  effect. The dialog lists exactly why a move cannot work and keeps confirm off: `numberTaken` (another Coming soon
-  or Published Chapter holds the number) and, for Published, `chapterContent` and `courseContent` (from
-  `liveContentVersionId` of the Chapter and of the Course; `publishBlockers`). The backend's 409
-  `PUBLISH_PRECONDITION` and `CHAPTER_NUMBER_TAKEN` are still handled if the page was stale. Only our own
-  `messages/en.json` text is shown, never the backend's.
-- **Replace** (Coming soon or Published Chapters only): the dialog lists the Course's Drafts
-  (`replacementCandidates`); for a Published Chapter a Draft without live content (or a Course without live content)
-  is listed but off with the reason. It names both Chapters: the Draft takes the number and state, the old one is
-  archived. Handles `REPLACEMENT_INVALID` and `PUBLISH_PRECONDITION`.
-- **Create and edit** (`ChapterDialog`, `chapter-form.ts`): titles, minutes, lesson count, number (blank on create =
-  next free). Edits send only the changed fields; `CHAPTER_NUMBER_TAKEN` is shown on the number field
-  (`catalogFieldForError`). **Delete** only when `deletable`, behind a confirm; otherwise the row menu says why
-  (`chapterDeleteBlockers`) and points to Archive. `CHAPTER_IN_USE` is still handled.
-- **Chapter page** `/catalog/chapters/[id]` (`fetchChapter` + `fetchCourse`): header (titles, number, state, Course
-  link, UUID) and the slot `ChapterContentVersionsSection` (`components/catalog/chapters/detail/`), which takes `{ chapter, course }`
-  and is filled by AD4 (see "Content versions"). Unknown ids render `not-found.tsx`. Audit
-  log entries targeting a Chapter link here; the sidebar keeps Courses highlighted on this page.
-
-### Content versions (AD4, #25)
-
-- **Where.** `ChapterContentVersionsSection` (Chapter page) and `CourseContentVersionsSection` (Course page) are the two
-  slots; both are thin wrappers over `ContentVersionsSection` (`components/catalog/content/content-versions-data.tsx`), an
-  async server component with its own `<Suspense>` and `SectionError`. It reads `fetchContentVersions`
-  (`GET /admin/{chapters|courses}/:id/versions`, newest first). **One read carries everything** (report, manifest, preview
-  status, `deletable`), so the detail is an expandable row (`VersionRow`), not a sub-page. The client `ContentVersionsCard`
-  holds the upload panel, the rows and the dialogs. Types are zod schemas in `lib/content/types.ts`.
-- **Upload** (`UploadPanel`, `lib/content/api.ts`, `folder-zip.ts`). Pick a folder (`<input webkitdirectory>`) or a `.zip`,
-  then Upload. A folder is zipped in the browser with `fflate` (`planFolder` keeps the relative paths with the picked
-  folder as the first segment, which the backend accepts as one wrapping folder; `.DS_Store`, `__MACOSX`, `Thumbs.db` and
-  `._*` are left out; PDFs are stored, not deflated). Then: `POST /admin/{...}/upload-token` through the same-origin proxy
-  gives `{ token, uploadUrl, expiresAt }`, and the browser POSTs the zip **straight to `uploadUrl`** (the backend's own
-  origin, from the token response, so there is no `NEXT_PUBLIC_` var) with `XMLHttpRequest` (only it reports upload
-  progress): `Authorization: Bearer <token>`, `Content-Type: application/zip`, no cookies. The token is single use and
-  lasts five minutes, so **every attempt, including a retry, asks for a new one**. 201 carries the version even when it
-  failed validation (`valid: false` plus a report); the card then opens that row on its report. Cancel aborts the XHR.
-- **Errors.** Every code maps to `Errors.<CODE>` (`UPLOAD_TOKEN_*`, `PAYLOAD_TOO_LARGE`, `UNSUPPORTED_UPLOAD_TYPE`,
-  `EMPTY_UPLOAD`, `INVALID_ARCHIVE`, `EMPTY_ARCHIVE`, `UNSAFE_ARCHIVE_PATH`, `TOO_MANY_ENTRIES`, `ARCHIVE_TOO_LARGE`,
-  `CONTENT_STORAGE_UNAVAILABLE|FAILED`, `VERSION_INVALID`, `VERSION_IN_USE`, `CONTENT_VERSION_NOT_FOUND`, plus our own
-  `FOLDER_UNREADABLE`). On the upload route a 401 is a refused token, not an ended session, so `uploadErrorKey` lets the
-  code win over the status; `tests/content-api.test.ts` lists the codes.
-- **Report and files.** The validation report is grouped by file (`groupReport`); rule, location and message are the
-  validator's own English output, shown as written and labelled so (in `<bdi>`: they can quote lesson text). The file list
-  is the manifest (path, human size, `formatBytes`). A version registered in place has `manifest: null` and
-  `report: null`: "Registered in place; no upload record."
-- **Actions** (`liveAction`, `deleteBlockers`, `needsPreview` in `lib/content/rules.ts`, all tested), each behind a
-  `ConfirmDialog`. **Set live** is offered on a valid version that is not live. It is worded **Roll back** when a newer
-  version is live. The dialog says new Sessions use it and running Sessions keep theirs, and for a Chapter that the lesson
-  count becomes the version's and that the Chapter's state does not change. **Delete** only when `deletable`; otherwise the
-  row names why (live, was live, Sessions). 409 `VERSION_INVALID`, 409 `VERSION_IN_USE` and 502 `CONTENT_STORAGE_FAILED`
-  are shown in the dialog.
-- **Preview** (Chapter versions only). **`STUDENT_APP_URL`** (server-only, optional, see `.env.example`): the student app's
-  base URL. Each valid version links to `${STUDENT_APP_URL}/session/{courseSlug}/{chapterId}?version={versionId}` in a new
-  tab (`previewUrl`; `&courseVersion=` is supported by the helper but not sent, so the Course's live version applies).
-  Links are built on the server, at request time like `LANGFUSE_PROJECT_URL`; unset or not an http(s) URL
-  (`parseStudentAppUrl`) means no link and the row says why. A valid, never-live version that no Admin Session has used
-  shows "Not previewed yet" in amber and a notice, and its preview button is the primary one. Course versions show the
-  same preview status but no link.
-- **Chapter edit dialog.** Set live fills `lessonCount` from the version's `lessons_list.json`, so the field is disabled
-  with a note while the Chapter has a live version (`liveContentVersionId`) and stays editable otherwise.
-- **Audit log.** `content-version.upload|set-live|delete` have labels, the `content-version` target type is labelled and
-  links to the owner's page (from `ownerKind` and `ownerId` in the entry), and the fields the backend records for these
-  actions have labels.
 
 ## Cross-repo contract
 

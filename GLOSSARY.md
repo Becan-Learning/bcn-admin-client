@@ -1,9 +1,8 @@
 # Becan admin
 
-The internal dashboard where Admins manage Accounts, the Catalog and Course content. Shared terms
+The internal dashboard where Admins manage Accounts. Shared terms
 (Student, Account, Course, Chapter, Lesson, Enrollment, Session, Plan, Allowance, Usage, Period) are
-defined in the backend's `GLOSSARY.md`, which also holds the Admin terms below and the content terms
-Admins work with most: Draft, Archived Course, Content version and Chapter replacement.
+defined in the backend's `GLOSSARY.md`, which also holds the Admin terms below.
 
 ## Language
 
@@ -43,3 +42,16 @@ _Avoid_: test session, preview session, unlimited session
 **Audit log**:
 The record of every Admin action: who acted, on which Account or Course, what changed, and when.
 _Avoid_: activity log, history
+
+**Insights**:
+The dashboard home page: counts of Signups, Held Sessions, study time and Allowance use, for the last 7, 30 or 90 days.
+Days use the Asia/Riyadh time zone. Admin Accounts and Admin Sessions are never counted.
+_Avoid_: analytics, reports, metrics
+
+**Held Session**:
+A Student's Session that the Student joined (it has a first join). Insights count Held Sessions, not Sessions issued.
+_Avoid_: attended session, started session
+
+**Active Student**:
+A Student with at least one Held Session in the bucket, or in the range for the total. Counted once per bucket.
+_Avoid_: engaged user, MAU

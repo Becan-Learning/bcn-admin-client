@@ -25,13 +25,11 @@
   },
   "Nav": {
     "label": "Navigation",
+    "insights": "Insights",
     "accounts": "Accounts",
-    "catalog": "Catalog",
     "auditLog": "Audit log",
     "myAccount": "My account",
-    "toggleSidebar": "Toggle sidebar",
-    "catalogInstitutions": "Institutions & Majors",
-    "catalogCourses": "Courses"
+    "toggleSidebar": "Toggle sidebar"
   },
   "Header": {
     "signedInAs": "Signed in as {name}",
@@ -42,17 +40,13 @@
     "themeSystem": "System"
   },
   "Pages": {
+    "insights": {
+      "title": "Insights",
+      "description": "How Students sign up, study and use their Allowance."
+    },
     "accounts": {
       "title": "Accounts",
       "description": "Find any Account by name, email or phone, then open it."
-    },
-    "catalogInstitutions": {
-      "title": "Institutions & Majors",
-      "description": "The Institutions Students belong to and the Majors under each. They can be added and edited, never deleted."
-    },
-    "catalogCourses": {
-      "title": "Courses",
-      "description": "Every Course in every status. Open one to edit it, change its status or delete it."
     },
     "auditLog": {
       "title": "Audit log",
@@ -145,39 +139,7 @@
     "ADMIN_UPDATE_FIELD_NOT_ALLOWED": "That field cannot be changed from here.",
     "ACCOUNT_NOT_FOUND": "This Account no longer exists.",
     "EMAIL_ALREADY_VERIFIED": "This email is already verified.",
-    "ADMIN_SELF_TARGET": "You cannot do this to your own Account.",
-    "INVALID_REQUEST": "Some of the details are not valid. Check the fields and try again.",
-    "INSTITUTION_ID_TAKEN": "Another Institution already uses this id. Choose a different id.",
-    "MAJOR_ID_TAKEN": "Another Major already uses this id. Choose a different id.",
-    "MAJOR_IN_USE": "Accounts hold this Major, so it cannot move to another Institution. Its names and sort order can still change.",
-    "INSTITUTION_NOT_FOUND": "This Institution no longer exists. Reload the page to refresh the list.",
-    "MAJOR_NOT_FOUND": "This Major no longer exists. Reload the page to refresh the list.",
-    "SLUG_TAKEN": "Another active Course already uses this slug. Choose a different slug.",
-    "PUBLISH_PRECONDITION": "A publishing rule blocks this change, so nothing was changed.",
-    "COURSE_IN_USE": "This Course has Enrollments, Sessions or Content versions that were live or uploaded, so it cannot be deleted. Archive it instead.",
-    "CHAPTER_NUMBER_TAKEN": "Another Coming soon or Published Chapter of this Course already has this number. Choose a free number, or reorder the Chapters.",
-    "CHAPTER_ORDER_MISMATCH": "The Course's Chapters changed since this page loaded, so the order was not saved. The list now shows the current order. Arrange it again.",
-    "REPLACEMENT_INVALID": "That Draft cannot replace this Chapter any more. Reload the page, then pick again.",
-    "CHAPTER_IN_USE": "This Chapter has study Sessions, or Content versions that were live or uploaded, so it cannot be deleted. Archive it instead.",
-    "CHAPTER_NOT_FOUND": "This Chapter no longer exists. Reload the page to refresh the list.",
-    "UPLOAD_TOKEN_REQUIRED": "The upload could not start because no upload token was sent. Try the upload again.",
-    "UPLOAD_TOKEN_INVALID": "The upload token was not recognised. Try the upload again.",
-    "UPLOAD_TOKEN_USED": "That upload token was already used. Try the upload again.",
-    "UPLOAD_TOKEN_EXPIRED": "The upload token expired before the upload started. Try the upload again.",
-    "PAYLOAD_TOO_LARGE": "The upload is larger than the server accepts. Leave out files that are not content and try again.",
-    "UNSUPPORTED_UPLOAD_TYPE": "The server only takes a zip file. Choose a zip file or a folder.",
-    "EMPTY_UPLOAD": "The upload was empty. Choose a folder or a zip file with files in it.",
-    "INVALID_ARCHIVE": "This is not a readable zip file, or it holds the same path twice. Check it and try again.",
-    "EMPTY_ARCHIVE": "The zip file holds no files.",
-    "UNSAFE_ARCHIVE_PATH": "The zip holds a file path that is not allowed, such as one that climbs out of its folder. Rename or remove it.",
-    "TOO_MANY_ENTRIES": "The zip holds too many files. Leave out files that are not content.",
-    "ARCHIVE_TOO_LARGE": "The files in the zip are too large once unpacked. Leave out files that are not content.",
-    "CONTENT_STORAGE_UNAVAILABLE": "Content storage is not set up on the server, so nothing can be uploaded or deleted. Ask whoever runs the backend.",
-    "CONTENT_STORAGE_FAILED": "Content storage refused the change, so nothing was changed. Try again in a moment.",
-    "VERSION_INVALID": "That version failed validation, so it cannot go live. Fix the files and upload a new version.",
-    "VERSION_IN_USE": "This version is or was live, or a Session used it, so it cannot be deleted. Keep it, or set another version live.",
-    "CONTENT_VERSION_NOT_FOUND": "This version no longer exists. Reload the page to refresh the list.",
-    "FOLDER_UNREADABLE": "The folder could not be read or zipped. Try again, or zip it yourself and upload the zip."
+    "ADMIN_SELF_TARGET": "You cannot do this to your own Account."
   },
   "AuditLog": {
     "filters": {
@@ -189,8 +151,8 @@
       "actorsLoading": "Loading Admins",
       "actorsFailed": "The Admin list could not be loaded.",
       "unknownActor": "Admin {id}",
-      "targetId": "Target id",
-      "targetIdPlaceholder": "Paste an Account, Course or Chapter id",
+      "targetId": "Account id",
+      "targetIdPlaceholder": "Paste an Account id",
       "from": "From",
       "to": "To",
       "dateHelp": "Dates cover whole days in UTC.",
@@ -207,12 +169,7 @@
     "removedAdmin": "Removed Admin",
     "reason": "Reason: {reason}",
     "targetTypes": {
-      "account": "Account",
-      "institution": "Institution",
-      "major": "Major",
-      "course": "Course",
-      "chapter": "Chapter",
-      "content-version": "Content version"
+      "account": "Account"
     },
     "actions": {
       "account_ban": "Banned an Account",
@@ -225,24 +182,7 @@
       "account_password_reset_sent": "Sent a password-reset email",
       "account_verification_email_sent": "Sent a verification email",
       "enrollment_grant": "Granted an Enrollment",
-      "enrollment_end": "Ended an Enrollment",
-      "institution_create": "Added an Institution",
-      "institution_update": "Edited an Institution",
-      "major_create": "Added a Major",
-      "major_update": "Edited a Major",
-      "course_create": "Added a Course",
-      "course_update": "Edited a Course",
-      "course_set_status": "Changed a Course status",
-      "course_delete": "Deleted a Course",
-      "chapter_create": "Added a Chapter",
-      "chapter_update": "Edited a Chapter",
-      "chapter_set_state": "Changed a Chapter state",
-      "chapter_reorder": "Reordered Chapters",
-      "chapter_replace": "Replaced a Chapter",
-      "chapter_delete": "Deleted a Chapter",
-      "content_version_upload": "Uploaded a Content version",
-      "content_version_set_live": "Set a Content version live",
-      "content_version_delete": "Deleted a Content version"
+      "enrollment_end": "Ended an Enrollment"
     },
     "fields": {
       "name": "Name",
@@ -258,33 +198,7 @@
       "sessionId": "Session id",
       "sessionCount": "Device sessions",
       "courseId": "Course id",
-      "enrollmentId": "Enrollment id",
-      "nameEn": "English name",
-      "nameAr": "Arabic name",
-      "sortOrder": "Sort order",
-      "slug": "Slug",
-      "code": "Code",
-      "icon": "Icon",
-      "tone": "Tone",
-      "status": "Status",
-      "state": "State",
-      "chapters": "Chapters",
-      "number": "Number",
-      "numbers": "Chapter numbers",
-      "titleEn": "English title",
-      "titleAr": "Arabic title",
-      "minutes": "Minutes",
-      "lessonCount": "Lesson count",
-      "replacement": "Replacement",
-      "ownerKind": "Owner kind",
-      "ownerId": "Owner id",
-      "version": "Version",
-      "valid": "Valid",
-      "prefix": "Storage path",
-      "files": "Files",
-      "issues": "Validation findings",
-      "liveVersionId": "Live version id",
-      "liveVersion": "Live version"
+      "enrollmentId": "Enrollment id"
     },
     "noChanges": "No recorded changes",
     "empty": {
@@ -626,14 +540,14 @@
       },
       "role": {
         "title": "Role",
-        "description": "Students study. Admins also manage Accounts, the Catalog and Course content.",
+        "description": "Students study. Admins also manage Accounts.",
         "current": "Current Role: {role}",
         "student": "Student",
         "admin": "Admin",
         "makeAdmin": "Make Admin",
         "makeStudent": "Make Student",
         "promoteTitle": "Make this Account an Admin?",
-        "promoteDescription": "An Admin can ban and remove Accounts, edit the Catalog and Courses, read the Audit log and study without a time limit. The new Admin must also turn on two-factor before any of these work.",
+        "promoteDescription": "An Admin can ban and remove Accounts, read the Audit log and study without a time limit. The new Admin must also turn on two-factor before any of these work.",
         "demoteTitle": "Make this Account a Student?",
         "demoteDescription": "The Account loses every Admin power at once, including access to this dashboard. It keeps its Enrollments and Plan.",
         "confirm": "Change Role",
@@ -653,520 +567,80 @@
       }
     }
   },
-  "Catalog": {
-    "form": {
-      "id": "Id",
-      "idReadOnly": "The id was set when this was created and cannot be changed.",
-      "nameEn": "English name",
-      "nameAr": "Arabic name",
-      "sortOrder": "Sort order",
-      "sortOrderHelp": "Lower numbers come first. A whole number from 0 to 1,000,000.",
-      "issues": {
-        "required": "Required.",
-        "invalidId": "Use lowercase letters, digits, \"-\" and \"_\", starting with a letter or digit, up to 80 characters.",
-        "tooLong": "At most 200 characters.",
-        "invalidSortOrder": "Enter a whole number from 0 to 1,000,000.",
-        "invalidNumber": "Enter a whole number from 1 to 10,000.",
-        "invalidMinutes": "Enter a whole number of minutes from 1 to 1,000.",
-        "invalidLessonCount": "Enter a whole number from 0 to 1,000."
-      }
+  "Insights": {
+    "rangeLabel": "Range",
+    "ranges": {
+      "7d": "7 days",
+      "30d": "30 days",
+      "90d": "90 days"
     },
-    "institutions": {
-      "add": "Add Institution",
-      "edit": "Edit",
-      "editLabel": "Edit Institution {name}",
-      "sortOrder": "Order {order}",
-      "counts": {
-        "majors": "{count, plural, one {# Major} other {# Majors}}",
-        "courses": "{count, plural, one {# Course} other {# Courses}}",
-        "accounts": "{count, plural, one {# Account} other {# Accounts}}"
-      },
-      "emptyTitle": "No Institutions yet",
-      "emptyDescription": "Add the first Institution, then its Majors.",
-      "errorTitle": "The Institutions could not be loaded",
-      "loading": "Loading Institutions",
-      "dialog": {
-        "createTitle": "Add an Institution",
-        "createDescription": "The id is used in links and by Accounts and Courses. You set it now and it cannot be changed later.",
-        "editTitle": "Edit Institution",
-        "editDescription": "Change the names or the sort order. The id stays the same.",
-        "idHelp": "Lowercase letters, digits, \"-\" and \"_\". Suggested from the English name.",
-        "create": "Add Institution",
-        "save": "Save changes",
-        "saved": "Institution saved."
-      }
+    "rangePhrases": {
+      "7d": "Last 7 days",
+      "30d": "Last 30 days",
+      "90d": "Last 90 days"
     },
-    "majors": {
-      "heading": "Majors",
-      "empty": "No Majors yet.",
-      "add": "Add Major",
-      "edit": "Edit",
-      "editLabel": "Edit Major {name}",
-      "sortOrder": "Order {order}",
-      "accountsCount": "{count, plural, one {# Account} other {# Accounts}}",
-      "columns": {
-        "major": "Major",
-        "id": "Id",
-        "order": "Order",
-        "accounts": "Accounts",
-        "actions": "Actions"
-      },
-      "dialog": {
-        "createTitle": "Add a Major",
-        "createDescription": "A Major belongs to one Institution. The id is set now and cannot be changed later.",
-        "editTitle": "Edit Major",
-        "editDescription": "Change the names or the sort order, or move it to another Institution. The id stays the same.",
-        "institution": "Institution",
-        "chooseInstitution": "Choose an Institution",
-        "institutionLocked": "Accounts hold this Major, so it cannot move to another Institution.",
-        "idHelp": "Lowercase letters, digits, \"-\" and \"_\". Suggested from the Institution and the English name.",
-        "create": "Add Major",
-        "save": "Save changes",
-        "saved": "Major saved."
-      }
+    "duration": "{hours, plural, =0 {{minutes}m} other {{hours}h {minutes}m}}",
+    "hoursTick": "{value}h",
+    "loading": "Loading Insights",
+    "errorTitle": "Could not load Insights",
+    "emptyTitle": "No Students yet",
+    "emptyDescription": "Insights appear here once Students sign up.",
+    "footnote": {
+      "timeZone": "Days are in {timeZone} time. Updated {time}.",
+      "day": "Each point is one day.",
+      "week": "Each point is one week, starting on Sunday."
     },
-    "courseStatus": {
-      "draft": "Draft",
-      "published": "Published",
-      "archived": "Archived"
+    "kpi": {
+      "students": "Students",
+      "studentsHint": "All time",
+      "signups": "Signups",
+      "activeStudents": "Active Students",
+      "heldSessions": "Held Sessions",
+      "studyTime": "Study time"
+    },
+    "charts": {
+      "signups": "Signups",
+      "activeStudents": "Active Students",
+      "heldSessions": "Held Sessions",
+      "studyTime": "Study time",
+      "studyTimeUnit": "Hours",
+      "weekOf": "Week of {date}"
     },
     "courses": {
-      "add": "Add Course",
-      "errorTitle": "The Courses could not be loaded",
-      "loading": "Loading Courses",
-      "searchLabel": "Search Courses",
-      "searchPlaceholder": "Search by code, slug or name",
-      "clearSearch": "Clear search",
-      "statusLabel": "Status",
-      "allStatuses": "All statuses",
-      "institutionLabel": "Institution",
-      "allInstitutions": "All Institutions",
-      "clearFilters": "Clear filters",
-      "summary": "{total, plural, one {# Course} other {# Courses}}",
-      "emptyTitle": "No Courses yet",
-      "emptyDescription": "Add the first Course. It starts as a Draft, hidden from Students until you publish it.",
-      "noMatchesTitle": "No Courses match",
-      "noMatchesDescription": "Try a different search, or clear the filters.",
-      "columns": {
-        "course": "Course",
-        "slug": "Slug",
-        "institution": "Institution",
-        "status": "Status",
-        "chapters": "Chapters",
-        "code": "Code"
-      },
-      "chapters": {
-        "published": "{count} published",
-        "comingSoon": "{count} coming soon",
-        "draft": "{count} draft",
-        "archived": "{count} archived",
-        "none": "No Chapters"
-      },
-      "icons": {
-        "coins": "Coins",
-        "bars": "Bars",
-        "blocks": "Blocks",
-        "torus": "Torus",
-        "flask": "Flask",
-        "atom": "Atom",
-        "donut": "Donut",
-        "cube": "Cube",
-        "bolt": "Bolt"
-      },
-      "tones": {
-        "lilac": "Lilac",
-        "base": "Base",
-        "deep": "Deep",
-        "amber": "Amber",
-        "walnut": "Walnut",
-        "olive": "Olive",
-        "oliveDark": "Olive dark"
-      },
-      "form": {
-        "slug": "Slug",
-        "slugHelp": "Used in Student links. Lowercase letters, digits, \"-\" and \"_\". Suggested from the English name.",
-        "slugEditHelp": "Used in Student links. Changing it changes those links: the old Course page stops resolving, and session links with the old slug redirect to the new one.",
-        "code": "Code",
-        "codeHelp": "The short code Students know the Course by, like CS101. Up to 40 characters.",
-        "institution": "Institution",
-        "chooseInstitution": "Choose an Institution",
-        "icon": "Icon",
-        "chooseIcon": "Choose an icon",
-        "tone": "Tone",
-        "chooseTone": "Choose a tone",
-        "look": "The icon and tone decide how the Student app draws the Course card."
-      },
-      "dialog": {
-        "createTitle": "Add a Course",
-        "createDescription": "A new Course is a Draft: Students cannot see it until you publish it. Every field can be changed later, including the slug.",
-        "create": "Add Course",
-        "created": "Course added.",
-        "noInstitutions": "There are no Institutions to choose from. Add an Institution first.",
-        "institutionsFailed": "The Institutions could not be loaded, so a Course cannot be added now. Reload the page to try again."
-      }
-    },
-    "chapterState": {
-      "draft": "Draft",
-      "coming_soon": "Coming soon",
-      "published": "Published",
-      "archived": "Archived"
-    }
-  },
-  "CourseDetail": {
-    "title": "Course",
-    "backToList": "Back to Courses",
-    "notFoundTitle": "Course not found",
-    "notFoundDescription": "This Course does not exist, or it was deleted.",
-    "errorTitle": "The Course could not be loaded",
-    "header": {
-      "code": "Code",
-      "slug": "Slug",
-      "institution": "Institution",
-      "id": "Course id",
-      "idHelp": "Fixed for the life of the Course. The slug can change; this cannot.",
-      "copyLabel": "Copy the Course id"
-    },
-    "details": {
-      "title": "Details",
-      "description": "Names, code, slug, Institution and how the Course card looks. Only the fields you change are saved.",
-      "save": "Save changes",
-      "saved": "Course saved.",
-      "institutionsFailed": "The Institution list could not be loaded, so the Institution cannot be changed now.",
-      "slugDialogTitle": "Change the slug?",
-      "slugDialogDescription": "Student links to this Course use the slug. After this change the Course page at the old slug stops resolving, while session links that still carry the old slug redirect to the new one. Share the new links.",
-      "slugConfirm": "Change slug",
-      "slugPending": "Saving"
-    },
-    "status": {
-      "title": "Status",
-      "description": "Draft Courses are hidden from Students. Published Courses are visible in the Catalog. Archived Courses are hidden and take no new Enrollments, and the existing Enrollments continue.",
-      "current": "Current status",
-      "updated": "Status updated.",
-      "blockedPublishedChapters": "Not available while the Course has a Published Chapter. Move its Chapters out of Published first, or archive the Course.",
-      "moves": {
-        "draft": {
-          "action": "Back to Draft",
-          "title": "Move this Course back to Draft?",
-          "description": "The Course is hidden from the Student Catalog and Students cannot enroll in it. Only Admins see it.",
-          "confirm": "Move to Draft"
-        },
-        "published": {
-          "action": "Publish",
-          "title": "Publish this Course?",
-          "description": "The Course becomes visible in the Student Catalog and Students can enroll in it. Students see its Coming soon and Published Chapters.",
-          "confirm": "Publish"
-        },
-        "archived": {
-          "action": "Archive",
-          "title": "Archive this Course?",
-          "description": "The Course is hidden from the Student Catalog and takes no new Enrollments. Students who are already enrolled keep their Enrollment and can keep studying.",
-          "confirm": "Archive"
-        }
-      },
-      "leavesArchived": "The slug counts as unique again once the Course leaves Archived. If another active Course already uses it, this is refused and you can change the slug first.",
-      "pending": "Updating",
-      "preconditionHelp": "A Course cannot go back to Draft while it has a Published Chapter, because Students could lose a Chapter they can start. Move the Chapters out of Published first, or archive the Course.",
-      "slugTakenHelp": "Change this Course's slug in Details, or archive the other Course that uses it, then try again."
-    },
-    "delete": {
-      "title": "Delete Course",
-      "description": "Permanently deletes this Course and its Chapters. This cannot be undone.",
-      "action": "Delete Course",
-      "dialogTitle": "Delete this Course?",
-      "dialogDescription": "This permanently deletes the Course and all its Chapters. It cannot be undone.",
-      "typeSlug": "Type <strong>{slug}</strong> to confirm.",
-      "confirm": "Delete Course",
-      "pending": "Deleting",
-      "deleted": "Course deleted.",
-      "blockedTitle": "This Course cannot be deleted",
-      "blockedIntro": "It has:",
-      "blockers": {
-        "enrollments": "Enrollments, active or ended",
-        "sessions": "study Sessions",
-        "contentVersions": "Content versions that were live or uploaded"
-      },
-      "blockedArchive": "Archive it instead. It is then hidden from the Catalog and takes no new Enrollments, and everything that exists stays.",
-      "blockedArchived": "It is already archived, which is the right place for it."
-    },
-    "chapters": {
-      "title": "Chapters",
-      "description": "Coming soon and Published Chapters are numbered and listed to Students in that order. Drafts and Archived Chapters are hidden from Students.",
-      "loading": "Loading Chapters",
-      "loadFailed": "The Chapters could not be loaded",
-      "add": "Add Chapter",
-      "empty": "This Course has no Chapters yet. Add a Draft, upload its content, then publish it.",
-      "groups": {
-        "numbered": "Coming soon and Published",
-        "numberedEmpty": "No Coming soon or Published Chapters. Move a Draft here when it is ready.",
-        "drafts": "Drafts",
-        "archived": "Archived"
-      },
-      "row": {
-        "chapterNumber": "Chapter {number}",
-        "minutes": "{minutes} min",
-        "lessons": "{count, plural, one {# lesson} other {# lessons}}",
-        "contentLive": "Live content",
-        "contentNone": "No live content",
-        "willBecome": "becomes {number}",
-        "actions": "Actions for {title}",
-        "content": "Content versions",
-        "edit": "Edit details",
-        "moveUp": "Move up",
-        "moveDown": "Move down",
-        "stateLabel": "Change state",
-        "moveTo": "Move to {state}",
-        "unavailable": "Unavailable",
-        "replace": "Replace with a Draft…",
-        "delete": "Delete…",
-        "deleteBlocked": "Cannot be deleted: {reason} Archive it instead.",
-        "deleteBlockers": {
-          "sessions": "it has study Sessions.",
-          "contentVersions": "it has Content versions that were live or uploaded."
-        }
-      },
-      "order": {
-        "handle": "Reorder {title}",
-        "instructions": "To reorder, press Space or Enter on the handle, move with the arrow keys, then press Space or Enter again to drop. Press Escape to cancel. The Move up and Move down actions do the same.",
-        "changed": "The order has changed. Save it to renumber the Chapters from 1 in this order.",
-        "locked": "Save or reset the new order before changing a Chapter.",
-        "save": "Save order",
-        "saving": "Saving order",
-        "reset": "Reset",
-        "saved": "Order saved."
-      },
-      "dialog": {
-        "createTitle": "Add a Chapter",
-        "createDescription": "It is created as a Draft, hidden from Students. Upload its content, then move it to Coming soon or Published.",
-        "editTitle": "Edit Chapter",
-        "editDescription": "Only the fields you change are saved. To change the state, use the Chapter's actions menu.",
-        "create": "Add Chapter",
-        "created": "Chapter added.",
-        "save": "Save changes",
-        "saved": "Chapter saved."
-      },
-      "form": {
-        "titleEn": "English title",
-        "titleAr": "Arabic title",
-        "minutes": "Minutes",
-        "minutesHelp": "How long the Chapter takes, a whole number from 1 to 1,000.",
-        "lessonCount": "Lessons",
-        "lessonCountHelp": "How many lessons it has. Content uploads can set this too.",
-        "number": "Number",
-        "numberHelpCreate": "Leave blank to use the next free number, {next}. A Draft may share a number with a Coming soon or Published Chapter.",
-        "numberPlaceholder": "Next: {next}",
-        "numberHelpLive": "Must not be used by another Coming soon or Published Chapter. To move a Chapter among the others, drag it instead.",
-        "numberHelpOther": "Only has to be free when the Chapter goes Coming soon or Published.",
-        "lessonCountFromContent": "Set by the live Chapter content version, so it cannot be edited here. Set another version live to change it."
-      },
-      "state": {
-        "pending": "Updating",
-        "updated": "State updated.",
-        "leavesNumbered": "Its number is freed. The other Chapters keep their numbers until you save the order.",
-        "joinsNumbered": "It takes number {number} in the Coming soon and Published list.",
-        "blockedIntro": "This cannot be done yet:",
-        "blockers": {
-          "numberTaken": "Another Coming soon or Published Chapter already has number {number}. Change this Chapter's number first, in Edit details.",
-          "chapterContent": "This Chapter has no live Chapter content version. Upload one and set it live first.",
-          "courseContent": "The Course has no live Course content version. Upload one and set it live first."
-        },
-        "preconditionStale": "A live content version changed since this page loaded. Reload the page to see the current state.",
-        "numberTakenHelp": "Change the number in Edit details, or reorder the Chapters, then try again.",
-        "moves": {
-          "draft": {
-            "title": "Move this Chapter back to Draft?",
-            "description": "Students no longer see the Chapter and cannot start it. Its content and study history stay.",
-            "confirm": "Move to Draft"
-          },
-          "coming_soon": {
-            "title": "Mark this Chapter as Coming soon?",
-            "description": "Students see the Chapter in the Course's list with its number, but cannot start it. It needs no content.",
-            "confirm": "Mark as Coming soon"
-          },
-          "published": {
-            "title": "Publish this Chapter?",
-            "description": "Students can start this Chapter. It teaches from its live Chapter content version and the Course's live Course content version.",
-            "confirm": "Publish"
-          },
-          "archived": {
-            "title": "Archive this Chapter?",
-            "description": "The Chapter is hidden from Students and cannot be started. Its content, numbers and study history stay, and it can come back as a Draft.",
-            "confirm": "Archive"
-          }
-        }
-      },
-      "replace": {
-        "title": "Replace this Chapter with a Draft",
-        "description": "Pick one of the Course's Drafts. In one step, the Draft takes this Chapter's number and state, and this Chapter is archived.",
-        "pickLabel": "Drafts of this Course",
-        "none": "This Course has no Drafts. Add a Draft Chapter and give it live content, then come back.",
-        "draftMeta": "Draft, number {number}",
-        "blockers": {
-          "chapterContent": "No live Chapter content version.",
-          "courseContent": "The Course has no live Course content version."
-        },
-        "summary": "<name>{draft}</name> takes number {number} and becomes {state}. <name>{old}</name> is archived.",
-        "confirm": "Replace Chapter",
-        "pending": "Replacing",
-        "done": "Chapter replaced.",
-        "preconditionHelp": "Replacing a Published Chapter needs the Draft to have a live Chapter content version, and the Course a live Course content version. Set them live, then try again.",
-        "invalidHelp": "Reload the page to see the Chapters as they are now."
-      },
-      "delete": {
-        "title": "Delete this Chapter?",
-        "description": "This permanently deletes {title}. It cannot be undone. The other Chapters keep their numbers, and saving the order closes the gap.",
-        "confirm": "Delete Chapter",
-        "pending": "Deleting",
-        "done": "Chapter deleted."
-      }
-    }
-  },
-  "ChapterDetail": {
-    "title": "Chapter",
-    "backToCourse": "Back to the Course",
-    "notFoundTitle": "Chapter not found",
-    "notFoundDescription": "This Chapter does not exist, or it was deleted.",
-    "errorTitle": "The Chapter could not be loaded",
-    "header": {
-      "chapterNumber": "Chapter {number}",
+      "title": "Courses",
+      "description": "Every Course in the Catalog for the selected range, including those nobody used.",
       "course": "Course",
-      "minutes": "Length",
-      "minutesValue": "{minutes} min",
-      "lessons": "Lessons",
-      "content": "Live content",
-      "contentLive": "Has a live Chapter content version",
-      "contentNone": "No live Chapter content version",
-      "id": "Chapter id",
-      "idHelp": "Fixed for the life of the Chapter.",
-      "copyLabel": "Copy the Chapter id"
+      "heldSessions": "Held Sessions",
+      "studyTime": "Study time",
+      "activeStudents": "Active Students",
+      "chapter": "Chapter {number}",
+      "unpublished": "Unpublished",
+      "expand": "Show Chapters of {name}",
+      "collapse": "Hide Chapters of {name}",
+      "noChapters": "This Course has no Chapters.",
+      "empty": "There are no Courses in the Catalog."
     },
-    "backToCourses": "Back to Courses"
-  },
-  "ContentVersions": {
-    "chapter": {
-      "title": "Content versions",
-      "description": "Every upload of this Chapter's files is kept as a numbered version. New Sessions use the live version; Sessions already running keep the one they started with.",
-      "expects": "A Chapter upload holds lessons_list.json, one JSON file per lesson (named after its slug) and slides.pdf, optionally inside one wrapping folder.",
-      "loading": "Loading Content versions",
-      "loadFailed": "The Content versions could not be loaded"
+    "institutions": {
+      "title": "Institutions",
+      "description": "Students all time, Signups in the selected range.",
+      "institution": "Institution",
+      "major": "Major",
+      "students": "Students",
+      "signups": "Signups",
+      "expand": "Show Majors of {name}",
+      "collapse": "Hide Majors of {name}",
+      "noMajors": "This Institution has no Majors.",
+      "empty": "There are no Institutions."
     },
-    "course": {
-      "title": "Course content versions",
-      "description": "The files shared by every Chapter of this Course are uploaded on their own. Each upload is kept as a numbered version; new Sessions use the live one, and Sessions already running keep theirs.",
-      "expects": "A Course upload holds 01_Course_Knowledge_Schema.md and cast.json.",
-      "loading": "Loading Course content versions",
-      "loadFailed": "The Course content versions could not be loaded"
-    },
-    "upload": {
-      "title": "Upload a new version",
-      "help": "Choose a folder or a zip file. A folder is zipped in your browser, then sent straight to the server. The files are checked when they arrive. A version that fails the checks is kept with its report, and cannot go live.",
-      "chooseFolder": "Choose a folder",
-      "chooseZip": "Choose a zip file",
-      "folder": "Folder {name}",
-      "zip": "Zip file {name}",
-      "summary": "{count, plural, one {# file} other {# files}} · {size}",
-      "zipSummary": "{size}",
-      "skipped": "{count, plural, one {# system file} other {# system files}} left out.",
-      "start": "Upload",
-      "remove": "Remove selection",
-      "cancel": "Cancel upload",
-      "zipping": "Zipping the folder",
-      "token": "Getting an upload token",
-      "uploading": "Uploading, {percent}%",
-      "processing": "Sent. The server is checking and storing the files.",
-      "progressLabel": "Upload progress",
-      "notZip": "That file is not a zip file. Choose a file that ends in .zip, or a folder.",
-      "emptyFolder": "That folder holds no files.",
-      "doneValid": "Version {version} uploaded. It passed validation and is not live yet.",
-      "doneInvalid": "Version {version} uploaded, but it failed validation with {count, plural, one {# finding} other {# findings}}. It cannot go live. The report is open below. Fix the files and upload again.",
-      "doneTitle": "Upload finished",
-      "dismiss": "Dismiss"
-    },
-    "list": {
-      "title": "Versions",
-      "empty": "No versions yet. Upload the first one.",
-      "count": "{count, plural, one {# version} other {# versions}}, newest first"
-    },
-    "row": {
-      "version": "Version {version}",
-      "live": "Live",
-      "valid": "Valid",
-      "invalid": "Invalid",
-      "previewed": "Previewed",
-      "previewedBy": "Previewed in {count, plural, one {# Admin Session} other {# Admin Sessions}}",
-      "notPreviewed": "Not previewed yet",
-      "uploadedBy": "Uploaded by <bdi>{name}</bdi> on {date}",
-      "uploadedAt": "Uploaded on {date}",
-      "sessions": "{count, plural, one {# Session} other {# Sessions}}",
-      "lessons": "{count, plural, one {# lesson} other {# lessons}}",
-      "toggle": "Show or hide the details of version {version}"
-    },
-    "detail": {
-      "notPreviewedTitle": "Not previewed yet",
-      "notPreviewedBody": "No Admin has had a Session on this version. Preview it in the student app before you set it live.",
-      "previewedBody": "Previewed in {count, plural, one {# Admin Session} other {# Admin Sessions}}.",
-      "reportTitle": "Validation report",
-      "reportIntro": "This is the content validator's own output, shown as written. Each finding names its rule and where in the file it applies.",
-      "reportPassed": "The version passed validation. There are no findings.",
-      "reportFailed": "This version failed validation and cannot go live. {count, plural, one {# finding} other {# findings}} in {files, plural, one {# file} other {# files}}.",
-      "reportNone": "No validation report: this version was registered in place.",
-      "wholeArchive": "The upload as a whole",
-      "rule": "Rule: {rule}",
-      "location": "At {path}",
-      "filesTitle": "Files",
-      "filesSummary": "{count, plural, one {# file} other {# files}} · {size}",
-      "filesNone": "Registered in place; no upload record.",
-      "colPath": "Path",
-      "colSize": "Size",
-      "factsPrefix": "Storage path",
-      "factsFirstLive": "First live",
-      "factsNeverLive": "Never live",
-      "factsSessions": "Sessions",
-      "factsSessionsValue": "{count, plural, one {# Session} other {# Sessions}} used it, {admin} of them Admin Sessions",
-      "factsLessons": "Lessons",
-      "actionsTitle": "Actions",
-      "notPreviewedBodyCourse": "No Admin has had a Session on this version yet."
-    },
-    "preview": {
-      "link": "Preview in student app",
-      "help": "Opens the student app in a new tab with an Admin Session on this version. Students are not affected.",
-      "unavailable": "The preview link is not available because the admin app has no student app address (STUDENT_APP_URL).",
-      "invalidOnly": "Only a version that passed validation can be previewed."
-    },
-    "actions": {
-      "setLive": "Set live",
-      "rollback": "Roll back to this version",
-      "delete": "Delete",
-      "isLive": "This is the live version.",
-      "cannotGoLive": "A version that failed validation cannot go live.",
-      "deleteBlocked": "Cannot be deleted: {reasons}",
-      "deleteBlockers": {
-        "live": "it is the live version.",
-        "wasLive": "it was live once, and is kept so a rollback can use it.",
-        "sessions": "{count, plural, one {# Session used it.} other {# Sessions used it.}}"
-      }
-    },
-    "live": {
-      "setTitle": "Set version {version} live?",
-      "setDescription": "New Sessions will use version {version}. Sessions that are already running keep the version they started with.",
-      "setFirst": "Nothing is live yet, so this becomes the first live version.",
-      "rollbackTitle": "Roll back to version {version}?",
-      "rollbackDescription": "New Sessions will go back to version {version} instead of version {current}. Sessions that are already running keep the version they started with. Version {current} is kept and can be set live again.",
-      "lessonCount": "The Chapter's lesson count becomes {count}, read from this version.",
-      "chapterState": "Setting a version live does not change the Chapter's state.",
-      "notPreviewed": "This version has not been previewed. Consider previewing it in the student app first.",
-      "confirmSet": "Set live",
-      "confirmRollback": "Roll back",
-      "pending": "Working",
-      "doneSet": "Version {version} is live.",
-      "doneRollback": "Rolled back to version {version}."
-    },
-    "delete": {
-      "title": "Delete version {version}?",
-      "description": "Its files are removed from storage and the version is gone for good. It was never live and no Session used it.",
-      "filesLine": "{count, plural, one {# file} other {# files}} will be removed.",
-      "confirm": "Delete version",
-      "pending": "Deleting",
-      "done": "Version deleted."
+    "allowance": {
+      "title": "Allowance by Plan",
+      "note": "This is the current Period of each Student. The selected range does not change it.",
+      "plan": "Plan",
+      "students": "Students",
+      "atLimit": "At limit",
+      "bandsTitle": "Share of the limit used",
+      "bandsDescription": "Students by how much of their Plan's limit they have used in the current Period.",
+      "empty": "There are no Plans."
     }
   }
 }
