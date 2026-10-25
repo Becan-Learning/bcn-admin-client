@@ -1,6 +1,6 @@
 # Repository guidance
 
-The Becan admin dashboard: where Admins manage Accounts, the Catalog and Course content. It is a
+The Becan admin dashboard: where Admins manage Accounts (the Catalog is managed by hand with SQL, not here). It is a
 **client of the backend** with no database or secrets (`docs/adr/0001-*`). Role checks here only
 decide what to render; the backend re-checks every call.
 

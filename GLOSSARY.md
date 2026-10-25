@@ -1,9 +1,8 @@
 # Becan admin
 
-The internal dashboard where Admins manage Accounts, the Catalog and Course content. Shared terms
+The internal dashboard where Admins manage Accounts. Shared terms
 (Student, Account, Course, Chapter, Lesson, Enrollment, Session, Plan, Allowance, Usage, Period) are
-defined in the backend's `GLOSSARY.md`, which also holds the Admin terms below and the content terms
-Admins work with most: Draft, Archived Course, Content version and Chapter replacement.
+defined in the backend's `GLOSSARY.md`, which also holds the Admin terms below.
 
 ## Language
 

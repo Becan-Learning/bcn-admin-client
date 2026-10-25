@@ -26,7 +26,6 @@
   "Nav": {
     "label": "Navigation",
     "accounts": "Accounts",
-    "catalog": "Catalog",
     "auditLog": "Audit log",
     "myAccount": "My account",
     "toggleSidebar": "Toggle sidebar"
@@ -43,11 +42,6 @@
     "accounts": {
       "title": "Accounts",
       "description": "Find any Account by name, email or phone, then open it."
-    },
-    "catalog": {
-      "title": "Catalog",
-      "description": "Institutions, Majors, Courses and Chapters.",
-      "placeholder": "The Catalog arrives in Milestone 2."
     },
     "auditLog": {
       "title": "Audit log",
@@ -541,14 +535,14 @@
       },
       "role": {
         "title": "Role",
-        "description": "Students study. Admins also manage Accounts, the Catalog and Course content.",
+        "description": "Students study. Admins also manage Accounts.",
         "current": "Current Role: {role}",
         "student": "Student",
         "admin": "Admin",
         "makeAdmin": "Make Admin",
         "makeStudent": "Make Student",
         "promoteTitle": "Make this Account an Admin?",
-        "promoteDescription": "An Admin can ban and remove Accounts, edit the Catalog and Courses, read the Audit log and study without a time limit. The new Admin must also turn on two-factor before any of these work.",
+        "promoteDescription": "An Admin can ban and remove Accounts, read the Audit log and study without a time limit. The new Admin must also turn on two-factor before any of these work.",
         "demoteTitle": "Make this Account a Student?",
         "demoteDescription": "The Account loses every Admin power at once, including access to this dashboard. It keeps its Enrollments and Plan.",
         "confirm": "Change Role",

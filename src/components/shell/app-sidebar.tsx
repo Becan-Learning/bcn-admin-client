@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { BookOpenIcon, ScrollTextIcon, ShieldCheckIcon, UserRoundIcon, UsersIcon } from "lucide-react";
+import { ScrollTextIcon, ShieldCheckIcon, UserRoundIcon, UsersIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -19,7 +19,6 @@ import {
 
 const NAV_ITEMS = [
   { key: "accounts", href: "/accounts", icon: UsersIcon },
-  { key: "catalog", href: "/catalog", icon: BookOpenIcon },
   { key: "auditLog", href: "/audit-log", icon: ScrollTextIcon },
   { key: "myAccount", href: "/my-account", icon: UserRoundIcon },
 ] as const;
